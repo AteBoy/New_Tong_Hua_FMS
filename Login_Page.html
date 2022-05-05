@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang = "eng" dir = "ltr">
+
+	<head>
+		<meta charset = "utf-8">
+		<title> New Legazpi Tong Hua Trading Login </title>
+		 <link rel="stylesheet" href="style/login.css">	
+	</head>
+	
+	<body>
+		<div class = "center">
+			<h1> Welcome to Tong Hua Trading </h1>
+			<form method="post">
+				<div class="txt_field">
+					<input type="text" required>
+					<span></span>
+					<label>Username</label>
+				</div>
+        		<div class="txt_field">
+        			<input type="password" required>
+        			<span></span>
+        			<label>Password</label>
+        		</div>
+        	<div class="pass" class = "btn" id = "reset_pass">Forgot Password?</div>
+				<input type = "submit" value = Login>		
+			</div>
+		 	</form>
+                <div id="reset_modal" class="modal">
+
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <span class="close" id = "close">&times;</span>
+                        <h2>Add Account</h2>
+                      </div>
+                      <div class="modal-body">
+                        <form action="##" method = "post">
+                            <div class="container">
+
+                                <label for="admin_key"><b>Admin Key</b></label>
+                                <input type="text" placeholder="Enter Admin Key" name="admin_key" id="admin_key" required>
+                          
+                                <label for="new_pass"><b>New Password</b></label>
+								<input type="password" placeholder="Enter New Password" name="new_pass" id="new_pass" required>
+
+                                <input type = "submit" class = "reset_btn" name = "submit_acc" value = "SUBMIT">
+                            </div>
+                          </form>
+                      </div>
+                      <div class="modal-footer">
+                      
+                      </div>
+                    </div>
+                </div>
+				<script>
+					var modal = document.getElementById("reset_modal");
+					var reset = document.getElementById("reset_pass");
+					var span = document.getElementById("close");
+
+					reset.onclick = function() {
+						modal.style.display = "block";
+					}
+					span.onclick = function() {
+						modal.style.display = "none";
+					}
+				</script>
+	</body>
+</html>

@@ -1,0 +1,649 @@
+<html>
+    <head>
+        <meta charset = "UTF-8">
+        <meta name = "viewport" content = "width=device-width, initial-scale = 1.0">
+        <link rel= "stylesheet" type= "text/css" href= "style/style.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <title>Home</title>
+    </head>
+    <body>
+
+        <div class = "header">
+            <div id = "status">Admin</div>
+        </div>
+        <aside class = "nav">
+            <ul>
+                <li><a href = "##" class = "tablink" onclick = "openTab(event, 'Dashboard')">Dashboard</a></li> 
+                <li><a href = "##" class = "tablink" onclick = "openTab(event, 'Accounts')">Accounts</a></li>
+                <li><a href = "##" class = "tablink" onclick = "openTab(event, 'Journal')">Journal Entry</a></li>
+                <li><a href = "##" class = "tablink" onclick = "openTab(event, 'Payable')">Payable</a></li>
+                <li><a href = "##" class = "tablink" onclick = "openTab(event, 'Receivable')">Receivable</a></li>  
+                <li><a href = "##" class = "tablink" onclick = "openTab(event, 'Inventory')">Inventory</a></li> 
+                <li><a href = "##" class = "tablink" onclick = "openTab(event, 'Financial_s')">Financial Statement</a></li>      
+            </ul>
+        </aside>
+        <div class = "content">
+            <div id = "Dashboard" class = "tabContent">
+                <div class = "contentNav">
+                    <h4 id = "navHeader">Dashboard</h4>
+                    <p class = "date">hello</p>
+                </div>    
+                <div class = "box_tb" style="background-color: deepskyblue;">
+                    <div class = "box_info">
+                        <h4 id = "number">0</h4>
+                        <h4 id = "label">Users</h4>
+                    </div>
+                    <div class = "tb_bottom">
+                        
+                    </div>
+                </div>
+                <div class = "box_tb" style="background-color: limegreen;">
+                    <div class = "box_info">
+                        <h4 id = "number">0</h4>
+                        <h4 id = "label">Total Sales</h4>
+                    </div>
+                    <div class = "tb_bottom">
+                        
+                    </div>
+                </div>
+                <div class = "box_tb" style="background-color: royalblue;">
+                    <div class = "box_info">
+                        <h4 id = "number">0</h4>
+                        <h4 id = "label">Expenses</h4>
+                    </div>
+                    <div class = "tb_bottom">
+                        
+                    </div>
+                </div>
+                <div class = "box_tb" style="background-color: indianred;">
+                    <div class = "box_info">
+                        <h4 id = "number">0</h4>
+                        <h4 id = "label">Profit</h4>
+                    </div>
+                    <div class = "tb_bottom">
+                        
+                    </div>
+                </div>
+            </div>
+            <div id = "Accounts" class = "tabContent">
+                <div class = "contentNav">
+                    <h4 id = "navHeader">Accounts</h4>
+                    <p class = "date">hello</p>
+                </div>   
+                <div class = "account_frame">
+                    <input type="text" id = "acc_search" placeholder="Search" >
+                    <table>
+                        <tr>
+                            <th>Account Number</th>
+                            <th>Account Name</th>
+                            <th>Account Type</th>
+                            <th>Action</th>
+                        </tr>
+                        <tr>
+                            <td contenteditable> </td>
+                            <td> </td>
+                            <td> </td>
+                            <td> </td>
+                        </tr>
+                        <tr>
+                            <td> </td>
+                            <td> </td>
+                            <td> </td>
+                            <td> </td>
+                        </tr>
+                    </table>
+                </div>
+                <button class = "btn" id = "add_acc">Add Account</button>
+                <div id="create_acc_modal" class="modal">
+
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <span class="close">&times;</span>
+                        <h2>Add Account</h2>
+                      </div>
+                      <div class="modal-body">
+                        <form action="/action_page.php">
+                            <div class="container">
+
+                              <label for="acc_name"><b>Account Name</b></label>
+                              <input type="text" placeholder="Enter Account Name" name="acc_name" id="acc_name" required>
+                          
+                              <label for="acc_type"><b>Account Type</b></label>
+                              <select name="acc_type" id = "acc_type" required>
+                                <option value="Asset">Asset</option>
+                                <option value="Liability">Liability</option>
+                                <option value="Owners Equity">Owners Equity</option>
+                                <option value="Income">Income</option>
+                                <option value="Expenses">Expenses</option>
+                            </select>
+                            </div>
+                          </form>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="submit" class="registerbtn">Register</button>
+                      </div>
+                    </div>
+                  
+                  </div>
+            </div>
+            <div id = "Journal" class = "tabContent">
+                <div class = "contentNav">
+                    <h4 id = "navHeader">Journal Entry</h4>
+                    <p class = "date">hello</p>
+                </div> 
+                <div class = "journal_frame">
+                    <div class = "journal_buttons">
+                        <button class = "buttonLink" onclick="openTable(event, 'sale_j')">Sales Journal</button>
+                        <button class = "buttonLink" onclick="openTable(event, 'inv_j')">Inventory Journal</button>
+                        <button class = "buttonLink" onclick="openTable(event, 'gen_j')">General Journal</button>
+                    </div>
+                    <div class = "tab_tb" id = "sale_j" style="overflow-x:auto;">
+                        <button class = "btn" id = "add_sales">New Entry</button>
+                        <table>
+                            <tr>
+                                <th>Sale ID</th>
+                                <th>Date</th>
+                                <th>Buyer Name</th>
+                                <th>Item Name</th>
+                                <th>Category</th>
+                                <th>Price</th>
+                                <th>Quantity</th>
+                                <th>Total Amount</th>
+                                <th>Journal</th>
+                                <th>Debit</th>
+                                <th>Credit</th>
+                            </tr>
+                            <tr>
+                                <td>data</td>
+                                <td>data</td>
+                                <td>datddddddddddddda</td>
+                                <td>data</td>
+                                <td>data</td>
+                                <td>data</td>
+                                <td>data</td>
+                                <td>data</td>
+                                <td>data</td>
+                                <td>data</td>
+                                <td>data</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div id="add_sales_modal" class="modal">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <span class="close" id = "close_sales">&times;</span>
+                                <h2>Sales Entry</h2>
+                            </div>
+                            <div class="modal-body">
+                                <form action="/action_page.php">
+                                    <div class="container">
+
+                                    <label for="sales_acc"><b>Account ID</b></label>
+                                    <input type="number" placeholder="Enter Account ID" name="sales_acc" id="sales_acc" required>
+                                    
+                                    <label for="sales_buyer"><b>Buyer Name</b></label>
+                                    <input type="text" placeholder="Enter Buyer Name" name="sales_buyer" id="sales_buyer" required>      
+                                    
+                                    <label for="sales_item"><b>Item Name</b></label>
+                                    <input type="text" placeholder="Enter Item Name" name="sales_item" id="sales_item" required>      
+
+                                    <label for="sales_cat"><b>Category</b></label>
+                                    <input type="text" placeholder="Enter Category" name="sales_cat" id="sales_cat" required>      
+
+                                    <label for="sales_quantity"><b>Quantity</b></label>
+                                    <input type="number" placeholder="Enter Quantity" name="sales_quantity" id="sales_quantity" required>          
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="submit" class="registerbtn">Register</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class = "tab_tb" id = "inv_j"style="overflow-x:auto;">
+                        <button class = "btn" id = "add_inv">New Entry</button>
+                        <table>
+                            <tr>
+                                <th>Inventory ID</th>
+                                <th>Date</th>
+                                <th>Supplier Name</th>
+                                <th>Item Name</th>
+                                <th>Category</th>
+                                <th>Price</th>
+                                <th>Quantity</th>
+                                <th>Total Amount</th>
+                                <th>Journal</th>
+                                <th>Debit</th>
+                                <th>Credit</th>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div id="add_inv_modal" class="modal">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <span class="close" id = "close_inv">&times;</span>
+                                <h2>Inventory Entry</h2>
+                            </div>
+                            <div class="modal-body">
+                                <form action="/action_page.php">
+                                    <div class="container">
+                                        <div style="float:left;margin-right:20px;width: 50%;">
+                                        <label for="name">Account</label>
+                                        <input id="name" type="text" value="" name="name">
+                                        </div>
+                                        <div style="float:right;width: 22%;">
+                                        <label for="">Debit</label>
+                                        <input id="" type="number" value="" name="">
+                                        </div>
+                                        <div style="float:right;margin-right:20px;width: 22%;">
+                                        <label for="">Credit</label>
+                                        <input id="" type="number" value="" name="">
+                                        </div>
+                                        
+                                          
+
+                                          
+                                    <label for="sales_acc"><b>Account ID</b></label>
+                                    <input type="number" placeholder="Enter Account ID" name="sales_acc" id="sales_acc" size = "50" required>
+                                    
+                                    <label for="sales_buyer"><b>Supplier Name</b></label>
+                                    <input type="text" placeholder="Enter Buyer Name" name="sales_buyer" id="sales_buyer" size = "50" required>      
+                                    
+                                    <label for="sales_item"><b>Item Name</b></label>
+                                    <input type="text" placeholder="Enter Item Name" name="sales_item" id="sales_item" required>      
+
+                                    <label for="sales_cat"><b>Category</b></label>
+                                    <input type="text" placeholder="Enter Category" name="sales_cat" id="sales_cat" required>      
+
+                                    <label for="sales_quantity"><b>Quantity</b></label>
+                                    <input type="number" placeholder="Enter Quantity" name="sales_quantity" id="sales_quantity" required>          
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="submit" class="registerbtn">Register</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class = "tab_tb" id = "gen_j">
+                        <table>
+                            <tr>
+                                <th>General Journal ID</th>
+                                <th>Date</th>
+                                <th>Journal</th>
+                                <th>Debit</th>
+                                <th>Credit</th>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div id = "Financial_s" class = "tabContent">
+                <div class = "contentNav">
+                    <h4 id = "navHeader">Financial Statement</h4>
+                    <p class = "date">hello</p>
+                </div>   
+                <div class = "financial_frame">
+                    <div class = "financial_buttons">
+                        <button class = "buttonLink" onclick="openTable(event, 'income')">Income Statement</button>
+                        <button class = "buttonLink" onclick="openTable(event, 'balance')">Balance Sheet</button>
+                    </div>
+                    <div class = "tab_tb" id = "income">
+                        <table>
+                            <tr>
+                                <th>Item ID</th>
+                                <th>Item Name</th>
+                            </tr>
+                            <tr>
+                                <td>Sales</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>Cost of Goods Sold</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>Gross Profit</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>Water Expenses</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>Internet</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>Electricty</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>Total Expenses</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>Net Income</td>
+                                <td></td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class = "tab_tb" id = "balance">
+                        <table>
+                            <tr>
+                                <th>Account Name</th>
+                                <th>Debit</th>
+                                <th>Credit</th>
+                            </tr>
+                            <tr>
+                                <td style="font-weight: bold;">Assets</td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>Cash</td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>Inventory</td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>Account Receivable</td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight: bold;">Total Assets</td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight: bold;">Liabilities</td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>Account Payable</td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight: bold;">Total Liabilities</td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight: bold;">Owner Equity</td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>Capital</td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div id = "Payable" class = "tabContent">
+                <div class = "contentNav">
+                    <h4 id = "navHeader">Account Payable</h4>
+                    <p class = "date">hello</p>
+                </div>   
+                <div class = "account_frame">
+                    <input type="text" id = "ap_search" placeholder="Search" >
+                    <table>
+                        <tr>
+                            <th>Account Receivable ID</th>
+                            <th>Sales ID</th>
+                            <th>Customer ID</th>
+                            <th>Initial Payment</th>
+                            <th>Collection of AR</th>
+                            <th>Total Collection</th>
+                            <th>Account Amount</th>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <div id = "Receivable" class = "tabContent">
+                <div class = "contentNav">
+                    <h4 id = "navHeader">Account Receivable</h4>
+                    <p class = "date">hello</p>
+                </div>   
+                <div class = "account_frame">
+                    <input type="text" id = "ar_search" placeholder="Search" >
+                    <table>
+                        <tr>
+                            <th>Account Payable ID</th>
+                            <th>Inventory ID</th>
+                            <th>Initial Payment</th>
+                            <th>Collection of AR</th>
+                            <th>Total Collection</th>
+                            <th>Account Amount</th>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <div id = "Inventory" class = "tabContent">
+                <div class = "contentNav">
+                    <h4 id = "navHeader">Inventory</h4>
+                    <p class = "date">hello</p>
+                </div> 
+                <div class = "inventory_frame">
+                    <div class = "inventory_buttons">
+                        <button class = "buttonLink" onclick="openTable(event, 'merch')">Merchandise</button>
+                        <button class = "buttonLink" onclick="openTable(event, 'stock')">Stock Record</button>
+                        <button class = "buttonLink" onclick="openTable(event, 'supp')">Supplier</button>
+                    </div>
+                    <div class = "tab_tb" id = "merch">
+                        <input type="text" id = "merch_search" placeholder="Search" >
+                        <table>
+                            <tr>
+                                <th>Item ID</th>
+                                <th>Item Name</th>
+                                <th>Category</th>
+                                <th>Stock</th>
+                                <th>Action</th>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class = "tab_tb" id = "stock" style="overflow-x:auto;">
+                        <input type="text" id = "merch_search" placeholder="Search" >
+                        <table>
+                            <tr>
+                                <th>Stock ID</th>
+                                <th>Item ID</th>
+                                <th>Item Name</th>
+                                <th>Supplier Name</th>
+                                <th>Category</th>
+                                <th>Price</th>
+                                <th>Quantity (In)</th>
+                                <th>Quantity (Out)</th>
+                                <th>Total Price</th> 
+                                <th>Action</th>
+                            </tr>
+                            <tr>
+                                <td><div contenteditable>hi</div></td>
+                                <td>hiiiiiiiiii</td>
+                                <td>hiiiiiiiiii</td>
+                                <td>hiiiiiiiiii</td>
+                                <td>hiiiiiiiiii</td>
+                                <td>hiiiiiiiiii</td>
+                                <td>hiiiiiiiiii</td>
+                                <td>hiiiiiiiiii</td>
+                                <td>hiiiiiiiiii</td>
+                                <td>hiiiiiiiiii</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class = "tab_tb" id = "supp">
+                        <input type="text" id = "supp_search" placeholder="Search" >
+                        <table>
+                            <tr>
+                                <th>Supplier ID</th>
+                                <th>Supplier Name</th>
+                                <th>Address</th>
+                                <th>Contact Number</th>
+                                <th>Action</th>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        </table>
+                        <button class = "btn" id = "add_supplier">Add Supplier</button>
+                        <div id="add_supplier_modal" class="modal">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <span class="close" id = "close_sup">&times;</span>
+                                    <h2>Add Supplier</h2>
+                                </div>
+                                <div class="modal-body">
+                                    <form action="/action_page.php">
+                                        <div class="container">
+        
+                                        <label for="Sup_name"><b>Name</b></label>
+                                        <input type="text" placeholder="Enter Name" name="sup_name" id="sup_name" required>
+                                
+                                        <label for="sup_adr"><b>Address</b></label>
+                                        <input type="text" placeholder="Enter Address" name="sup_adr" id="sup_adr" required> 
+                                    
+                                        <label for="sup_no"><b>Contact Number</b></label>
+                                        <input type="number" placeholder="Enter Contact Number" name="sup_no" id="sup_no" required>
+
+                                        <label for="sup_cat"><b>Category</b></label>
+                                        <input type="text" placeholder="Enter Category" name="sup_cat" id="sup_cat" required>
+                                    </div>
+                                    </form>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="submit" class="registerbtn">Register</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </div>
+        </div>
+    </body>
+    <script>
+        function openTab(evt, tabname) {
+            var i, x, tablinks;
+            x = document.getElementsByClassName("tabContent");
+            for (i = 0; i < x.length; i++) {
+                x[i].style.display = "none";
+            }
+            tablinks = document.getElementsByClassName("tablink");
+            for (i = 0; i < x.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(" active", ""); 
+            }
+            document.getElementById(tabname).style.display = "block";
+            evt.currentTarget.className += " active";
+
+            date = document.getElementsByClassName("date");
+            for(i = 0; i < date.length; i++){
+                date[i].innerHTML = Date();
+            }
+        }
+        function openTable(evt, tabname){
+            var i, x, buttonLink;
+            x = document.getElementsByClassName("tab_tb");
+            for (i = 0; i < x.length; i++) {
+                x[i].style.display = "none";
+            }
+            buttonLink = document.getElementsByClassName("buttonLink");
+            for (i = 0; i < x.length; i++) {
+                buttonLink[i].className = buttonLink[i].className.replace(" active", ""); 
+            }
+            document.getElementById(tabname).style.display = "block";
+            evt.currentTarget.className += " active";
+        }
+
+        var acc_modal = document.getElementById("create_acc_modal");
+        var acc_btn = document.getElementById("add_acc");
+        var acc_span = document.getElementsByClassName("close")[0];
+
+        var sup_modal = document.getElementById("add_supplier_modal");
+        var sup_btn = document.getElementById("add_supplier");
+        var sup_span = document.getElementById("close_sup");
+
+        var sales_modal = document.getElementById("add_sales_modal");
+        var sales_btn = document.getElementById("add_sales");
+        var sales_span = document.getElementById("close_sales");
+
+        var inv_modal = document.getElementById("add_inv_modal");
+        var inv_btn = document.getElementById("add_inv");
+        var inv_span = document.getElementById("close_inv");
+
+        acc_btn.onclick = function() {
+            acc_modal.style.display = "block";
+        }
+        acc_span.onclick = function() {
+            acc_modal.style.display = "none";
+        }
+
+        sup_btn.onclick = function() {
+            sup_modal.style.display = "block";
+        }
+        sup_span.onclick = function() {
+            sup_modal.style.display = "none";
+        }
+
+        sales_btn.onclick = function() {
+            sales_modal.style.display = "block";
+        }
+        sales_span.onclick = function() {
+            sales_modal.style.display = "none";
+        }
+
+        inv_btn.onclick = function() {
+            inv_modal.style.display = "block";
+        }
+        inv_span.onclick = function() {
+            inv_modal.style.display = "none";
+        }
+    </script>
+</html>

@@ -3,7 +3,7 @@
 - This is the Github repository for the Financial Management System of New Legazpi Tong Hua Trading.
 
 ## Requirements
-- [XAMMP] -  Apache distribution containing MariaDB, PHP, and Perl. 
+- [XAMMP] -  Apache distribution containing MariaDB, PHP, and Perl (Download version 7.4.29). 
 - [VS Code] or any other advanced text editor.
 - Any browser (as long as it is updated to its latest version).
 

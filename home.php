@@ -249,77 +249,80 @@
                             <div class="modal-body">
                                 <form action="insert.php" method = "post">
                                     <div class="container">
-                                    <div style="float:left;margin-right:20px;width: 50%;">
-                                    <label for="sales_acc"><b>Account ID</b></label>
-                                    <select name="sales_acc" required>
-                                    <?php
-                                        include("config.php");
-                                        if($connection->connect_error){
-                                            die("Connection Failed ". $connection->connect_error);
-                                        }
+                                        <button type = "button" class = "add">Add</button>
+                                        <button type = "button" class="remove">remove</button>
+                                        <div id = "new_chq">
+                                            <div style="float:left;margin-right:20px;width: 50%;">
+                                                <label for="sales_acc"><b>Account ID</b></label>
+                                                <select name="sales_acc" required>
+                                                <?php
+                                                    include("config.php");
+                                                    if($connection->connect_error){
+                                                        die("Connection Failed ". $connection->connect_error);
+                                                    }
 
-                                        $sql = "SELECT account_id, account_name FROM account";
-                                        $result = $connection->query($sql);
+                                                    $sql = "SELECT account_id, account_name FROM account";
+                                                    $result = $connection->query($sql);
 
-                                        if(!$result){
-                                            die("Invalid Query: ". $connection_error);
-                                        }
+                                                    if(!$result){
+                                                        die("Invalid Query: ". $connection_error);
+                                                    }
 
-                                        while($row = $result->fetch_assoc()){
-                                            echo "
-                                        <option value=".$row["account_id"].">".$row["account_name"]."</option>
-                                        ";
-                                        }
-                                        $connection->close();
-                                    ?>
-                                    </select>
+                                                    while($row = $result->fetch_assoc()){
+                                                        echo "
+                                                    <option value=".$row["account_id"].">".$row["account_name"]."</option>
+                                                    ";
+                                                    }
+                                                    $connection->close();
+                                                ?>
+                                                </select>
+                                            </div>
+                                            <div style="float:right;width: 22%;">
+                                                <label for="inv_debit">Debit</label>
+                                                <input type="number" id="inv_debit" name="inv_credit" required>
+                                            </div>
+                                            <div style="float:right;margin-right:20px;width: 22%;">
+                                                <label for="inv_credit">Credit</label>
+                                                <input type="number" id="inv_credit" name="inv_credit" required>
+                                            </div>
+                                        </div>
+                                        <div style="float:left;;width: 100%;">
+                                            <label for="sales_exp"><b>Explanation</b></label>
+                                            <input type="text" placeholder="Enter Explanation" name="inv_exp" id="inv_exp" required>      
+                                        </div>
+
+                                        <div style="float:left;margin-right:20px;width: 60%;">
+                                            <label for="sales_item"><b>Item Name</b></label>
+                                            <input type="text" placeholder="Enter Item Name" name="sales_item" id="sales_item" required>      
+                                        </div>
+
+                                        <div style="float:right;width: 35%;">
+                                            <label for="sales_cat"><b>Category</b></label>
+                                            <input type="text" placeholder="Enter Category" name="sales_cat" id="sales_cat" required>   
+                                        </div>
+
+                                        <div style="float:left;margin-right:20px;width: 25%;">
+                                            <label for="sales_buyer"><b>Buyer Name</b></label>
+                                            <input type="text" placeholder="Enter Buyer Name" name="sales_buyer" id="sales_buyer" required>                       
+                                        </div>
+
+                                        <div style="float:right;width: 22%;">
+                                            <label for="sales_total"><b>Total</b></label>
+                                            <input type="number" placeholder="Total" name="sales_total" id="sales_total" required readonly>      
+                                        </div>
+
+                                        <div style="float:right;margin-right:20px;width: 22%;">
+                                            <label for="sales_price"><b>Price</b></label>
+                                            <input type="number" placeholder="Enter Price" name="sales_price" id="sales_price" required>      
+                                        </div>
+
+                                        <div style="float:right;margin-right:20px;width: 22%;">
+                                            <label for="sales_quantity"><b>Quantity</b></label>
+                                            <input type="number" placeholder="Enter Quantity" name="sales_quantity" id="sales_quantity" required>     
+                                        </div>
+
+                                        <button type="submit" class="registerbtn" name="submit_sales">Register</button>    
                                     </div>
-                                    <div style="float:right;width: 22%;">
-                                        <label for="inv_debit">Debit</label>
-                                        <input type="number" id="inv_debit" name="inv_credit" required>
-                                    </div>
-                                    <div style="float:right;margin-right:20px;width: 22%;">
-                                        <label for="inv_credit">Credit</label>
-                                        <input type="number" id="inv_credit" name="inv_credit" required>
-                                    </div>
-
-                                    <div style="float:left;;width: 100%;">
-                                        <label for="sales_exp"><b>Explanation</b></label>
-                                        <input type="text" placeholder="Enter Explanation" name="inv_exp" id="inv_exp" required>      
-                                    </div>
-
-                                    <div style="float:left;margin-right:20px;width: 60%;">
-                                        <label for="sales_item"><b>Item Name</b></label>
-                                        <input type="text" placeholder="Enter Item Name" name="sales_item" id="sales_item" required>      
-                                    </div>
-
-                                    <div style="float:right;width: 35%;">
-                                        <label for="sales_cat"><b>Category</b></label>
-                                        <input type="text" placeholder="Enter Category" name="sales_cat" id="sales_cat" required>   
-                                    </div>
-
-                                    <div style="float:left;margin-right:20px;width: 25%;">
-                                        <label for="sales_buyer"><b>Buyer Name</b></label>
-                                        <input type="text" placeholder="Enter Buyer Name" name="sales_buyer" id="sales_buyer" required>                       
-                                    </div>
-
-                                    <div style="float:right;width: 22%;">
-                                        <label for="sales_total"><b>Total</b></label>
-                                        <input type="number" placeholder="Total" name="sales_total" id="sales_total" required readonly>      
-                                    </div>
-
-                                    <div style="float:right;margin-right:20px;width: 22%;">
-                                        <label for="sales_price"><b>Price</b></label>
-                                        <input type="number" placeholder="Enter Price" name="sales_price" id="sales_price" required>      
-                                    </div>
-
-                                    <div style="float:right;margin-right:20px;width: 22%;">
-                                    <label for="sales_quantity"><b>Quantity</b></label>
-                                    <input type="number" placeholder="Enter Quantity" name="sales_quantity" id="sales_quantity" required>     
-                                    </div>
-
-                                    <button type="submit" class="registerbtn" name="submit_sales">Register</button>    
-                                </div>
                                 </form>
                             </div>
                             <div class="modal-footer">
@@ -394,99 +397,101 @@
                             <div class="modal-body">
                                 <form action="insert.php" method = "post">
                                     <div class="container">
-            
-                                    <div style="float:left;margin-right:20px;width: 50%;">
-                                        <label for="inv_acc"><b>Account</b></label>
-                                        <select name="inv_acc" required>
-                                        <?php
-                                            include("config.php");
-                                            if($connection->connect_error){
-                                                die("Connection Failed ". $connection->connect_error);
-                                            }
+                                        <button type = "button" class = "add">Add</button>
+                                        <button type = "button" class="remove">remove</button>
+                                        <div id = "new_chq">
+                                            <div style="float:left;margin-right:20px;width: 50%;">
+                                                <label for="inv_acc"><b>Account</b></label>
+                                                <select name="inv_acc" required>
+                                                <?php
+                                                    include("config.php");
+                                                    if($connection->connect_error){
+                                                        die("Connection Failed ". $connection->connect_error);
+                                                    }
 
-                                            $sql = "SELECT account_name, account_id FROM account";
-                                            $result = $connection->query($sql);
+                                                    $sql = "SELECT account_name, account_id FROM account";
+                                                    $result = $connection->query($sql);
 
-                                            if(!$result){
-                                                die("Invalid Query: ". $connection_error);
-                                            }
+                                                    if(!$result){
+                                                        die("Invalid Query: ". $connection_error);
+                                                    }
 
-                                            while($row = $result->fetch_assoc()){
-                                                echo "
-                                            <option value=".$row["account_id"].">".$row["account_name"]."</option>
-                                            ";
-                                            }
-                                            $connection->close();
-                                        ?>
-                                        </select>
-                                    </div>
-                                    <div style="float:right;width: 22%;">
-                                        <label for="inv_debit">Debit</label>
-                                        <input type="number" id="inv_debit" name="inv_debit" required>
-                                    </div>
+                                                    while($row = $result->fetch_assoc()){
+                                                        echo "
+                                                    <option value=".$row["account_id"].">".$row["account_name"]."</option>
+                                                    ";
+                                                    }
+                                                    $connection->close();
+                                                ?>
+                                                </select>
+                                            </div>
+                                            <div style="float:right;width: 22%;">
+                                                <label for="inv_debit">Debit</label>
+                                                <input type="number" id="inv_debit" name="inv_debit" required>
+                                            </div>
 
-                                    <div style="float:right;margin-right:20px;width: 22%;">
-                                        <label for="inv_credit">Credit</label>
-                                        <input type="number" id="inv_credit" name="inv_credit" required>
-                                    </div>
+                                            <div style="float:right;margin-right:20px;width: 22%;">
+                                                <label for="inv_credit">Credit</label>
+                                                <input type="number" id="inv_credit" name="inv_credit" required>
+                                            </div>
+                                        </div>
+                                        <div style="float:left;;width: 100%;">
+                                            <label for="inv_exp"><b>Explanation</b></label>
+                                            <input type="text" placeholder="Enter Explanation" name="inv_exp" id="inv_exp" required>  
+                                        </div>
 
-                                    <div style="float:left;;width: 100%;">
-                                        <label for="inv_exp"><b>Explanation</b></label>
-                                        <input type="text" placeholder="Enter Explanation" name="inv_exp" id="inv_exp" required>  
-                                    </div>
+                                        <div style="float:left;margin-right:20px;width: 60%;">
+                                            <label for="inv_item"><b>Item Name</b></label>
+                                            <input type="text" placeholder="Enter Item Name" name="inv_item" id="inv_item" required>      
+                                        </div>
 
-                                    <div style="float:left;margin-right:20px;width: 60%;">
-                                        <label for="inv_item"><b>Item Name</b></label>
-                                        <input type="text" placeholder="Enter Item Name" name="inv_item" id="inv_item" required>      
-                                    </div>
+                                        <div style="float:right;width: 35%;">
+                                            <label for="inv_cat"><b>Category</b></label>
+                                            <input type="text" placeholder="Enter Category" name="inv_cat" id="inv_cat" required> 
+                                        </div>
+                                        
+                                        <div style="float:left;margin-right:20px;width: 25%;">
+                                            <label for="supplier_id"><b>Supplier</b></label>
+                                            <select name="inv_sup" required>
+                                            <?php
+                                                include("config.php");
+                                                if($connection->connect_error){
+                                                    die("Connection Failed ". $connection->connect_error);
+                                                }
 
-                                    <div style="float:right;width: 35%;">
-                                        <label for="inv_cat"><b>Category</b></label>
-                                        <input type="text" placeholder="Enter Category" name="inv_cat" id="inv_cat" required> 
-                                    </div>
+                                                $sql = "SELECT supplier_name FROM supplier";
+                                                $result = $connection->query($sql);
 
-                                    <div style="float:left;margin-right:20px;width: 25%;">
-                                        <label for="supplier_id"><b>Supplier</b></label>
-                                        <select name="inv_sup" required>
-                                        <?php
-                                            include("config.php");
-                                            if($connection->connect_error){
-                                                die("Connection Failed ". $connection->connect_error);
-                                            }
+                                                if(!$result){
+                                                    die("Invalid Query: ". $connection_error);
+                                                }
 
-                                            $sql = "SELECT supplier_name FROM supplier";
-                                            $result = $connection->query($sql);
+                                                while($row = $result->fetch_assoc()){
+                                                    echo "
+                                                <option value=".$row["supplier_name"].">".$row["supplier_name"]."</option>
+                                                ";
+                                                }
+                                                $connection->close();
+                                            ?>
+                                            </select>
+                                        </div>
 
-                                            if(!$result){
-                                                die("Invalid Query: ". $connection_error);
-                                            }
+                                        <div style="float:right;width: 22%;">
+                                            <label for="inv_total"><b>Total</b></label>
+                                            <input type="number" placeholder="Total" name="inv_total" id="inv_total" required readonly>      
+                                        </div>
 
-                                            while($row = $result->fetch_assoc()){
-                                                echo "
-                                            <option value=".$row["supplier_name"].">".$row["supplier_name"]."</option>
-                                            ";
-                                            }
-                                            $connection->close();
-                                        ?>
-                                        </select>
-                                    </div>
+                                        <div style="float:right;margin-right:20px;width: 22%;">
+                                            <label for="inv_price"><b>Price</b></label>
+                                            <input type="number" placeholder="Enter Price" name="inv_price" id="inv_price" required>      
+                                        </div>
 
-                                    <div style="float:right;width: 22%;">
-                                        <label for="inv_total"><b>Total</b></label>
-                                        <input type="number" placeholder="Total" name="inv_total" id="inv_total" required readonly>      
-                                    </div>
+                                        <div style="float:right;margin-right:20px;width: 22%;">
+                                            <label for="inv_quantity"><b>Quantity</b></label>
+                                            <input type="number" placeholder="Enter Quantity" name="inv_quantity" id="inv_quantity" required>  
+                                        </div>
 
-                                    <div style="float:right;margin-right:20px;width: 22%;">
-                                        <label for="inv_price"><b>Price</b></label>
-                                        <input type="number" placeholder="Enter Price" name="inv_price" id="inv_price" required>      
-                                    </div>
-
-                                    <div style="float:right;margin-right:20px;width: 22%;">
-                                        <label for="inv_quantity"><b>Quantity</b></label>
-                                        <input type="number" placeholder="Enter Quantity" name="inv_quantity" id="inv_quantity" required>  
-                                    </div>
-
-                                    <input type = "submit" class = "registerbtn" name = "submit_inv" value = "SUBMIT">  
+                                        <input type = "submit" class = "registerbtn" name = "submit_inv" value = "SUBMIT">  
                                     </div>
                                 </form>
                             </div>
@@ -552,38 +557,43 @@
                                     <form action="insert.php" method = "post">
                                         <div class="container">
 
-                                        <div style="float:left;margin-right:20px;width: 50%;">
-                                        <label for="gen_acc"><b>Account</b></label>
-                                        <select name="gen_acc" required>
-                                        <?php
-                                            include("config.php");
-                                            if($connection->connect_error){
-                                                die("Connection Failed ". $connection->connect_error);
-                                            }
+                                        <button type = "button" class = "add">Add</button>
+                                        <button type = "button" class="remove">remove</button>
+                                        <div id = "new_chq">
+                                            <div style="float:left;margin-right:20px;width: 50%;">
+                                                <label for="gen_acc"><b>Account</b></label>
+                                                <select name="gen_acc" required>
+                                                    <option id = "total_chq" value = "1">Account</option>
+                                                    <?php
+                                                        include("config.php");
+                                                        if($connection->connect_error){
+                                                            die("Connection Failed ". $connection->connect_error);
+                                                        }
 
-                                            $sql = "SELECT account_name, account_id FROM account";
-                                            $result = $connection->query($sql);
+                                                        $sql = "SELECT account_name, account_id FROM account";
+                                                        $result = $connection->query($sql);
 
-                                            if(!$result){
-                                                die("Invalid Query: ". $connection_error);
-                                            }
+                                                        if(!$result){
+                                                            die("Invalid Query: ". $connection_error);
+                                                        }
 
-                                            while($row = $result->fetch_assoc()){
-                                                echo "
-                                            <option value=".$row["account_id"].">".$row["account_name"]."</option>
-                                            ";
-                                            }
-                                            $connection->close();
-                                        ?>
-                                        </select>
-                                        </div>
-                                        <div style="float:right;width: 22%;">
-                                            <label for="gen_debit">Debit</label>
-                                            <input type="number" id="gen_debit" name="gen_debit">
-                                        </div>
-                                        <div style="float:right;margin-right:20px;width: 22%;">
-                                            <label for="gen_credit">Credit</label>
-                                            <input type="number" id="gen_credit" name="gen_credit">
+                                                        while($row = $result->fetch_assoc()){
+                                                            echo "
+                                                            <option value=".$row["account_id"].">".$row["account_name"]."</option>
+                                                            ";
+                                                        }
+                                                        $connection->close();
+                                                    ?>
+                                                </select>
+                                            </div>
+                                            <div style="float:right;width: 22%;">
+                                                <label for="gen_debit">Debit</label>
+                                                <input type="number" id="gen_debit" name="gen_debit">
+                                            </div>
+                                            <div style="float:right;margin-right:20px;width: 22%;">
+                                                <label for="gen_credit">Credit</label>
+                                                <input type="number" id="gen_credit" name="gen_credit">
+                                            </div>
                                         </div>
                                 
                                         <button type="submit" class="registerbtn" name = "submit_gen">Register</button>
@@ -888,27 +898,46 @@
     <script>
         $(function(){
 
-        $("#loading").hide();
-        //acknowledgement message
-        var message_status = $("#status");
-        $("td[contenteditable=true]").blur(function(){
-            var field_userid = $(this).attr("id") ;
-            var value = $(this).text() ;
+            $("#loading").hide();
+            //acknowledgement message
+            var message_status = $("#status");
+            $("td[contenteditable=true]").blur(function(){
+                var field_userid = $(this).attr("id") ;
+                var value = $(this).text() ;
 
-            $.post('update.php' , field_userid + "=" + value, function(data){
+                $.post('update.php' , field_userid + "=" + value, function(data){
 
 
 
-                if(data != '')
-                {
-                    message_status.show();
-                    message_status.text(data);
-                    //hide the message
-                    setTimeout(function(){message_status.hide()},1000);
-                }
+                    if(data != '')
+                    {
+                        message_status.show();
+                        message_status.text(data);
+                        //hide the message
+                        setTimeout(function(){message_status.hide()},1000);
+                    }
+                });
             });
-        });
        
+        });
+
+        $(function(){
+
+            $("i").click(function(){
+                var field = $(this).attr("id") ;
+         
+                $.post('sort.php' , field, function(data){
+                    
+                    if(data != '')
+                    {
+                        message_status.show();
+                        message_status.text(data);
+                        //hide the message
+                        setTimeout(function(){message_status.hide()},1000);
+                    }
+                });
+            });
+
         });
         /*$(document).ready(function(){
             $("i").click(function(){
@@ -1020,6 +1049,27 @@
                 }
             }
         }
-        
+
+$('.add').on('click', add);
+$('.remove').on('click', remove);
+
+function add() {
+    var new_chq_no = parseInt($('#total_chq').val()) + 1;
+
+    var new_chq = "<div id='new_" + new_chq_no + "' ><div id='new_" + new_chq_no + "' style='float:left;margin-right:20px;width: 50%;'><label for='gen_acc'><b>Account</b></label><select name='gen_acc' required><option id = 'total_chq' value = '0'>Account</option><?php include('config.php');if($connection->connect_error){die('Connection Failed '. $connection->connect_error); }$sql = 'SELECT account_name, account_id FROM account';$result = $connection->query($sql);if(!$result){die('Invalid Query: '. $connection_error);}while($row = $result->fetch_assoc()){echo '<option value='.$row['account_id'].'>'.$row['account_name'].'</option>';}$connection->close();?></select></div><div style='float:right;width: 22%;'><label for='gen_debit'>Debit</label><input type='number' id='gen_debit' name='gen_debit'></div><div style='float:right;margin-right:20px;width: 22%;'><label for='gen_credit'>Credit</label><input type='number' id='gen_credit' name='gen_credit'></div></div>";
+
+
+$('#new_chq').append(new_chq);
+
+$('#total_chq').val(new_chq_no);
+}
+function remove() {
+  var last_chq_no = $('#total_chq').val();
+
+  if (last_chq_no > 1) {
+    $('#new_' + last_chq_no).remove();
+    $('#total_chq').val(last_chq_no - 1);
+  }
+}
     </script>
 </html>

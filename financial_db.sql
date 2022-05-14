@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 12, 2022 at 04:15 PM
+-- Generation Time: May 14, 2022 at 02:51 PM
 -- Server version: 10.4.19-MariaDB
 -- PHP Version: 8.0.7
 
@@ -94,7 +94,10 @@ INSERT INTO `customer` (`customer_id`, `customer_name`, `stock`) VALUES
 (9, 'dwa', 32),
 (10, 'earl', 20),
 (11, 'shio', 20),
-(12, 'hi', 10);
+(12, 'hi', 10),
+(13, 'John', 10),
+(14, 'dwa', 32),
+(15, 'Reil', 50);
 
 -- --------------------------------------------------------
 
@@ -108,15 +111,22 @@ CREATE TABLE `general` (
   `debit` float NOT NULL,
   `credit` float NOT NULL,
   `journal` varchar(20) NOT NULL,
-  `date` date NOT NULL
+  `date` date NOT NULL,
+  `explanation` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `general`
 --
 
-INSERT INTO `general` (`general_id`, `account_id`, `debit`, `credit`, `journal`, `date`) VALUES
-(1, 1001, 33, 22, 'Assets', '2022-05-05');
+INSERT INTO `general` (`general_id`, `account_id`, `debit`, `credit`, `journal`, `date`, `explanation`) VALUES
+(1, 1001, 33, 22, 'Assets', '2022-05-05', ''),
+(8, 2000, 100, 100, 'Liability', '2022-05-14', 'y'),
+(9, 3000, 200, 200, 'Owners Equ', '2022-05-14', 'e'),
+(11, 3000, 100, 100, 'Owners Equ', '2022-05-14', 'yesss'),
+(12, 1001, 1200, 1200, 'Assets', '2022-05-14', 'yesss'),
+(13, 3000, 69, 69, 'Owners Equ', '2022-05-14', 'no'),
+(14, 1003, 3, 3, 'Asset', '2022-05-14', '3');
 
 -- --------------------------------------------------------
 
@@ -146,10 +156,9 @@ CREATE TABLE `inventory` (
 
 INSERT INTO `inventory` (`inventory_id`, `account_id`, `inv_date`, `supplier_id`, `item_name`, `category`, `price`, `quantity`, `total`, `journal`, `debit`, `credit`, `Explanation`) VALUES
 (2, 1001, '2022-04-20', 1, 'red cloth', 'pink', 100, 10, 1000, 'Asset', 1000, 0, ''),
-(4, 2000, '2022-04-20', 2, 'pink cloth', 'cloth', 200, 10, 2000, 'Liability', 2000, 0, ''),
-(7, 1001, '2022-04-29', 2, 'pink cloth', 'cloth', 10, 4, 40, 'Assets', 40, 0, ''),
-(10, 2000, '2022-05-05', 1, 'Red Cloth', 'Cloth', 50, 10, 500, 'Liability', 200, 100, ''),
-(11, 2000, '2022-05-05', 2, 'YESS', 'YES', 32, 32, 1024, 'Liability', 32, 32, 'YES YES YES');
+(31, 2000, '2022-05-14', 1, 'DWA', 'DWA', 2, 32, 64, 'Liability', 32, 32, 'DWA'),
+(32, 2000, '2022-05-14', 1, 'DWA', 'DWA', 2, 32, 64, 'Liability', 32, 32, 'DWA'),
+(33, 1001, '2022-05-14', 1, 'dwa', 'dwa', 2, 32, 64, 'Assets', 69, 69, 'nice');
 
 -- --------------------------------------------------------
 
@@ -181,16 +190,9 @@ CREATE TABLE `logs` (
 --
 
 INSERT INTO `logs` (`log_id`, `admin_id`, `login`, `logout`) VALUES
-(40, 1000, '2022-05-03 14:09:32', '2022-05-03 14:09:49'),
-(41, 1000, '2022-05-03 14:25:40', '0000-00-00 00:00:00'),
-(42, 1000, '2022-05-04 13:31:25', '0000-00-00 00:00:00'),
-(43, 1000, '2022-05-04 15:13:01', '0000-00-00 00:00:00'),
-(44, 1000, '2022-05-04 15:17:40', '0000-00-00 00:00:00'),
-(45, 1000, '2022-05-04 15:32:36', '0000-00-00 00:00:00'),
-(46, 1000, '2022-05-05 13:19:32', '0000-00-00 00:00:00'),
-(47, 1000, '2022-05-10 13:54:04', '0000-00-00 00:00:00'),
-(48, 1000, '2022-05-12 08:41:57', '0000-00-00 00:00:00'),
-(49, 1000, '2022-05-12 14:06:33', '0000-00-00 00:00:00');
+(54, 1000, '2022-05-14 13:56:50', '2022-05-14 13:57:01'),
+(55, 1000, '2022-05-14 13:57:09', '2022-05-14 13:57:21'),
+(56, 1000, '2022-05-14 13:57:33', '0000-00-00 00:00:00');
 
 -- --------------------------------------------------------
 
@@ -210,15 +212,17 @@ CREATE TABLE `sales` (
   `total` float NOT NULL,
   `journal` varchar(20) NOT NULL,
   `debit` float NOT NULL,
-  `credit` float NOT NULL
+  `credit` float NOT NULL,
+  `explanation` varchar(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `sales`
 --
 
-INSERT INTO `sales` (`sales_id`, `account_id`, `sales_date`, `buyer_name`, `item_name`, `category`, `price`, `quantity`, `total`, `journal`, `debit`, `credit`) VALUES
-(4, 1001, '2022-05-05', 'hi', 'pink', 'cloth', 5, 10, 50, 'Assets', 0, 0);
+INSERT INTO `sales` (`sales_id`, `account_id`, `sales_date`, `buyer_name`, `item_name`, `category`, `price`, `quantity`, `total`, `journal`, `debit`, `credit`, `explanation`) VALUES
+(4, 1001, '2022-05-05', 'hi', 'pink', 'cloth', 5, 10, 50, 'Assets', 0, 0, ''),
+(5, 2000, '2022-05-14', 'reil', 'Pink Ribbon', 'Ribbon', 3, 50, 150, 'Liability', 69, 69, 'NO');
 
 -- --------------------------------------------------------
 
@@ -319,19 +323,19 @@ ALTER TABLE `account`
 -- AUTO_INCREMENT for table `customer`
 --
 ALTER TABLE `customer`
-  MODIFY `customer_id` int(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `customer_id` int(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT for table `general`
 --
 ALTER TABLE `general`
-  MODIFY `general_id` int(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `general_id` int(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT for table `inventory`
 --
 ALTER TABLE `inventory`
-  MODIFY `inventory_id` int(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `inventory_id` int(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
 
 --
 -- AUTO_INCREMENT for table `journal`
@@ -343,13 +347,13 @@ ALTER TABLE `journal`
 -- AUTO_INCREMENT for table `logs`
 --
 ALTER TABLE `logs`
-  MODIFY `log_id` int(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=50;
+  MODIFY `log_id` int(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=57;
 
 --
 -- AUTO_INCREMENT for table `sales`
 --
 ALTER TABLE `sales`
-  MODIFY `sales_id` int(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `sales_id` int(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `supplier`

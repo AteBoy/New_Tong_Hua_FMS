@@ -30,6 +30,13 @@
         $connection->close(); 
         header("Location: home.php");
     }
+    if($table == "general"){
+        $qry = "DELETE FROM $table WHERE general_id = '$id'";
+        $result = $connection->query($qry);
+
+        $connection->close(); 
+        header("Location: home.php");
+    }
     if($table == "supplier"){
         $qry = "DELETE FROM $table WHERE supplier_ID = '$id'";
         $result = $connection->query($qry);

@@ -124,12 +124,22 @@
         $inv_quantity = $_POST['inv_quantity'];
         $date = date("Y/m/d");
         $total = $inv_quantity * $inv_price;
-        $debit = $_POST['inv_debit'];
-        $credit = $_POST['inv_credit'];
+        $inv_debit = $_POST['inv_debit'];
+        $inv_credit = $_POST['inv_credit'];
         $exp = $_POST['inv_exp'];
+        
+        for ($i = 0; $i < count($inv_acc); $i++) {
+            if (strlen($inv_acc[$i]) !== 0) {
+                $acc = $inv_acc[$i];
+                $debit = $inv_debit[$i];
+                $credit = $inv_credit[$i];
+                $a = $acc;
+                echo "<script>alert('$a');</script>";
+                $qry = "INSERT INTO inventory(inventory_id, account_id, inv_date, supplier_id, item_name, category, price, quantity, total, journal, debit, credit, explanation) VALUES ('','$acc','$date',(SELECT supplier_id from supplier where supplier_name = '$inv_sup'),'$inv_item','$inv_cat','$inv_price','$inv_quantity','$total',(select account_type from account where account_id = '$acc'), '$debit', '$credit','$exp')";
+                $result = $connection->query($qry);
+            }
+        }
 
-        $qry = "INSERT INTO inventory(inventory_id, account_id, inv_date, supplier_id, item_name, category, price, quantity, total, journal, debit, credit, explanation) VALUES ('','$inv_acc','$date',(SELECT supplier_id from supplier where supplier_name = '$inv_sup'),'$inv_item','$inv_cat','$inv_price','$inv_quantity','$total',(select account_type from account where account_id = '$inv_acc'), '$debit', '$credit','$exp')";
-        $result = $connection->query($qry);
         $connection->close(); 
     }
     if(isset($_POST['submit_sales'])){
@@ -141,25 +151,40 @@
         $sales_quantity = $_POST['sales_quantity'];
         $date = date("Y/m/d");
         $total = $sales_quantity * $sales_price;
-        $debit = $_POST['sales_debit'];
-        $credit = $_POST['sales_credit'];
+        $sales_debit = $_POST['sales_debit'];
+        $sales_credit = $_POST['sales_credit'];
         $exp = $_POST['sales_exp'];
 
-        $qry = "INSERT INTO sales(sales_id, account_id, sales_date, buyer_name, item_name, category, price, quantity, total, journal, debit, credit, explanation) VALUES ('','$sales_acc','$date','$sales_buyer','$sales_item','$sales_cat','$sales_price','$sales_quantity','$total',(select account_type from account where account_id = '$sales_acc'), '$debit', '$credit','$exp')";
-        $result = $connection->query($qry);
-        
-        $qry = "INSERT INTO customer(customer_id, customer_name, stock) VALUES ('','$sales_buyer','$sales_quantity')";
-        $result = $connection->query($qry);
+        for ($i = 0; $i < count($sales_acc); $i++) {
+            if (strlen($sales_acc[$i]) !== 0) {
+                $acc = $sales_acc[$i];
+                $debit = $sales_debit[$i];
+                $credit = $sales_credit[$i];
+
+                $qry = "INSERT INTO sales(sales_id, account_id, sales_date, buyer_name, item_name, category, price, quantity, total, journal, debit, credit, explanation) VALUES ('','$acc','$date','$sales_buyer','$sales_item','$sales_cat','$sales_price','$sales_quantity','$total',(select account_type from account where account_id = '$acc'), '$debit', '$credit','$exp')";
+                $result = $connection->query($qry);
+            }
+        }
 
         $connection->close(); 
     }
     if(isset($_POST['submit_gen'])){
         $gen_acc = $_POST['gen_acc'];
-        $debit = $_POST['gen_debit'];
-        $credit = $_POST['gen_credit'];
+        $gen_debit = $_POST['gen_debit'];
+        $gen_credit = $_POST['gen_credit'];
         $date = date("Y/m/d");
-        $qry = "INSERT INTO general(general_id, account_id, debit, credit, journal, date) VALUES ('','$gen_acc','$debit','$credit',(select account_type from account where account_id = '$gen_acc'),'$date')";
-        $result = $connection->query($qry);
+        $exp = $_POST['gen_exp'];
+        for ($i = 0; $i < count($gen_acc); $i++) {
+            if (strlen($gen_acc[$i]) !== 0) {
+                $acc = $gen_acc[$i];
+                $debit = $gen_debit[$i];
+                $credit = $gen_credit[$i];
+ 
+                $qry = "INSERT INTO general(general_id, account_id, debit, credit, journal, date, explanation) VALUES ('','$acc','$debit','$credit',(select account_type from account where account_id = '$acc'),'$date','$exp')";
+                $result = $connection->query($qry);
+            }
+        }
+        
     }
     if(isset($_POST['submit_sup'])){
         $sup_name = $_POST['sup_name'];

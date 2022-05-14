@@ -249,12 +249,13 @@
                             <div class="modal-body">
                                 <form action="insert.php" method = "post">
                                     <div class="container">
-                                        <button type = "button" class = "add">Add</button>
-                                        <button type = "button" class="remove">remove</button>
-                                        <div id = "new_chq">
+                                        <button type = "button" class = "add_sales_acc">Add</button>
+                                        <button type = "button" class="remove_sales_acc">remove</button>
+                                        <div id = "new_ch3">
                                             <div style="float:left;margin-right:20px;width: 50%;">
                                                 <label for="sales_acc"><b>Account ID</b></label>
-                                                <select name="sales_acc" required>
+                                                <select name="sales_acc[]" required>
+                                                <option id = "total_ch3" value = "1">Account</option>
                                                 <?php
                                                     include("config.php");
                                                     if($connection->connect_error){
@@ -278,17 +279,17 @@
                                                 </select>
                                             </div>
                                             <div style="float:right;width: 22%;">
-                                                <label for="inv_debit">Debit</label>
-                                                <input type="number" id="inv_debit" name="inv_credit" required>
+                                                <label for="sales_debit">Debit</label>
+                                                <input type="number" id="sales_debit" name="sales_debit[]" required>
                                             </div>
                                             <div style="float:right;margin-right:20px;width: 22%;">
-                                                <label for="inv_credit">Credit</label>
-                                                <input type="number" id="inv_credit" name="inv_credit" required>
+                                                <label for="sales_credit">Credit</label>
+                                                <input type="number" id="sales_credit" name="sales_credit[]" required>
                                             </div>
                                         </div>
                                         <div style="float:left;;width: 100%;">
                                             <label for="sales_exp"><b>Explanation</b></label>
-                                            <input type="text" placeholder="Enter Explanation" name="inv_exp" id="inv_exp" required>      
+                                            <input type="text" placeholder="Enter Explanation" name="sales_exp" id="sales_exp" required>      
                                         </div>
 
                                         <div style="float:left;margin-right:20px;width: 60%;">
@@ -397,12 +398,13 @@
                             <div class="modal-body">
                                 <form action="insert.php" method = "post">
                                     <div class="container">
-                                        <button type = "button" class = "add">Add</button>
-                                        <button type = "button" class="remove">remove</button>
-                                        <div id = "new_chq">
+                                        <button type = "button" class = "add_inv_acc">Add</button>
+                                        <button type = "button" class="remove_inv_acc">remove</button>
+                                        <div id = "new_ch2">
                                             <div style="float:left;margin-right:20px;width: 50%;">
                                                 <label for="inv_acc"><b>Account</b></label>
-                                                <select name="inv_acc" required>
+                                                <select name="inv_acc[]" required>
+                                                <option id = "total_ch2" value = "1">Account</option>
                                                 <?php
                                                     include("config.php");
                                                     if($connection->connect_error){
@@ -427,12 +429,12 @@
                                             </div>
                                             <div style="float:right;width: 22%;">
                                                 <label for="inv_debit">Debit</label>
-                                                <input type="number" id="inv_debit" name="inv_debit" required>
+                                                <input type="number" id="inv_debit" name="inv_debit[]" required>
                                             </div>
 
                                             <div style="float:right;margin-right:20px;width: 22%;">
                                                 <label for="inv_credit">Credit</label>
-                                                <input type="number" id="inv_credit" name="inv_credit" required>
+                                                <input type="number" id="inv_credit" name="inv_credit[]" required>
                                             </div>
                                         </div>
                                         <div style="float:left;;width: 100%;">
@@ -557,13 +559,13 @@
                                     <form action="insert.php" method = "post">
                                         <div class="container">
 
-                                        <button type = "button" class = "add">Add</button>
-                                        <button type = "button" class="remove">remove</button>
-                                        <div id = "new_chq">
+                                        <button type = "button" class = "add_gen_acc">Add</button>
+                                        <button type = "button" class="remove_gen_acc">remove</button>
+                                        <div id = "new_ch1">
                                             <div style="float:left;margin-right:20px;width: 50%;">
                                                 <label for="gen_acc"><b>Account</b></label>
-                                                <select name="gen_acc" required>
-                                                    <option id = "total_chq" value = "1">Account</option>
+                                                <select name="gen_acc[]" required>
+                                                    <option id = "total_ch1" value = "1">Account</option>
                                                     <?php
                                                         include("config.php");
                                                         if($connection->connect_error){
@@ -588,11 +590,15 @@
                                             </div>
                                             <div style="float:right;width: 22%;">
                                                 <label for="gen_debit">Debit</label>
-                                                <input type="number" id="gen_debit" name="gen_debit">
+                                                <input type="number" id="gen_debit" name="gen_debit[]">
                                             </div>
                                             <div style="float:right;margin-right:20px;width: 22%;">
                                                 <label for="gen_credit">Credit</label>
-                                                <input type="number" id="gen_credit" name="gen_credit">
+                                                <input type="number" id="gen_credit" name="gen_credit[]">
+                                            </div>
+                                            <div style="float:left;;width: 100%;">
+                                                <label for="gen_exp"><b>Explanation</b></label>
+                                                <input type="text" placeholder="Enter Explanation" name="gen_exp" id="gen_exp" required>      
                                             </div>
                                         </div>
                                 
@@ -1050,26 +1056,61 @@
             }
         }
 
-$('.add').on('click', add);
-$('.remove').on('click', remove);
+$('.add_gen_acc').on('click', add_gen_acc);
+$('.remove_gen_acc').on('click', remove_gen_acc);
+//ch1 = general entry
+//ch2 = inventory entry
+//ch3 = sales entry
+function add_gen_acc() {
+    var new_chq_no = parseInt($('#total_ch1').val()) + 1;
+    var new_ch1 = "<div id='new_" + new_chq_no + "' ><div id='new_" + new_chq_no + "' style='float:left;margin-right:20px;width: 50%;'><label for='gen_acc'><b>Account</b></label><select name='gen_acc[]' required><option id = 'total_ch1' value = '0'>Account</option><?php include('config.php');if($connection->connect_error){die('Connection Failed '. $connection->connect_error); }$sql = 'SELECT account_name, account_id FROM account';$result = $connection->query($sql);if(!$result){die('Invalid Query: '. $connection_error);}while($row = $result->fetch_assoc()){echo '<option value='.$row['account_id'].'>'.$row['account_name'].'</option>';}$connection->close();?></select></div><div style='float:right;width: 22%;'><label for='gen_debit'>Debit</label><input type='number' id='gen_debit' name='gen_debit[]'></div><div style='float:right;margin-right:20px;width: 22%;'><label for='gen_credit'>Credit</label><input type='number' id='gen_credit' name='gen_credit[]'></div><div style='float:left;;width: 100%;''></div>";
 
-function add() {
-    var new_chq_no = parseInt($('#total_chq').val()) + 1;
+    $('#new_ch1').append(new_ch1);
+    $('#total_ch1').val(new_chq_no);
 
-    var new_chq = "<div id='new_" + new_chq_no + "' ><div id='new_" + new_chq_no + "' style='float:left;margin-right:20px;width: 50%;'><label for='gen_acc'><b>Account</b></label><select name='gen_acc' required><option id = 'total_chq' value = '0'>Account</option><?php include('config.php');if($connection->connect_error){die('Connection Failed '. $connection->connect_error); }$sql = 'SELECT account_name, account_id FROM account';$result = $connection->query($sql);if(!$result){die('Invalid Query: '. $connection_error);}while($row = $result->fetch_assoc()){echo '<option value='.$row['account_id'].'>'.$row['account_name'].'</option>';}$connection->close();?></select></div><div style='float:right;width: 22%;'><label for='gen_debit'>Debit</label><input type='number' id='gen_debit' name='gen_debit'></div><div style='float:right;margin-right:20px;width: 22%;'><label for='gen_credit'>Credit</label><input type='number' id='gen_credit' name='gen_credit'></div></div>";
-
-
-$('#new_chq').append(new_chq);
-
-$('#total_chq').val(new_chq_no);
 }
-function remove() {
-  var last_chq_no = $('#total_chq').val();
+function remove_gen_acc() {
+    var last_chq_no = $('#total_ch1').val();
 
-  if (last_chq_no > 1) {
-    $('#new_' + last_chq_no).remove();
-    $('#total_chq').val(last_chq_no - 1);
-  }
+    if (last_chq_no > 1) {
+        $('#new_' + last_chq_no).remove();
+        $('#total_ch1').val(last_chq_no - 1);
+    }
+}
+$('.add_inv_acc').on('click', add_inv_acc);
+$('.remove_inv_acc').on('click', remove_inv_acc);
+function add_inv_acc() {
+    var new_chq_no = parseInt($('#total_ch2').val()) + 1;
+    var new_ch2 = "<div id='new_" + new_chq_no + "' ><div id='new_" + new_chq_no + "' style='float:left;margin-right:20px;width: 50%;'><label for='inv_acc'><b>Account</b></label><select name='inv_acc[]' required><option id = 'total_ch2' value = '0'>Account</option><?php include('config.php');if($connection->connect_error){die('Connection Failed '. $connection->connect_error); }$sql = 'SELECT account_name, account_id FROM account';$result = $connection->query($sql);if(!$result){die('Invalid Query: '. $connection_error);}while($row = $result->fetch_assoc()){echo '<option value='.$row['account_id'].'>'.$row['account_name'].'</option>';}$connection->close();?></select></div><div style='float:right;width: 22%;'><label for='inv_debit'>Debit</label><input type='number' id='inv_debit' name='inv_debit[]'></div><div style='float:right;margin-right:20px;width: 22%;'><label for='inv_credit'>Credit</label><input type='number' id='inv_credit' name='inv_credit[]'></div><div style='float:left;;width: 100%;'></div>";
+    
+    $('#new_ch2').append(new_ch2);
+    $('#total_ch2').val(new_chq_no);
+}
+function remove_inv_acc() {
+    var last_chq_no = $('#total_ch2').val();
+
+    if (last_chq_no > 1) {
+        $('#new_' + last_chq_no).remove();
+        $('#total_ch2').val(last_chq_no - 1);
+    }
+}
+
+$('.add_sales_acc').on('click', add_sales_acc);
+$('.remove_sales_acc').on('click', remove_sales_acc);
+function add_sales_acc() {
+    var new_chq_no = parseInt($('#total_ch3').val()) + 1;
+    var new_ch3 = "<div id='new_" + new_chq_no + "' ><div id='new_" + new_chq_no + "' style='float:left;margin-right:20px;width: 50%;'><label for='sales_acc'><b>Account</b></label><select name='sales_acc[]' required><option id = 'total_ch3' value = '0'>Account</option><?php include('config.php');if($connection->connect_error){die('Connection Failed '. $connection->connect_error); }$sql = 'SELECT account_name, account_id FROM account';$result = $connection->query($sql);if(!$result){die('Invalid Query: '. $connection_error);}while($row = $result->fetch_assoc()){echo '<option value='.$row['account_id'].'>'.$row['account_name'].'</option>';}$connection->close();?></select></div><div style='float:right;width: 22%;'><label for='sales_debit'>Debit</label><input type='number' id='sales_debit' name='sales_debit[]'></div><div style='float:right;margin-right:20px;width: 22%;'><label for='sales_credit'>Credit</label><input type='number' id='sales_credit' name='sales_credit[]'></div><div style='float:left;;width: 100%;''></div>";
+
+    $('#new_ch3').append(new_ch3);
+    $('#total_ch3').val(new_chq_no);
+}
+function remove_sales_acc() {
+    var last_chq_no = $('#total_ch3').val();
+
+    if (last_chq_no > 1) {
+        $('#new_' + last_chq_no).remove();
+        $('#total_ch3').val(last_chq_no - 1);
+    }
 }
     </script>
 </html>

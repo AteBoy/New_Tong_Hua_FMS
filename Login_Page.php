@@ -53,6 +53,8 @@
 	</head>
 	
 	<body>
+		<div class="body-image"></div>
+
 		<div class = "center">
 			<h1> Welcome to Tong Hua Trading </h1>
 			<form  action="" method="post">

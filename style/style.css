@@ -1,27 +1,53 @@
 
-body{
+body {
+    font-family: "Open Sans", sans-serif;
     margin: 0;
+ 
 }
-.header{
+.header {
     width: 100%;
     height: 5%;
-    background-color:#2346DB;
+    background-color: #617ced;
 }
 #status{
     top: 1.5%;
     right: 1%;
     position: absolute;
-    color: white;
-    
+    color: blue;
 }
-.user_dropdown{
+
+.userMenu {
+    box-shadow: inset 0px 0px 0px 0px #ffffff;
+    background: linear-gradient(to bottom, #ffffff 5%, #f6f6f6 100%);
+    background-color: #ffffff;
+    border-radius: 7px;
+    border: 1px solid #dcdcdc;
+    display: inline-block;
+    cursor: pointer;
+    color: #666666;
+    font-family: Arial;
+    font-size: 15px;
+    font-weight: bold;
+    padding: 4px 35px;
+    text-decoration: none;
+    text-shadow: 0px 1px 0px #ffffff;
+    display: inline-block;
+}
+.user_dropdown {
+    box-shadow: inset 0px 0px 0px 0px #ffffff;
+    background: linear-gradient(to bottom, #ffffff 5%, #f6f6f6 100%);
+    border-radius: 7px;
+    border: 1px solid #dcdcdc;
     display: none;
     position: absolute;
     background-color: #f1f1f1;
-    min-width: 160px;
+    min-width: 200px;
     overflow: auto;
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
     z-index: 1;
+    left: 100%;
+    right: auto;
+    transform: translateX(-100%);
 }
 .user_dropdown a{
     color: black;
@@ -33,28 +59,27 @@ body{
     background-color: #ddd;
 }
 .show {display: block;}
-.nav ul{
-   list-style-type: none;
-   margin: 0;
-   padding: 0;
-   width: 15%;
-   background-color:  #DEE2F2;
-   position: fixed;
-   height: 100%;
-   overflow: auto;
+.nav ul {
+    list-style-type: none;
+    margin: 0;
+    padding: .50rem .25rem;
+    width: 13%;
+    background-color: #accefa;
+    position: fixed;
+    height: 100%;
+    overflow: auto;
+    border: 1px solid rgba(0,0,0,.125);
 }
-.nav li a{
+.nav li a {
     display: block;
-    color: #8395FE;
+    color: #ffffff;
     padding: 8px 16px;
     text-decoration: none;
     width: 100%;
-    border-bottom: black 2px solid;
     font-size: 18px;
 }
-.nav a.active{
-    background-color: #8395FE;
-    color: white;
+.nav a.active {
+
 }
 .nav a:hover:not(.active){
     background-color: skyblue;
@@ -84,10 +109,10 @@ body{
 .tabContent{
     display:none;
 }
-.contentNav{
+.contentNav {
     width: 100%;
     height: 5%;
-    border-bottom: 3px black solid;
+    border-bottom: 1px black solid;
     position: sticky;
 }
 #navHeader{
@@ -105,33 +130,34 @@ body{
     padding-right: 20px;
     margin: 0%;
 }
-.box_tb{
+.box_tb {
     width: 20%;
     height: 20%;
-    border: 3px black solid;
+    border-radius: 7px;
+    border: 1px solid #dcdcdc;
     margin: 35px;
     float: left;
 }
-.box_info{   
-    border-bottom: 3px black solid;
+.box_info {
+    border-top: 1px solid rgba(0,0,0,.1);
     width: 100%;
     height: 80%;
 }
 #number{
     text-align: right;
-    font-size: 80px;
-    color: black;
+    font-size: 70px;
+    color: white;
     padding-right: 20px;
     margin: 0%;
     padding-top: 10px;
 }
 #label{
     text-align: right;
-    font-size: 30px;
-    color: black;
+    font-size: 20px;
+    color: white;
     padding-right: 20px;
     margin: 0%;
-    padding-top: 10px;
+    padding-top: 20px;
 }
 
 #acc_label{

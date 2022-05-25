@@ -7,41 +7,50 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>  
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <title>Dynamic  input fields</title>
-<div class="row">
-    <div class="col-md-4"></div>
-    <div class="col-md-4">
-        <form action="" method="post">
-            <div class="input_fields_wrap">
+    <style>
 
-            <button class="add_field_button">Add More Fields</button>
-            <input type="text" class="form-control mb-3" name="mytext[]" placeholder="Enter Price">
-            </div>
-            <button type="submit" class="btn btn-primary">Submit</button>
-        </form>
-    </div>
-    <div class="col-md-4"></div>
-</div>
+#stock_switch{
+    width: 10%;
+    font-size: 12px;
+    height: 1%;
+    float: left;
+    margin-bottom: 5px;
+    margin-top: 50px;
+    background-color: #749EFF; 
+    color: white; 
+    border: 2px solid darkblue;
+}
+.btn{
+    background-color: #749EFF; 
+    color: white; 
+    border: 2px solid darkblue;
+    padding: 16px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    transition-duration: 0.4s;
+    cursor: pointer;
+    position: fixed;
+    bottom: -4px;
+    right: 10px;
+}
+.btn:hover, .btn.active, #stock_switch:hover, #stock_switch.active{
+    background-color: skyblue;
+    color: white;
+}
+    </style>
+<body>
+    <input onclick="change()" type="button" value="In" id="stock_switch"></input>
 
 </body>  
 <script>
+function change() // no ';' here
+{
+    var elem = document.getElementById("stock_switch");
+    if (elem.value=="Out") elem.value = "In";
+    else elem.value = "Out";
+}
 
-$(document).ready(function() {
-var max_fields      = 10; //maximum input boxes allowed
-var wrapper   		= $(".input_fields_wrap"); //Fields wrapper
-var add_button      = $(".add_field_button"); //Add button ID
-
-var x = 1; //initlal text box count
-$(add_button).click(function(e){ //on add input button click
-e.preventDefault();
-    if(x < max_fields){ //max input box allowed
-        x++; //text box increment
-        $(wrapper).append('<div class="input-group mb-3"><input placeholder="Enter Price" type="text" name="mytext[]" class="form-control"><div class="input-group-append"><button class="btn btn-outline-danger remove_field" type="button">Remove</button></div></div>'); //add input box
-    }
-});
-
-$(wrapper).on("click",".remove_field", function(e){ //user click on remove text
-    e.preventDefault(); $(this).parent('div').parent('div').remove(); x--;
-    })
-});
 </script>
 </html> 

@@ -11,10 +11,11 @@
         $user = $_POST['username'];
         $pass = $_POST['password']; 
       
-        $sql = "SELECT admin_id FROM admin WHERE admin_name = '$user' and admin_pass = '$pass'";
+        $sql = "SELECT admin_id, admin_role FROM admin WHERE admin_name = '$user' and admin_pass = '$pass'";
         $result = $connection->query($sql);
         $row = $result->fetch_assoc();
 		$admin = $row["admin_id"];
+		$role = $row["admin_role"];
         $count = mysqli_num_rows($result);
             
         if($count == 1) {
@@ -29,6 +30,7 @@
 			$log_id = $row["log_id"];
 
 			$_SESSION['log_id'] = $log_id;
+			$_SESSION['role'] = $role;
 			$connection->close(); 
             header("location: home.php");
         }else {

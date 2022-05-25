@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 14, 2022 at 02:51 PM
+-- Generation Time: May 18, 2022 at 06:36 AM
 -- Server version: 10.4.19-MariaDB
 -- PHP Version: 8.0.7
 
@@ -120,13 +120,11 @@ CREATE TABLE `general` (
 --
 
 INSERT INTO `general` (`general_id`, `account_id`, `debit`, `credit`, `journal`, `date`, `explanation`) VALUES
-(1, 1001, 33, 22, 'Assets', '2022-05-05', ''),
-(8, 2000, 100, 100, 'Liability', '2022-05-14', 'y'),
-(9, 3000, 200, 200, 'Owners Equ', '2022-05-14', 'e'),
-(11, 3000, 100, 100, 'Owners Equ', '2022-05-14', 'yesss'),
-(12, 1001, 1200, 1200, 'Assets', '2022-05-14', 'yesss'),
-(13, 3000, 69, 69, 'Owners Equ', '2022-05-14', 'no'),
-(14, 1003, 3, 3, 'Asset', '2022-05-14', '3');
+(15, 1003, 69, 69, 'Asset', '2022-05-16', 'yes'),
+(16, 1001, 43, 50, 'Assets', '2022-05-16', 'dwa'),
+(17, 2000, 42, 32, 'Liability', '2022-05-16', 'dwa'),
+(18, 3000, 3, 3, 'Owners Equ', '2022-05-16', 'dwa'),
+(19, 2000, 12, 12, 'Liability', '2022-05-16', 'dwa');
 
 -- --------------------------------------------------------
 
@@ -158,7 +156,8 @@ INSERT INTO `inventory` (`inventory_id`, `account_id`, `inv_date`, `supplier_id`
 (2, 1001, '2022-04-20', 1, 'red cloth', 'pink', 100, 10, 1000, 'Asset', 1000, 0, ''),
 (31, 2000, '2022-05-14', 1, 'DWA', 'DWA', 2, 32, 64, 'Liability', 32, 32, 'DWA'),
 (32, 2000, '2022-05-14', 1, 'DWA', 'DWA', 2, 32, 64, 'Liability', 32, 32, 'DWA'),
-(33, 1001, '2022-05-14', 1, 'dwa', 'dwa', 2, 32, 64, 'Assets', 69, 69, 'nice');
+(33, 1001, '2022-05-14', 1, 'dwa', 'dwa', 2, 32, 64, 'Assets', 69, 69, 'nice'),
+(34, 3000, '2022-05-16', 2, 'dwa', 'dwa', 32, 32, 1024, 'Owners Equ', 22, 22, 'dwa');
 
 -- --------------------------------------------------------
 
@@ -192,7 +191,10 @@ CREATE TABLE `logs` (
 INSERT INTO `logs` (`log_id`, `admin_id`, `login`, `logout`) VALUES
 (54, 1000, '2022-05-14 13:56:50', '2022-05-14 13:57:01'),
 (55, 1000, '2022-05-14 13:57:09', '2022-05-14 13:57:21'),
-(56, 1000, '2022-05-14 13:57:33', '0000-00-00 00:00:00');
+(56, 1000, '2022-05-14 13:57:33', '0000-00-00 00:00:00'),
+(57, 1000, '2022-05-15 13:20:08', '0000-00-00 00:00:00'),
+(58, 1000, '2022-05-16 13:27:06', '0000-00-00 00:00:00'),
+(59, 1000, '2022-05-17 13:37:59', '0000-00-00 00:00:00');
 
 -- --------------------------------------------------------
 
@@ -329,13 +331,13 @@ ALTER TABLE `customer`
 -- AUTO_INCREMENT for table `general`
 --
 ALTER TABLE `general`
-  MODIFY `general_id` int(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `general_id` int(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
 -- AUTO_INCREMENT for table `inventory`
 --
 ALTER TABLE `inventory`
-  MODIFY `inventory_id` int(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
+  MODIFY `inventory_id` int(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
 
 --
 -- AUTO_INCREMENT for table `journal`
@@ -347,7 +349,7 @@ ALTER TABLE `journal`
 -- AUTO_INCREMENT for table `logs`
 --
 ALTER TABLE `logs`
-  MODIFY `log_id` int(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=57;
+  MODIFY `log_id` int(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=60;
 
 --
 -- AUTO_INCREMENT for table `sales`

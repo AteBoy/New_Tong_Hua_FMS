@@ -28,13 +28,13 @@
         </div>
         <aside class = "nav">
             <ul>
-            <li><a href = "##" class = "tablink" onclick = "openTab(event, 'Dashboard')">Dashboard</a></li> 
-                <li><a href = "##" class = "tablink" onclick = "openTab(event, 'Accounts')">Accounts</a></li>
-                <li><a href = "##" class = "tablink" onclick = "openTab(event, 'Journal')">Journal Entry</a></li>
-                <li><a href = "##" class = "tablink" onclick = "openTab(event, 'Payable')">Payable</a></li>
-                <li><a href = "##" class = "tablink" onclick = "openTab(event, 'Receivable')">Receivable</a></li>  
-                <li><a href = "##" class = "tablink" onclick = "openTab(event, 'Inventory')">Inventory</a></li> 
-                <li><a href = "##" id = "admin_1" class = "tablink" onclick = "openTab(event, 'Financial_s')">Financial Statement</a></li>  
+                <li><a href = "##" class = "tablink" onclick = "openTab(event, 'Dashboard')"><span class='icon-field'><i class="fa fa-home"></i></span> Dashboard</a></li> 
+                <li><a href = "##" class = "tablink" onclick = "openTab(event, 'Accounts')"><span class='icon-field'><i class="fa fa-users"></i></span> Accounts</a></li>
+                <li><a href = "##" class = "tablink" onclick = "openTab(event, 'Journal')"><span class='icon-field'><i class="fa fa-plus-square"></i></span> Journal Entry</a></li>
+                <li><a href = "##" class = "tablink" onclick = "openTab(event, 'Payable')"><span class='icon-field'><i class="fa fa-money"></i></span> Payable</a></li>
+                <li><a href = "##" class = "tablink" onclick = "openTab(event, 'Receivable')"><span class='icon-field'><i class="fa fa-reply"></i></span> Receivable</a></li>  
+                <li><a href = "##" class = "tablink" onclick = "openTab(event, 'Inventory')"><span class='icon-field'><i class="fa fa-shopping-basket"></i></span> Inventory</a></li> 
+                <li><a href = "##" id = "admin_1" class = "tablink" onclick = "openTab(event, 'Financial_s')"><span class='icon-field'><i class="fa fa-newspaper-o"></i></span> Financial Statement</a></li>      
                 <li><a href = "##" id = "admin_2" class = "tablink" onclick = "openTab(event, 'Logs')">Logs</a></li>
                 <li><a href = "##" id = "admin_3" class = "tablink" onclick = "openTab(event, 'Admin')">Admin</a></li>    
             </ul>
@@ -44,11 +44,12 @@
                 <div class = "contentNav">
                     <h4 id = "navHeader">Dashboard</h4>
                     <p class = "date">hello</p>
-                </div>    
+                </div>
+        
                 <div class = "box_tb" style="background-color: deepskyblue;">
                     <div class = "box_info">
                         <h4 id = "number">0</h4>
-                        <h4 id = "label">Users</h4>
+                        <h4 id = "label">Sales for the Month</h4>
                     </div>
                     <div class = "tb_bottom">
                         
@@ -57,7 +58,7 @@
                 <div class = "box_tb" style="background-color: limegreen;">
                     <div class = "box_info">
                         <h4 id = "number">0</h4>
-                        <h4 id = "label">Total Sales</h4>
+                        <h4 id = "label">Sales for Last Month</h4>
                     </div>
                     <div class = "tb_bottom">
                         
@@ -66,7 +67,7 @@
                 <div class = "box_tb" style="background-color: royalblue;">
                     <div class = "box_info">
                         <h4 id = "number">0</h4>
-                        <h4 id = "label">Expenses</h4>
+                        <h4 id = "label">Sales For the Day</h4>
                     </div>
                     <div class = "tb_bottom">
                         
@@ -75,12 +76,13 @@
                 <div class = "box_tb" style="background-color: indianred;">
                     <div class = "box_info">
                         <h4 id = "number">0</h4>
-                        <h4 id = "label">Profit</h4>
+                        <h4 id = "label">Total Daily Profit</h4>
                     </div>
                     <div class = "tb_bottom">
                         
                     </div>
                 </div>
+        
             </div>
             <div id = "Accounts" class = "tabContent">
                 <div class = "contentNav">

@@ -15,6 +15,8 @@
                 session_start();
                 $login_user = $_SESSION['login_user'];
                 $log_id = $_SESSION['log_id'];
+                $role = $_SESSION['role'];
+
                 echo $login_user;
             ?>
             </button>
@@ -32,7 +34,9 @@
                 <li><a href = "##" class = "tablink" onclick = "openTab(event, 'Payable')"><span class='icon-field'><i class="fa fa-money"></i></span> Payable</a></li>
                 <li><a href = "##" class = "tablink" onclick = "openTab(event, 'Receivable')"><span class='icon-field'><i class="fa fa-reply"></i></span> Receivable</a></li>  
                 <li><a href = "##" class = "tablink" onclick = "openTab(event, 'Inventory')"><span class='icon-field'><i class="fa fa-shopping-basket"></i></span> Inventory</a></li> 
-                <li><a href = "##" class = "tablink" onclick = "openTab(event, 'Financial_s')"><span class='icon-field'><i class="fa fa-newspaper-o"></i></span> Financial Statement</a></li>      
+                <li><a href = "##" id = "admin_1" class = "tablink" onclick = "openTab(event, 'Financial_s')"><span class='icon-field'><i class="fa fa-newspaper-o"></i></span> Financial Statement</a></li>      
+                <li><a href = "##" id = "admin_2" class = "tablink" onclick = "openTab(event, 'Logs')">Logs</a></li>
+                <li><a href = "##" id = "admin_3" class = "tablink" onclick = "openTab(event, 'Admin')">Admin</a></li>    
             </ul>
         </aside>
         <div class = "content">
@@ -87,11 +91,11 @@
                 </div>   
                 <div class = "account_frame" style="overflow-x:auto; overflow-x:auto;">
                     <input type="text" id = "acc_search" placeholder="Search" >
-                    <table>
+                    <table id = "acc_table">
                         <tr>
-                            <th>Account Number <i class = "fa fa-sort" id = "account:account_id"></i> </th>
-                            <th>Account Name</th>
-                            <th>Account Type</th>
+                            <th>Account Number <i class = "fa fa-sort" onclick="sortTable(0,'acc_table')"></i> </th>
+                            <th>Account Name <i class = "fa fa-sort" onclick="sortTable(1,'acc_table')"></i></th>
+                            <th>Account Type <i class = "fa fa-sort" onclick="sortTable(2,'acc_table')"></i></th>
                             <th>Action</th>
                         </tr>
                         <?php
@@ -169,14 +173,14 @@
                         <button class = "buttonLink" onclick="openTable(event, 'gen_j')">General Journal</button>
                     </div>
                     <div class = "tab_tb" id = "journal">
-                        <table>
+                        <table id = "journal_table">
                             <tr>
-                                <th>Date</th>
-                                <th>Account Title and Explanation</th>
-                                <th>Journal Entry ID</th>
-                                <th>Journal</th>
-                                <th>Debit</th>
-                                <th>Credit</th>
+                                <th>Date <i class = "fa fa-sort" onclick="sortTable(0,'journal_table')"></i></th>
+                                <th>Account Title and Explanation <i class = "fa fa-sort" onclick="sortTable(1,'journal_table')"></i></th>
+                                <th>Journal Entry ID <i class = "fa fa-sort" onclick="sortTable(2,'journal_table')"></i></th>
+                                <th>Journal <i class = "fa fa-sort" onclick="sortTable(3,'journal_table')"></i></th>
+                                <th>Debit <i class = "fa fa-sort" onclick="sortTable(4,'journal_table')"></i></th>
+                                <th>Credit <i class = "fa fa-sort" onclick="sortTable(5,'journal_table')"></i></th>
                                 <th>Action</th>
                             </tr>
                             <tr>
@@ -187,19 +191,20 @@
                     </div>
                     <div class = "tab_tb" id = "sale_j" style="overflow-x:auto;">
                         <button class = "btn" id = "add_sales">New Entry</button>
-                        <table>
+                        <table id = "sales_table">
                             <tr>
-                                <th>Sale ID</th>
-                                <th>Date</th>
-                                <th>Buyer Name</th>
-                                <th>Item Name</th>
-                                <th>Category</th>
-                                <th>Price</th>
-                                <th>Quantity</th>
-                                <th>Total Amount</th>
-                                <th>Journal</th>
-                                <th>Debit</th>
-                                <th>Credit</th>
+                                <th>Sale ID <i class = "fa fa-sort" onclick="sortTable(0,'sales_table')"></i></th>
+                                <th>Date <i class = "fa fa-sort" onclick="sortTable(1,'sales_table')"></i></th>
+                                <th>Buyer Name <i class = "fa fa-sort" onclick="sortTable(2,'sales_table')"></i></th>
+                                <th>Item Name <i class = "fa fa-sort" onclick="sortTable(3,'sales_table')"></i></th>
+                                <th>Category <i class = "fa fa-sort" onclick="sortTable(4,'sales_table')"></i></th>
+                                <th>Price <i class = "fa fa-sort" onclick="sortTable(5,'sales_table')"></i></th>
+                                <th>Quantity <i class = "fa fa-sort" onclick="sortTable(6,'sales_table')"></i></th>
+                                <th>Total Amount <i class = "fa fa-sort" onclick="sortTable(7,'sales_table')"></i></th>
+                                <th>Journal <i class = "fa fa-sort" onclick="sortTable(8,'sales_table')"></i></th>
+                                <th>Debit <i class = "fa fa-sort" onclick="sortTable(9,'sales_table')"></i></th>
+                                <th>Credit <i class = "fa fa-sort" onclick="sortTable(10,'sales_table')"></i></th>
+                                <th>Action</th>
                             </tr>
                             <?php
                             $server = "localhost";
@@ -335,19 +340,19 @@
                     </div>
                     <div class = "tab_tb" id = "inv_j"style="overflow-x:auto;">
                         <button class = "btn" id = "add_inv">New Entry</button>
-                        <table>
+                        <table id = "inv_table">
                             <tr>
-                                <th>Inventory ID</th>
-                                <th>Date</th>
-                                <th>Supplier Name</th>
-                                <th>Item Name</th>
-                                <th>Category</th>
-                                <th>Price</th>
-                                <th>Quantity</th>
-                                <th>Total Amount</th>
-                                <th>Journal</th>
-                                <th>Debit</th>
-                                <th>Credit</th>
+                                <th>Inventory ID <i class = "fa fa-sort" onclick="sortTable(0,'inv_table')"></i></th>
+                                <th>Date <i class = "fa fa-sort" onclick="sortTable(1,'inv_table')"></i></th>
+                                <th>Supplier Name <i class = "fa fa-sort" onclick="sortTable(2,'inv_table')"></i></th>
+                                <th>Item Name <i class = "fa fa-sort" onclick="sortTable(3,'inv_table')"></i></th>
+                                <th>Category <i class = "fa fa-sort" onclick="sortTable(4,'inv_table')"></i></th>
+                                <th>Price <i class = "fa fa-sort" onclick="sortTable(5,'inv_table')"></i></th>
+                                <th>Quantity <i class = "fa fa-sort" onclick="sortTable(6,'inv_table')"></i></th>
+                                <th>Total Amount <i class = "fa fa-sort" onclick="sortTable(7,'inv_table')"></i></th>
+                                <th>Journal <i class = "fa fa-sort" onclick="sortTable(8,'inv_table')"></i></th>
+                                <th>Debit <i class = "fa fa-sort" onclick="sortTable(9,'inv_table')"></i></th>
+                                <th>Credit <i class = "fa fa-sort" onclick="sortTable(10,'inv_table')"></i></th>
                                 <th>Action</th>
                             </tr>
                             <?php
@@ -504,17 +509,16 @@
                         </div>
                     </div>
                     <div class = "tab_tb" id = "gen_j">
-                        <table>
+                        <table id = "gen_table">
                             <tr>
-                                <th>General Journal ID</th>
-                                <th>Date</th>
-                                <th>Account ID</th>
-                                <th>Journal</th>
-                                <th>Debit</th>
-                                <th>Credit</th>
+                                <th>General Journal ID <i class = "fa fa-sort" onclick="sortTable(0,'gen_table')"></th>
+                                <th>Date <i class = "fa fa-sort" onclick="sortTable(1,'gen_table')"></th>
+                                <th>Account ID <i class = "fa fa-sort" onclick="sortTable(2,'gen_table')"></th>
+                                <th>Journal <i class = "fa fa-sort" onclick="sortTable(3,'gen_table')"></th>
+                                <th>Debit <i class = "fa fa-sort" onclick="sortTable(4,'gen_table')"></th>
+                                <th>Credit <i class = "fa fa-sort" onclick="sortTable(5,'gen_table')"></th>
                                 <th>Action</th>
                             </tr>
-                            <tr>
                                 <?php
                             $server = "localhost";
                             $user = "root";
@@ -839,41 +843,56 @@
                     </div>
                     <div class = "tab_tb" id = "stock" style="overflow-x:auto; overflow-x:auto;"> 
                         <input type="text" id = "merch_search" placeholder="Search" >
-                        <table>
-                            <tr>
-                                <th>Stock ID</th>
-                                <th>Item ID</th>
-                                <th>Item Name</th>
-                                <th>Supplier Name</th>
-                                <th>Category</th>
-                                <th>Price</th>
-                                <th>Quantity (In)</th>
-                                <th>Quantity (Out)</th>
-                                <th>Total Price</th> 
-                                <th>Action</th>
-                            </tr>
-                            <tr>
-                                <td><div contenteditable>hi</div></td>
-                                <td>hiiiiiiiiii</td>
-                                <td>hiiiiiiiiii</td>
-                                <td>hiiiiiiiiii</td>
-                                <td>hiiiiiiiiii</td>
-                                <td>hiiiiiiiiii</td>
-                                <td>hiiiiiiiiii</td>
-                                <td>hiiiiiiiiii</td>
-                                <td>hiiiiiiiiii</td>
-                                <td>hiiiiiiiiii</td>
-                            </tr>
-                        </table>
+                        <input onclick="change()" type="button" value="In" id="stock_switch"></input>
+                        <div class = "stock_tb" id = "in"> 
+                            <table>
+                                <tr>
+                                    <th>Stock ID</th>
+                                    <th>Journal ID</th>
+                                    <th>Date</th>
+                                    <th>Item ID</th>
+                                    <th>Item Name</th>
+                                    <th>Supplier Name</th>
+                                    <th>Category</th>
+                                    <th>Item Unit Price</th>
+                                    <th>Item Quantity</th>
+                                    <th>Total Price</th> 
+                                    <th>Action</th>
+                                </tr>
+                                <tr>
+                                    
+                                </tr>
+                            </table>
+                        </div>
+                        <div class = "stock_tb" id = "out" style="display:none;" > 
+                            <table>
+                                <tr>
+                                    <th>Stock ID</th>
+                                    <th>Journal ID</th>
+                                    <th>Date</th>
+                                    <th>Item ID</th>
+                                    <th>Item Name</th>
+                                    <th>Supplier Name</th>
+                                    <th>Category</th>
+                                    <th>Item Unit Price</th>
+                                    <th>Item Quantity</th>
+                                    <th>Total Price</th> 
+                                    <th>Action</th>
+                                </tr>
+                                <tr>
+                                    
+                                </tr>
+                            </table>
+                        </div>
                     </div>
                     <div class = "tab_tb" id = "supp">
                         <input type="text" id = "supp_search" placeholder="Search" >
-                        <table>
+                        <table id = "sup_table">
                             <tr>
-                                <th>Supplier ID</th>
-                                <th>Supplier Name</th>
-                                <th>Address</th>
-                                <th>Contact Number</th>
+                                <th>Supplier ID <i class = "fa fa-sort" onclick="sortTable(0,'sup_table')"></th>
+                                <th>Supplier Name <i class = "fa fa-sort" onclick="sortTable(1,'sup_table')"></th>
+                                <th>Address <i class = "fa fa-sort" onclick="sortTable(2,'sup_table')"></th>
+                                <th>Contact Number <i class = "fa fa-sort" onclick="sortTable(3,'sup_table')"></th>
                                 <th>Action</th>
                             </tr>
                             <?php
@@ -934,10 +953,118 @@
                     </div>
                 </div>
             </div>
+            <div id = "Logs" class = "tabContent">
+                <div class = "contentNav">
+                    <h4 id = "navHeader">Logs</h4>
+                    <p class = "date">hello</p>
+                </div>   
+                <div class = "account_frame" style="overflow-y:auto;">
+                    <input type="text" id = "ap_search" placeholder="Search" >
+                    <div>
+                    <table>
+                        <tr>
+                            <th>Log ID</th>
+                            <th>Admin ID</th>
+                            <th>Login</th>
+                            <th>Logout</th>
+                        </tr>
+                        <tbody>
+                        <?php
+                            include("config.php");
+                            if($connection->connect_error){
+                                die("Connection Failed ". $connection->connect_error);
+                            }
+
+                            $sql = "SELECT * FROM logs";
+                            $result = $connection->query($sql);
+
+                            if(!$result){
+                                die("Invalid Query: ". $connection_error);
+                            }
+
+                            while($row = $result->fetch_assoc()){
+                                echo "<tbody data-link='row' class='rowlink'>
+                                <tr>
+                                    <td>" . $row["log_id"] . "</td>
+                                    <td>" . $row["admin_id"] . "</td>
+                                    <td>" . $row["login"] . "</td>
+                                    <td>" . $row["logout"] . "</td>
+                                    
+                                    ";$id = $row["log_id"];?>
+                                    
+                                    <td><a href="delete.php?id=<?php echo $id;?>&table=admin">Delete</i></a></td>
+                               </tr><?php
+                           }
+                           $connection->close();?>
+                        </tbody>
+                    </table>
+                        </div>
+                </div>
+            </div>
+            <div id = "Admin" class = "tabContent">
+                <div class = "contentNav">
+                    <h4 id = "navHeader">Manage Admin</h4>
+                    <p class = "date">hello</p>
+                </div>   
+                <div class = "account_frame">
+                    <input type="text" id = "ap_search" placeholder="Search" >
+                    <table>
+                        <tr>
+                            <th>Admin ID</th>
+                            <th>Admin name</th>
+                            <th>Admin Password</th>
+                            <th>Admin Contact</th>
+                            <th>Address</th>
+                            <th>Admin Key</th>
+                            <th>Admin Role</th>
+                        </tr>
+                        <?php
+                            include("config.php");
+                            if($connection->connect_error){
+                                die("Connection Failed ". $connection->connect_error);
+                            }
+
+                            $sql = "SELECT * FROM admin";
+                            $result = $connection->query($sql);
+
+                            if(!$result){
+                                die("Invalid Query: ". $connection_error);
+                            }
+
+                            while($row = $result->fetch_assoc()){
+                                echo "<tbody data-link='row' class='rowlink'>
+                                <tr>
+                                    <td>" . $row["admin_id"] . "</td>
+                                    <td contenteditable='true' id = 'admin:admin_name:admin_id:". $row["admin_id"] ."'>" . $row["admin_name"] . "</td>
+                                    <td contenteditable='true' id = 'admin:admin_pass:admin_id:". $row["admin_id"] ."'>" . $row["admin_pass"] . "</td>
+                                    <td contenteditable='true' id = 'admin:admin_contact:admin_id:". $row["admin_id"] ."'>" . $row["admin_contact"] . "</td>
+                                    <td contenteditable='true' id = 'admin:address:admin_id:". $row["admin_id"] ."'>" . $row["address"] . "</td>
+                                    <td contenteditable='true' id = 'admin:admin_key:admin_id:". $row["admin_id"] ."'>" . $row["admin_key"] . "</td>
+                                    <td contenteditable='true' id = 'admin:admin_role:admin_id:". $row["admin_id"] ."'>" . $row["admin_role"] . "</td>
+                                    ";$id = $row["admin_id"];?>
+                                    
+                                    <td><a href="delete.php?id=<?php echo $id;?>&table=admin">Delete</i></a></td>
+                               </tr><?php
+                           }
+                           $connection->close();?>
+                    </table>
+                </div>
+            </div>
             </div>
         </div>
     </body>
     <script>
+
+        if(<?php echo json_encode($role); ?> == "Admin"){
+
+            x = document.getElementById("admin_1");
+            y = document.getElementById("admin_2");
+            z = document.getElementById("admin_3");
+            x.style.display = "none";
+            y.style.display = "none";
+            z.style.display = "none";
+
+        }
         $(function(){
 
             $("#loading").hide();
@@ -981,15 +1108,7 @@
             });
 
         });
-        /*$(document).ready(function(){
-            $("i").click(function(){
-                var field = $(this).attr("id";
 
-                $.post('sort.php'){
-                    
-                };
-            });
-        });*/
         function openTab(evt, tabname) {
             var i, x, tablinks;
             x = document.getElementsByClassName("tabContent");
@@ -1147,6 +1266,83 @@ function remove_sales_acc() {
         $('#new_' + last_chq_no).remove();
         $('#total_ch3').val(last_chq_no - 1);
     }
+}
+function change() // no ';' here
+{
+    var elem = document.getElementById("stock_switch");
+    if (elem.value=="Out") {
+        elem.value = "In";
+        
+        document.getElementById("in").style.display="block";
+        document.getElementById("out").style.display="none";
+    }
+    else{
+        elem.value = "Out";
+        document.getElementById("out").style.display="block";
+        document.getElementById("in").style.display="none";
+    }
+}
+
+//sorting
+
+function sortTable(n,t) {
+    var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
+    table = document.getElementById(t);
+    switching = true;
+    //Set the sorting direction to ascending:
+    dir = "asc"; 
+    /*Make a loop that will continue until
+    no switching has been done:*/
+    while (switching) {
+    //start by saying: no switching is done:
+    switching = false;
+    rows = table.rows;
+    /*Loop through all table rows (except the
+    first, which contains table headers):*/
+    for (i = 1; i < (rows.length - 1); i++) {
+        //start by saying there should be no switching:
+        shouldSwitch = false;
+        /*Get the two elements you want to compare,
+        one from current row and one from the next:*/
+        x = rows[i].getElementsByTagName("TD")[n];
+        y = rows[i + 1].getElementsByTagName("TD")[n];
+        /*check if the two rows should switch place,
+        based on the direction, asc or desc:*/
+        /*if(x.innerHTML === x.innerHTML && x.innerHTML % 1 !== 0){
+            alert("yes");
+        }*/
+      //  alert(x.innerHTML + 1);
+        
+        if (dir == "asc") {
+            if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+            //if so, mark as a switch and break the loop:
+            shouldSwitch= true;
+            break;
+            }
+        } else if (dir == "desc") {
+        if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+            //if so, mark as a switch and break the loop:
+            shouldSwitch = true;
+            break;
+        }
+      }
+    }
+    if (shouldSwitch) {
+        /*If a switch has been marked, make the switch
+        and mark that a switch has been done:*/
+        rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+        switching = true;
+        //Each time a switch is done, increase this count by 1:
+        switchcount ++;      
+    } else {
+        /*If no switching has been done AND the direction is "asc",
+        set the direction to "desc" and run the while loop again.*/
+        if (switchcount == 0 && dir == "asc") {
+            dir = "desc";
+            switching = true;
+        }
+    }
+  }
 }
     </script>
 </html>

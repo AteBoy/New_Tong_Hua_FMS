@@ -770,6 +770,40 @@
                             <th>Total Collection</th>
                             <th>Account Amount</th>
                         </tr>
+						<?php
+                            $server = "localhost";
+                            $user = "root";
+                            $pass = "";
+                            $db = "financial_db";
+                        
+                            $connection = new mysqli($server, $user, $pass, $db);
+                        
+                            if($connection->connect_error){
+                                die("Connection Failed ". $connection->connect_error);
+                            }
+
+                            $sql = "SELECT * FROM account recievables";
+                            $result = $connection->query($sql);
+
+                            if(!$result){
+                                die("Invalid Query: ". $connection_error);
+                            }
+
+                            while($row = $result->fetch_assoc()){
+                                echo "<tr>
+                                    <td>" . $row["Account Payable ID"] . "</td>
+                                    <td>" . $row["Inventory ID"] . "</td>
+									<td contenteditable='true' id = 'inventory:item_name:inventory_id:". $row["Inventory ID"] ."'>" . $row["item_name"] . "</td>
+                                    <td>" . $row["Initial Payment"] . "</td>                
+                                    <td>" . $row["Total Collection"] . "</td>
+                                    <td>" . $row["Account Amount"] . "</td>
+                                    
+                                    ";$id = $row["account recievables"];?>
+                                    
+                                     <td><a href="delete.php?id=<?php echo $id;?>&table=account recievables">Delete</i></a></td>
+                                </tr><?php
+                            }
+                            $connection->close();?>
                     </table>
                 </div>
             </div>

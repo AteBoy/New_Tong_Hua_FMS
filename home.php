@@ -787,11 +787,44 @@
                             }
 
                             $sql = "SELECT * FROM account recievables";
+							
                             $result = $connection->query($sql);
 
                             if(!$result){
                                 die("Invalid Query: ". $connection_error);
                             }
+							
+							$query = "SELECT SUM(Initial Payment) AS sum FROM 'account recievables'";
+							
+							$query_result = mysqli_query($conn , $query);
+							
+							while($row = mysqli_fetch_assoc($query result)){
+								$output = "Total Initial Payment"." ".$row['sum'];
+							}
+							
+							$query = "SELECT SUM(Collection of AR) AS sum2 FROM 'account recievables'";
+							
+							$query_result = mysqli_query($conn , $query);
+							
+							while($row = mysqli_fetch_assoc($query result)){
+								$output2 = "Total Collection of AR"." ".$row['sum2'];
+							}
+							
+							$query = "SELECT SUM(Total Collection) AS sum3 FROM 'account recievables'";
+							
+							$query_result = mysqli_query($conn , $query);
+							
+							while($row = mysqli_fetch_assoc($query result)){
+								$output3 = "Total"." ".$row['sum3'];
+							}
+							
+							$query = "SELECT SUM(Account Amount) AS sum4 FROM 'account recievables'";
+							
+							$query_result = mysqli_query($conn , $query);
+							
+							while($row = mysqli_fetch_assoc($query result)){
+								$output4 = "Total Account Amount"." ".$row['sum4'];
+							}
 
                             while($row = $result->fetch_assoc()){
                                 echo "<tr>
@@ -806,6 +839,7 @@
                                     
                                      <td><a href="delete.php?id=<?php echo $id;?>&table=account recievables">Delete</i></a></td>
                                 </tr><?php
+								
                             }
                             $connection->close();?>
                     </table>

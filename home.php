@@ -16,7 +16,9 @@
                 $login_user = $_SESSION['login_user'];
                 $log_id = $_SESSION['log_id'];
                 $role = $_SESSION['role'];
-
+                if(empty($login_user)){
+                    header("Location: login_page.php");
+                }
                 echo $login_user;
             ?>
             </button>
@@ -119,7 +121,7 @@
                                     <td contenteditable='true' id = 'account:account_type:account_id:". $row["account_id"] ."'>" . $row["account_type"] . "</td>
                                     ";$id = $row["account_id"];?>
                                     
-                                    <td><a href="delete.php?id=<?php echo $id;?>&table=account">Delete</i></a></td>
+                                    <td><a href="delete.php?id=<?php echo $id;?>&table=account:account_id">Delete</i></a></td>
                                </tr><?php
                            }
                            $connection->close();?>
@@ -241,7 +243,7 @@
                                     <td>" . $row["credit"] . "</td>
                                     ";$id = $row["sales_id"];?>
                                     
-                                    <td><a href="delete.php?id=<?php echo $id;?>&table=sales">Delete</i></a></td>
+                                    <td><a href="delete.php?id=<?php echo $id;?>&table=sales:sales_id">Delete</i></a></td>
                                </tr><?php
                            }
                            $connection->close();?>
@@ -321,7 +323,7 @@
 
                                         <div style="float:right;margin-right:20px;width: 22%;">
                                             <label for="sales_price"><b>Price</b></label>
-                                            <input type="number" placeholder="Enter Price" name="sales_price" id="sales_price" required>      
+                                            <input type="number" placeholder="Enter Price" name="sales_price" id="sales_price" onchange = "computeTotal('sales')"required>      
                                         </div>
 
                                         <div style="float:right;margin-right:20px;width: 22%;">
@@ -390,7 +392,7 @@
                                     
                                     ";$id = $row["inventory_id"];?>
                                     
-                                     <td><a href="delete.php?id=<?php echo $id;?>&table=inventory">Delete</i></a></td>
+                                     <td><a href="delete.php?id=<?php echo $id;?>&table=inventory:inventory_id">Delete</i></a></td>
                                 </tr><?php
                             }
                             $connection->close();?>
@@ -492,7 +494,7 @@
 
                                         <div style="float:right;margin-right:20px;width: 22%;">
                                             <label for="inv_price"><b>Price</b></label>
-                                            <input type="number" placeholder="Enter Price" name="inv_price" id="inv_price" required>      
+                                            <input type="number" placeholder="Enter Price" name="inv_price" id="inv_price" onchange = "computeTotal('inv')" required>      
                                         </div>
 
                                         <div style="float:right;margin-right:20px;width: 22%;">
@@ -549,7 +551,7 @@
                                     
                                     ";$id = $row["general_id"];?>
                                     
-                                     <td><a href="delete.php?id=<?php echo $id;?>&table=general">Delete</i></a></td>
+                                     <td><a href="delete.php?id=<?php echo $id;?>&table=general:general_id">Delete</i></a></td>
                                 </tr><?php
                             }
                             $connection->close();?>
@@ -798,13 +800,33 @@
                                 <th>Stock</th>
                                 <th>Action</th>
                             </tr>
-                            <tr>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
                             </tr>
+                            <?php
+                                include("config.php");
+                                if($connection->connect_error){
+                                    die("Connection Failed ". $connection->connect_error);
+                                }
+
+                                $sql = "SELECT * FROM merchandise";
+                                $result = $connection->query($sql);
+
+                                if(!$result){
+                                    die("Invalid Query: ". $connection_error);
+                                }
+
+                                while($row = $result->fetch_assoc()){
+                                    echo "<tbody data-link='row' class='rowlink'>
+                                    <tr>
+                                        <td>" . $row["item_id"] . "</td>
+                                        <td contenteditable='true' id = 'merchandise:item_name:item_id:". $row["item_id"] ."'>" . $row["item_name"] . "</td>
+                                        <td contenteditable='true' id = 'merchandise:item_category:item_id:". $row["item_id"] ."'>" . $row["item_category"] . "</td>
+                                        <td>" . $row["item_stock"] . "</td>
+                                        ";$id = $row["item_id"];?>
+                                        
+                                        <td><a href="delete.php?id=<?php echo $id;?>&table=merchandise:item_id">Delete</i></a></td>
+                                </tr><?php
+                            }
+                            $connection->close();?>
                         </table>
                     </div>
                     <div class = "tab_tb" id = "stock" style="overflow-x:auto; overflow-x:auto;"> 
@@ -883,11 +905,11 @@
                                     <td contenteditable='true' id = 'supplier:contact:supplier_ID:". $row["supplier_ID"] ."'>" . $row["contact"] . "</td>
                                     ";$id = $row["supplier_ID"];?>
                                     
-                                    <td><a href="delete.php?id=<?php echo $id;?>&table=supplier">Delete</i></a></td>
+                                    <td><a href="delete.php?id=<?php echo $id;?>&table=supplier:supplier_id">Delete</i></a></td>
                                </tr><?php
                            }
                            $connection->close();?>
-                       </table>
+                        </table>
                         <button class = "btn" id = "add_supplier">Add Supplier</button>
                         <div id="add_supplier_modal" class="modal">
                             <div class="modal-content">
@@ -958,7 +980,7 @@
                                     
                                     ";$id = $row["log_id"];?>
                                     
-                                    <td><a href="delete.php?id=<?php echo $id;?>&table=admin">Delete</i></a></td>
+                                    <td><a href="delete.php?id=<?php echo $id;?>&table=logs:log_id">Delete</i></a></td>
                                </tr><?php
                            }
                            $connection->close();?>
@@ -1009,11 +1031,48 @@
                                     <td contenteditable='true' id = 'admin:admin_role:admin_id:". $row["admin_id"] ."'>" . $row["admin_role"] . "</td>
                                     ";$id = $row["admin_id"];?>
                                     
-                                    <td><a href="delete.php?id=<?php echo $id;?>&table=admin">Delete</i></a></td>
+                                    <td><a href="delete.php?id=<?php echo $id;?>&table=admin:admin_id">Delete</i></a></td>
                                </tr><?php
                            }
                            $connection->close();?>
                     </table>
+                    <button class = "btn" id = "add_admin">Register</button>
+                        <div id="add_admin_modal" class="modal">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <span class="close" id = "close_admin">&times;</span>
+                                    <h2>Register</h2>
+                                </div>
+                                <div class="modal-body">
+                                    <form action="insert.php" method = "post">
+                                        <div class="container">
+        
+                                        <label for="admin_name"><b>Name</b></label>
+                                        <input type="text" placeholder="Enter Name" name="admin_name" id="admin_name" required>
+                                
+                                        <label for="admin_pass"><b>Password</b></label>
+                                        <input type="password" placeholder="Enter Password" name="admin_pass" id="admin_pass" required> 
+                                    
+                                        <label for="admin_no"><b>Contact Number</b></label>
+                                        <input type="number" placeholder="Enter Contact Number" name="admin_no" id="admin_no" required>
+                                        
+                                        <label for="admin_address"><b>Address</b></label>
+                                        <input type="text" placeholder="Enter Address" name="admin_address" id="admin_address" required>
+                                        
+                                        <label for="admin_role"><b>Admin Role</b></label>
+                                        <select name = "admin_role" required>
+                                            <option value = "Admin">Admin</option>
+                                            <option value = "Owner">Owner</option>
+                                        </select>
+
+                                        <button type="submit" class="registerbtn" name = "submit_admin">Register</button>
+                                    </div>
+                                    </form>
+                                </div>
+                                <div class="modal-footer">
+                                </div>
+                            </div>
+                        </div>
                 </div>
             </div>
             </div>
@@ -1042,8 +1101,6 @@
 
                 $.post('update.php' , field_userid + "=" + value, function(data){
 
-
-
                     if(data != '')
                     {
                         message_status.show();
@@ -1069,6 +1126,7 @@
                         message_status.text(data);
                         //hide the message
                         setTimeout(function(){message_status.hide()},1000);
+                        
                     }
                 });
             });
@@ -1078,6 +1136,7 @@
         function openTab(evt, tabname) {
             var i, x, tablinks;
             x = document.getElementsByClassName("tabContent");
+       
             for (i = 0; i < x.length; i++) {
                 x[i].style.display = "none";
                 
@@ -1128,6 +1187,10 @@
         var gen_btn = document.getElementById("add_gen");
         var gen_span = document.getElementById("close_gen");
 
+        var admin_modal = document.getElementById("add_admin_modal");
+        var admin_btn = document.getElementById("add_admin");
+        var admin_span = document.getElementById("close_admin");
+
         acc_btn.onclick = function() {
             acc_modal.style.display = "block";
         }
@@ -1161,6 +1224,13 @@
         gen_span.onclick = function() {
             gen_modal.style.display = "none";
         }
+        admin_btn.onclick = function() {
+            admin_modal.style.display = "block";
+        }
+        admin_span.onclick = function() {
+            admin_modal.style.display = "none";
+        }
+
         function open_menu(){
             document.getElementById("myDropdown").classList.toggle("show");
         }
@@ -1251,7 +1321,7 @@ function change() // no ';' here
 
 //sorting
 
-function sortTable(n,t) {
+function sortTable(n,t) { //can only sort up to 2 digits
     var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
     table = document.getElementById(t);
     switching = true;
@@ -1271,13 +1341,13 @@ function sortTable(n,t) {
         /*Get the two elements you want to compare,
         one from current row and one from the next:*/
         x = rows[i].getElementsByTagName("TD")[n];
+        //alert(x.innerHTML);
         y = rows[i + 1].getElementsByTagName("TD")[n];
         /*check if the two rows should switch place,
         based on the direction, asc or desc:*/
         /*if(x.innerHTML === x.innerHTML && x.innerHTML % 1 !== 0){
             alert("yes");
         }*/
-      //  alert(x.innerHTML + 1);
         
         if (dir == "asc") {
             if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
@@ -1309,6 +1379,15 @@ function sortTable(n,t) {
         }
     }
   }
+}
+function computeTotal(code){
+    //alert(code);
+    var price = document.getElementById(code+"_price").value;
+    var quantity = document.getElementById(code+"_quantity").value;
+    var total = price * quantity;
+
+    document.getElementById(code+"_total").value = total;
+    
 }
     </script>
 </html>

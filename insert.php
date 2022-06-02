@@ -127,19 +127,36 @@
         $inv_debit = $_POST['inv_debit'];
         $inv_credit = $_POST['inv_credit'];
         $exp = $_POST['inv_exp'];
-        
+        $title;
         for ($i = 0; $i < count($inv_acc); $i++) {
             if (strlen($inv_acc[$i]) !== 0) {
                 $acc = $inv_acc[$i];
                 $debit = $inv_debit[$i];
                 $credit = $inv_credit[$i];
-                $a = $acc;
-                echo "<script>alert('$a');</script>";
+
                 $qry = "INSERT INTO inventory(inventory_id, account_id, inv_date, supplier_id, item_name, category, price, quantity, total, journal, debit, credit, explanation) VALUES ('','$acc','$date',(SELECT supplier_id from supplier where supplier_name = '$inv_sup'),'$inv_item','$inv_cat','$inv_price','$inv_quantity','$total',(select account_type from account where account_id = '$acc'), '$debit', '$credit','$exp')";
                 $result = $connection->query($qry);
             }
         }
-
+        $sql = "SELECT item_name, item_category from merchandise where item_name = '$inv_item' && item_category = '$inv_cat'";
+        $result = $connection->query($sql); 
+        $row = $result->fetch_assoc();
+        if($result){
+            if(mysqli_num_rows($result) > 0){
+                $qry = "SELECT item_name.merchandise, item_category from inventory, merchandise where item_name.inventory = item_name.merchandise && item_category = category";
+                $result = $connection->query($qry);
+                //$new_stock = $inv_quantity + 
+                $qry = "UPDATE merchandise SET item_stock = item_stock + '$inv_quantity' WHERE item_name = '$inv_item' && item_category = '$inv_cat'";
+                $result = $connection->query($qry);
+ 
+            }
+            else{
+                $qry = "INSERT INTO merchandise(item_id, item_name, item_category, item_stock) VALUES('','$inv_item','$inv_cat','$inv_quantity')";
+                $result = $connection->query($qry);
+   
+            }
+        }
+       
         $connection->close(); 
     }
     if(isset($_POST['submit_sales'])){
@@ -192,6 +209,18 @@
         $sup_no = $_POST['sup_no'];
         
         $qry = "INSERT INTO supplier(supplier_ID, supplier_name, address, contact) VALUES ('','$sup_name','$sup_adr','$sup_no')";
+        
+        $result = $connection->query($qry);
+        $connection->close(); 
+    }
+    if(isset($_POST['submit_admin'])){
+        $admin_name = $_POST['admin_name'];
+        $admin_pass = $_POST['admin_pass'];
+        $admin_no = $_POST['admin_no'];
+        $admin_address = $_POST['admin_address'];
+        $admin_role = $_POST['admin_role'];
+        $admin_key = rand(100000,900000);
+        $qry = "INSERT INTO admin(admin_id, admin_name, admin_pass, admin_contact, address, admin_key, admin_role) VALUES ('','$admin_name','$admin_pass','$admin_no','$admin_address','$admin_key','$admin_role')";
         
         $result = $connection->query($qry);
         $connection->close(); 

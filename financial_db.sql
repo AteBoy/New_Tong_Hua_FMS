@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 25, 2022 at 04:25 PM
+-- Generation Time: Jun 02, 2022 at 03:16 PM
 -- Server version: 10.4.19-MariaDB
 -- PHP Version: 8.0.7
 
@@ -53,9 +53,9 @@ CREATE TABLE `admin` (
   `admin_id` int(6) NOT NULL,
   `admin_name` varchar(20) DEFAULT NULL,
   `admin_pass` varchar(10) DEFAULT NULL,
-  `admin_contact` varchar(11) NOT NULL,
-  `address` varchar(20) NOT NULL,
-  `admin_key` int(10) NOT NULL,
+  `admin_contact` varchar(12) DEFAULT NULL,
+  `address` varchar(20) DEFAULT NULL,
+  `admin_key` int(6) DEFAULT NULL,
   `admin_role` varchar(10) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -64,9 +64,8 @@ CREATE TABLE `admin` (
 --
 
 INSERT INTO `admin` (`admin_id`, `admin_name`, `admin_pass`, `admin_contact`, `address`, `admin_key`, `admin_role`) VALUES
-(1000, 'notshio', 'shio123', '54554354', 'Daraga', 42069, 'Admin'),
-(1001, 'reil', 'shio321', '54554354', 'Daraga', 421111, 'Admin'),
-(1002, 'Shiori', 'shio123', '09369888542', 'Legazpi', 421553, 'Owner');
+(1001, 'Shio', 'shio123', '09369888542', 'Daraga', 42069, 'Owner'),
+(1002, 'Shiori', 'shio321', '09361386954', 'Albay', 393203, 'Admin');
 
 -- --------------------------------------------------------
 
@@ -125,7 +124,6 @@ INSERT INTO `general` (`general_id`, `account_id`, `debit`, `credit`, `journal`,
 (15, 1003, 69, 69, 'Asset', '2022-05-16', 'yes'),
 (16, 1001, 43, 50, 'Assets', '2022-05-16', 'dwa'),
 (17, 2000, 42, 32, 'Liability', '2022-05-16', 'dwa'),
-(18, 3000, 3, 3, 'Owners Equ', '2022-05-16', 'dwa'),
 (19, 2000, 12, 12, 'Liability', '2022-05-16', 'dwa');
 
 -- --------------------------------------------------------
@@ -155,11 +153,16 @@ CREATE TABLE `inventory` (
 --
 
 INSERT INTO `inventory` (`inventory_id`, `account_id`, `inv_date`, `supplier_id`, `item_name`, `category`, `price`, `quantity`, `total`, `journal`, `debit`, `credit`, `Explanation`) VALUES
-(2, 1001, '2022-04-20', 1, 'red cloth', 'pink', 100, 10, 1000, 'Asset', 1000, 0, ''),
-(31, 2000, '2022-05-14', 1, 'DWA2', 'DWA', 2, 32, 64, 'Liability', 32, 32, 'DWA'),
-(32, 2000, '2022-05-14', 1, 'DWA', 'DWA', 2, 32, 64, 'Liability', 32, 32, 'DWA'),
-(33, 1001, '2022-05-14', 1, 'dwa', 'dwa', 2, 32, 64, 'Assets', 69, 69, 'nice'),
-(34, 3000, '2022-05-16', 2, 'dwa', 'dwa', 32, 32, 1024, 'Owners Equ', 22, 22, 'dwa');
+(40, 1001, '2022-05-30', 2, 'dawdaw', 'dwadwa', 22, 32, 704, 'Assets', 101, 100, 'dwadwa'),
+(52, 1001, '2022-05-31', 1, 'dwa', 'faw', 22, 32, 704, 'Assets', 11, 22, 'dwad'),
+(53, 2000, '2022-05-31', 1, 'fawfwa', 'fwa', 11, 22, 242, 'Liability', 11, 22, 'dwad'),
+(55, 3000, '2022-05-31', 1, 'Red Cloth', 'Cloth', 100, 10, 1000, 'Owners Equ', 0, 50, 'I dont know'),
+(56, 1001, '2022-06-01', 1, 'ggg', 'ggg', 200, 10, 2000, 'Assets', 5, 11, 'fwafwa'),
+(67, 1003, '2022-06-01', 1, 'Pink Cloth', 'Cloth', 5, 10, 50, 'Asset', 4, 10, 'fwafwa'),
+(109, 3000, '2022-06-02', 1, 'Pink Cloth', 'Cloth', 22, 100, 2200, 'Owners Equ', 2, 55, 'dawdwa'),
+(110, 3000, '2022-06-02', 1, 'Pink Cloth', 'Cloth', 22, 100, 2200, 'Owners Equ', 2, 55, 'dawdwa'),
+(111, 3000, '2022-06-02', 2, 'Gray Cloth', 'Cloth', 22, 200, 4400, 'Owners Equ', 0, 22, 'aaaaa'),
+(112, 1003, '2022-06-02', 1, 'Gray Cloth', 'Cloth', 5, 100, 500, 'Asset', 200, 100, 'wdaaww');
 
 -- --------------------------------------------------------
 
@@ -183,7 +186,7 @@ CREATE TABLE `logs` (
   `log_id` int(6) NOT NULL,
   `admin_id` int(6) NOT NULL,
   `login` datetime NOT NULL,
-  `logout` datetime DEFAULT NULL
+  `logout` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
@@ -191,33 +194,37 @@ CREATE TABLE `logs` (
 --
 
 INSERT INTO `logs` (`log_id`, `admin_id`, `login`, `logout`) VALUES
-(54, 1000, '2022-05-14 13:56:50', '2022-05-14 13:57:01'),
-(55, 1000, '2022-05-14 13:57:09', '2022-05-14 13:57:21'),
-(56, 1000, '2022-05-14 13:57:33', '2022-05-24 14:50:35'),
-(57, 1000, '2022-05-15 13:20:08', '2022-05-24 14:50:35'),
-(58, 1000, '2022-05-16 13:27:06', '2022-05-24 14:50:35'),
-(59, 1000, '2022-05-17 13:37:59', '2022-05-24 14:50:35'),
-(60, 1000, '2022-05-19 14:11:17', '2022-05-24 14:50:35'),
-(61, 1000, '2022-05-24 13:16:39', '2022-05-24 14:50:35'),
-(62, 1000, '2022-05-24 13:30:29', '2022-05-24 14:50:35'),
-(63, 1000, '2022-05-24 13:41:51', '2022-05-24 14:50:35'),
-(64, 1000, '2022-05-24 13:59:17', '2022-05-24 14:50:35'),
-(65, 1000, '2022-05-24 14:00:23', '2022-05-24 14:50:35'),
-(66, 1000, '2022-05-24 14:00:33', '2022-05-24 14:50:35'),
-(67, 1000, '2022-05-24 14:00:51', '2022-05-24 14:50:35'),
-(68, 1002, '2022-05-24 14:50:40', '2022-05-24 14:50:43'),
-(69, 1000, '2022-05-24 14:50:48', '2022-05-24 14:55:30'),
-(70, 1000, '2022-05-24 14:55:35', '2022-05-24 14:58:32'),
-(71, 1002, '2022-05-24 14:58:39', '2022-05-24 15:22:05'),
-(72, 1000, '2022-05-24 15:22:09', '2022-05-24 15:22:29'),
-(73, 1000, '2022-05-24 15:22:34', '2022-05-24 15:23:51'),
-(74, 1002, '2022-05-24 15:23:55', '2022-05-24 15:23:58'),
-(75, 1000, '2022-05-24 15:24:03', '2022-05-25 15:29:25'),
-(76, 1000, '2022-05-25 13:19:37', '2022-05-25 15:29:25'),
-(77, 1000, '2022-05-25 15:27:11', '2022-05-25 15:29:25'),
-(78, 1002, '2022-05-25 15:29:32', '2022-05-25 15:29:41'),
-(79, 1000, '2022-05-25 15:45:49', '2022-05-25 15:50:07'),
-(80, 1002, '2022-05-25 15:50:13', '0000-00-00 00:00:00');
+(1, 1001, '2022-05-26 14:39:11', '2022-05-26 14:39:39'),
+(2, 1002, '2022-05-26 14:40:04', '2022-05-26 14:40:09'),
+(3, 1002, '2022-05-26 14:41:14', '2022-05-26 16:52:50'),
+(4, 1001, '2022-05-26 16:50:39', '2022-05-26 16:52:50'),
+(5, 1001, '2022-05-26 16:52:14', '2022-05-26 16:52:50'),
+(6, 1001, '2022-05-30 13:26:49', '2022-06-02 15:16:12'),
+(7, 1001, '2022-05-31 13:15:08', '2022-06-02 15:16:12'),
+(8, 1001, '2022-06-01 13:28:43', '2022-06-02 15:16:12'),
+(9, 1001, '2022-06-02 13:22:14', '2022-06-02 15:16:12');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `merchandise`
+--
+
+CREATE TABLE `merchandise` (
+  `item_id` int(11) NOT NULL,
+  `item_name` varchar(20) DEFAULT NULL,
+  `item_category` varchar(10) DEFAULT NULL,
+  `item_stock` int(10) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `merchandise`
+--
+
+INSERT INTO `merchandise` (`item_id`, `item_name`, `item_category`, `item_stock`) VALUES
+(1, 'Pink Cloth', 'Cloth', 505),
+(2, 'ggg', 'ggg', 10),
+(27, 'Gray Cloth', 'Cloth', 300);
 
 -- --------------------------------------------------------
 
@@ -246,7 +253,6 @@ CREATE TABLE `sales` (
 --
 
 INSERT INTO `sales` (`sales_id`, `account_id`, `sales_date`, `buyer_name`, `item_name`, `category`, `price`, `quantity`, `total`, `journal`, `debit`, `credit`, `explanation`) VALUES
-(4, 1001, '2022-05-05', 'hi', 'pink', 'cloth', 5, 10, 50, 'Assets', 0, 0, ''),
 (5, 2000, '2022-05-14', 'reil', 'Pink Ribbon', 'Ribbon', 3, 50, 150, 'Liability', 69, 69, 'NO');
 
 -- --------------------------------------------------------
@@ -269,6 +275,18 @@ CREATE TABLE `supplier` (
 INSERT INTO `supplier` (`supplier_ID`, `supplier_name`, `address`, `contact`) VALUES
 (1, 'shiori', 'daraga', '09369888542'),
 (2, 'earl', 'daraga', '09324152321');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tags`
+--
+
+CREATE TABLE `tags` (
+  `tag_id` int(6) NOT NULL,
+  `tag_code` varchar(6) NOT NULL,
+  `tag_name` varchar(20) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Indexes for dumped tables
@@ -319,7 +337,13 @@ ALTER TABLE `journal`
 --
 ALTER TABLE `logs`
   ADD PRIMARY KEY (`log_id`),
-  ADD KEY `admin_id` (`admin_id`);
+  ADD KEY `fk_adminLogs` (`admin_id`);
+
+--
+-- Indexes for table `merchandise`
+--
+ALTER TABLE `merchandise`
+  ADD PRIMARY KEY (`item_id`);
 
 --
 -- Indexes for table `sales`
@@ -335,6 +359,12 @@ ALTER TABLE `supplier`
   ADD PRIMARY KEY (`supplier_ID`);
 
 --
+-- Indexes for table `tags`
+--
+ALTER TABLE `tags`
+  ADD PRIMARY KEY (`tag_id`);
+
+--
 -- AUTO_INCREMENT for dumped tables
 --
 
@@ -343,6 +373,12 @@ ALTER TABLE `supplier`
 --
 ALTER TABLE `account`
   MODIFY `account_id` int(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3001;
+
+--
+-- AUTO_INCREMENT for table `admin`
+--
+ALTER TABLE `admin`
+  MODIFY `admin_id` int(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1003;
 
 --
 -- AUTO_INCREMENT for table `customer`
@@ -360,7 +396,7 @@ ALTER TABLE `general`
 -- AUTO_INCREMENT for table `inventory`
 --
 ALTER TABLE `inventory`
-  MODIFY `inventory_id` int(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
+  MODIFY `inventory_id` int(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=113;
 
 --
 -- AUTO_INCREMENT for table `journal`
@@ -372,7 +408,13 @@ ALTER TABLE `journal`
 -- AUTO_INCREMENT for table `logs`
 --
 ALTER TABLE `logs`
-  MODIFY `log_id` int(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=81;
+  MODIFY `log_id` int(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+
+--
+-- AUTO_INCREMENT for table `merchandise`
+--
+ALTER TABLE `merchandise`
+  MODIFY `item_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
 
 --
 -- AUTO_INCREMENT for table `sales`
@@ -385,6 +427,12 @@ ALTER TABLE `sales`
 --
 ALTER TABLE `supplier`
   MODIFY `supplier_ID` int(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT for table `tags`
+--
+ALTER TABLE `tags`
+  MODIFY `tag_id` int(6) NOT NULL AUTO_INCREMENT;
 
 --
 -- Constraints for dumped tables
@@ -415,7 +463,7 @@ ALTER TABLE `journal`
 -- Constraints for table `logs`
 --
 ALTER TABLE `logs`
-  ADD CONSTRAINT `admin_id` FOREIGN KEY (`admin_id`) REFERENCES `admin` (`admin_id`);
+  ADD CONSTRAINT `fk_adminLogs` FOREIGN KEY (`admin_id`) REFERENCES `admin` (`admin_id`);
 
 --
 -- Constraints for table `sales`

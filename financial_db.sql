@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 02, 2022 at 03:16 PM
+-- Generation Time: Jun 14, 2022 at 09:23 AM
 -- Server version: 10.4.19-MariaDB
 -- PHP Version: 8.0.7
 
@@ -76,29 +76,17 @@ INSERT INTO `admin` (`admin_id`, `admin_name`, `admin_pass`, `admin_contact`, `a
 CREATE TABLE `customer` (
   `customer_id` int(6) NOT NULL,
   `customer_name` varchar(10) NOT NULL,
-  `stock` int(10) NOT NULL
+  `stock` int(10) NOT NULL,
+  `item_name` varchar(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `customer`
 --
 
-INSERT INTO `customer` (`customer_id`, `customer_name`, `stock`) VALUES
-(1, 'earl', 10),
-(2, 'earl', 10),
-(3, 'earl', 10),
-(4, 'earl', 1),
-(5, 'earl', 2),
-(6, 'earl', 23),
-(7, 'earl', 32),
-(8, 'earl', 32),
-(9, 'dwa', 32),
-(10, 'earl', 20),
-(11, 'shio', 20),
-(12, 'hi', 10),
-(13, 'John', 10),
-(14, 'dwa', 32),
-(15, 'Reil', 50);
+INSERT INTO `customer` (`customer_id`, `customer_name`, `stock`, `item_name`) VALUES
+(16, 'shiori', 20, 'Pink Cloth'),
+(17, 'earl', 100, 'Red Cloth');
 
 -- --------------------------------------------------------
 
@@ -153,16 +141,12 @@ CREATE TABLE `inventory` (
 --
 
 INSERT INTO `inventory` (`inventory_id`, `account_id`, `inv_date`, `supplier_id`, `item_name`, `category`, `price`, `quantity`, `total`, `journal`, `debit`, `credit`, `Explanation`) VALUES
-(40, 1001, '2022-05-30', 2, 'dawdaw', 'dwadwa', 22, 32, 704, 'Assets', 101, 100, 'dwadwa'),
-(52, 1001, '2022-05-31', 1, 'dwa', 'faw', 22, 32, 704, 'Assets', 11, 22, 'dwad'),
-(53, 2000, '2022-05-31', 1, 'fawfwa', 'fwa', 11, 22, 242, 'Liability', 11, 22, 'dwad'),
-(55, 3000, '2022-05-31', 1, 'Red Cloth', 'Cloth', 100, 10, 1000, 'Owners Equ', 0, 50, 'I dont know'),
-(56, 1001, '2022-06-01', 1, 'ggg', 'ggg', 200, 10, 2000, 'Assets', 5, 11, 'fwafwa'),
-(67, 1003, '2022-06-01', 1, 'Pink Cloth', 'Cloth', 5, 10, 50, 'Asset', 4, 10, 'fwafwa'),
-(109, 3000, '2022-06-02', 1, 'Pink Cloth', 'Cloth', 22, 100, 2200, 'Owners Equ', 2, 55, 'dawdwa'),
-(110, 3000, '2022-06-02', 1, 'Pink Cloth', 'Cloth', 22, 100, 2200, 'Owners Equ', 2, 55, 'dawdwa'),
-(111, 3000, '2022-06-02', 2, 'Gray Cloth', 'Cloth', 22, 200, 4400, 'Owners Equ', 0, 22, 'aaaaa'),
-(112, 1003, '2022-06-02', 1, 'Gray Cloth', 'Cloth', 5, 100, 500, 'Asset', 200, 100, 'wdaaww');
+(135, 3000, '2022-06-10', 1, 'Pink Cloth', 'Cloth', 100, 100, 10000, 'Owners Equ', 69, 16, 'idk'),
+(136, 1003, '2022-06-10', 1, 'Red Cloth', 'Cloth', 100, 200, 20000, 'Asset', 0, 69, 'dwdwa'),
+(137, 1003, '2022-06-10', 2, 'Pink Cloth', 'Cloth', 20, 100, 2000, 'Asset', 69, 0, 'dwadwa'),
+(138, 2000, '2022-06-13', 1, 'Pink Cloth', 'Cloth', 100, 30, 3000, 'Liability', 4, 100, 'dwadwa'),
+(139, 1001, '2022-06-13', 1, 'Red Button', 'Button', 33, 100, 3300, 'Assets', 11, 11, 'dwadaw'),
+(140, 1003, '2022-06-13', 1, 'Pink Cloth', 'Cloth', 10, 1000, 10000, 'Asset', 11, 11, 'dwada');
 
 -- --------------------------------------------------------
 
@@ -202,7 +186,23 @@ INSERT INTO `logs` (`log_id`, `admin_id`, `login`, `logout`) VALUES
 (6, 1001, '2022-05-30 13:26:49', '2022-06-02 15:16:12'),
 (7, 1001, '2022-05-31 13:15:08', '2022-06-02 15:16:12'),
 (8, 1001, '2022-06-01 13:28:43', '2022-06-02 15:16:12'),
-(9, 1001, '2022-06-02 13:22:14', '2022-06-02 15:16:12');
+(9, 1001, '2022-06-02 13:22:14', '2022-06-02 15:16:12'),
+(10, 1001, '2022-06-05 14:13:44', '2022-06-13 14:14:46'),
+(11, 1001, '2022-06-06 14:44:12', '2022-06-13 14:14:46'),
+(12, 1001, '2022-06-09 13:49:45', '2022-06-13 14:14:46'),
+(13, 1001, '2022-06-10 14:13:49', '2022-06-13 14:14:46'),
+(14, 1001, '2022-06-12 14:02:42', '2022-06-13 14:14:46'),
+(15, 1001, '2022-06-13 13:33:57', '2022-06-13 14:14:46'),
+(16, 1001, '2022-06-13 13:58:57', '2022-06-13 14:14:46'),
+(17, 1001, '2022-06-13 14:10:48', '2022-06-13 14:14:46'),
+(18, 1001, '2022-06-13 14:14:54', '2022-06-13 14:17:27'),
+(19, 1001, '2022-06-13 14:17:41', '2022-06-13 14:18:35'),
+(20, 1001, '2022-06-13 14:18:56', '2022-06-13 14:20:24'),
+(21, 1001, '2022-06-13 14:35:46', '2022-06-13 14:36:29'),
+(22, 1001, '2022-06-13 14:36:49', '2022-06-14 09:14:11'),
+(23, 1001, '2022-06-14 09:11:48', '2022-06-14 09:14:11'),
+(24, 1001, '2022-06-14 09:13:03', '2022-06-14 09:14:11'),
+(25, 1001, '2022-06-14 09:15:08', '2022-06-14 09:15:25');
 
 -- --------------------------------------------------------
 
@@ -211,10 +211,10 @@ INSERT INTO `logs` (`log_id`, `admin_id`, `login`, `logout`) VALUES
 --
 
 CREATE TABLE `merchandise` (
-  `item_id` int(11) NOT NULL,
+  `item_id` int(6) NOT NULL,
   `item_name` varchar(20) DEFAULT NULL,
-  `item_category` varchar(10) DEFAULT NULL,
-  `item_stock` int(10) DEFAULT NULL
+  `item_category` varchar(20) DEFAULT NULL,
+  `item_stock` int(6) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
@@ -222,9 +222,9 @@ CREATE TABLE `merchandise` (
 --
 
 INSERT INTO `merchandise` (`item_id`, `item_name`, `item_category`, `item_stock`) VALUES
-(1, 'Pink Cloth', 'Cloth', 505),
-(2, 'ggg', 'ggg', 10),
-(27, 'Gray Cloth', 'Cloth', 300);
+(3, 'Pink Cloth', 'Cloth', 890),
+(4, 'Red Cloth', 'Cloth', -50),
+(5, 'Red Button', 'Button', 100);
 
 -- --------------------------------------------------------
 
@@ -253,7 +253,13 @@ CREATE TABLE `sales` (
 --
 
 INSERT INTO `sales` (`sales_id`, `account_id`, `sales_date`, `buyer_name`, `item_name`, `category`, `price`, `quantity`, `total`, `journal`, `debit`, `credit`, `explanation`) VALUES
-(5, 2000, '2022-05-14', 'reil', 'Pink Ribbon', 'Ribbon', 3, 50, 150, 'Liability', 69, 69, 'NO');
+(7, 1003, '2022-06-10', 'Shio', 'Pink Cloth', 'Cloth', 200, 100, 20000, 'Asset', 69, 100, 'dwadaw'),
+(8, 1003, '2022-06-10', 'Shio', 'Red Cloth', 'Cloth', 60, 50, 3000, 'Asset', 11, 11, 'dwadwa'),
+(10, 1003, '2022-06-10', 'shiori', 'Pink Cloth', 'Cloth', 100, 10, 1000, 'Asset', 11, 11, 'dwadwa'),
+(12, 1003, '2022-06-13', 'shiori', 'Pink Cloth', 'Cloth', 1, 100, 100, 'Asset', 33, 100, 'dwadwa'),
+(13, 2000, '2022-06-13', 'earl', 'Red Cloth', 'Cloth', 5, 100, 500, 'Liability', 11, 11, 'dwadwa'),
+(14, 2000, '2022-06-13', 'earl', 'Red Cloth', 'Cloth', 5, 100, 500, 'Liability', 11, 11, 'dwadwa'),
+(15, 1003, '2022-06-13', 'shiori', 'Pink Cloth', 'Cloth', 100, 10, 1000, 'Asset', 1, 1, 'dwa');
 
 -- --------------------------------------------------------
 
@@ -384,7 +390,7 @@ ALTER TABLE `admin`
 -- AUTO_INCREMENT for table `customer`
 --
 ALTER TABLE `customer`
-  MODIFY `customer_id` int(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `customer_id` int(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT for table `general`
@@ -396,7 +402,7 @@ ALTER TABLE `general`
 -- AUTO_INCREMENT for table `inventory`
 --
 ALTER TABLE `inventory`
-  MODIFY `inventory_id` int(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=113;
+  MODIFY `inventory_id` int(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=141;
 
 --
 -- AUTO_INCREMENT for table `journal`
@@ -408,19 +414,19 @@ ALTER TABLE `journal`
 -- AUTO_INCREMENT for table `logs`
 --
 ALTER TABLE `logs`
-  MODIFY `log_id` int(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `log_id` int(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 
 --
 -- AUTO_INCREMENT for table `merchandise`
 --
 ALTER TABLE `merchandise`
-  MODIFY `item_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
+  MODIFY `item_id` int(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `sales`
 --
 ALTER TABLE `sales`
-  MODIFY `sales_id` int(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `sales_id` int(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT for table `supplier`

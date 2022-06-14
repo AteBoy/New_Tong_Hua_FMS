@@ -26,15 +26,11 @@ if(!empty($_POST))
             $qry = "UPDATE $table SET $field = '$val' WHERE $id_name = $id";
             $result = $connection->query($qry);
 
-            /*if($field == "price" || $field == "quantity"){
-                $sql = "SELECT $field from quantity where $id_name = 'id'";
-                $result = $connection->query($sql);
-                $row = $result->fetch_assoc();
-                $quantity = $row["quantity"];
-                $qry = "UPDATE $table SET total = '$val * $quantity' WHERE $id_name = $id";
+            if($field == "price"){
+                $qry = "UPDATE $table SET total = '$val' * quantity WHERE $id_name = $id";
                 $result = $connection->query($qry);
-            }*/
-            echo "Updated";
+            }
+            //echo "Updated";
         } else {
             echo "Invalid Requests";
         }

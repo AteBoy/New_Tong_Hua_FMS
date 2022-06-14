@@ -141,10 +141,10 @@
         $sql = "SELECT item_name, item_category from merchandise where item_name = '$inv_item' && item_category = '$inv_cat'";
         $result = $connection->query($sql); 
         $row = $result->fetch_assoc();
+
         if($result){
             if(mysqli_num_rows($result) > 0){
-                $qry = "SELECT item_name.merchandise, item_category from inventory, merchandise where item_name.inventory = item_name.merchandise && item_category = category";
-                $result = $connection->query($qry);
+                
                 //$new_stock = $inv_quantity + 
                 $qry = "UPDATE merchandise SET item_stock = item_stock + '$inv_quantity' WHERE item_name = '$inv_item' && item_category = '$inv_cat'";
                 $result = $connection->query($qry);
@@ -172,17 +172,55 @@
         $sales_credit = $_POST['sales_credit'];
         $exp = $_POST['sales_exp'];
 
-        for ($i = 0; $i < count($sales_acc); $i++) {
-            if (strlen($sales_acc[$i]) !== 0) {
-                $acc = $sales_acc[$i];
-                $debit = $sales_debit[$i];
-                $credit = $sales_credit[$i];
+        
+        $sql = "SELECT item_name, item_category from merchandise where item_name = '$sales_item' && item_category = '$sales_cat'";
+        $result = $connection->query($sql); 
+        $row = $result->fetch_assoc();
 
-                $qry = "INSERT INTO sales(sales_id, account_id, sales_date, buyer_name, item_name, category, price, quantity, total, journal, debit, credit, explanation) VALUES ('','$acc','$date','$sales_buyer','$sales_item','$sales_cat','$sales_price','$sales_quantity','$total',(select account_type from account where account_id = '$acc'), '$debit', '$credit','$exp')";
+        if($result){
+            if(mysqli_num_rows($result) > 0){
+
+                for ($i = 0; $i < count($sales_acc); $i++) {
+                    if (strlen($sales_acc[$i]) !== 0) {
+                        $acc = $sales_acc[$i];
+                        $debit = $sales_debit[$i];
+                        $credit = $sales_credit[$i];
+        
+                        $qry = "INSERT INTO sales(sales_id, account_id, sales_date, buyer_name, item_name, category, price, quantity, total, journal, debit, credit, explanation) VALUES ('','$acc','$date','$sales_buyer','$sales_item','$sales_cat','$sales_price','$sales_quantity','$total',(select account_type from account where account_id = '$acc'), '$debit', '$credit','$exp')";
+                        $result = $connection->query($qry);
+                    }
+                }
+
+                $sql = "SELECT item_name.merchandise, item_category from inventory, merchandise where item_name.inventory = item_name.merchandise && item_category = category";
+                $result = $connection->query($sql);
+                //$new_stock = $inv_quantity + 
+                $qry = "UPDATE merchandise SET item_stock = item_stock - '$sales_quantity' WHERE item_name = '$sales_item' && item_category = '$sales_cat'";
                 $result = $connection->query($qry);
+ 
+            }
+            else{
+                echo "<script>alert('Item Not Found, Please Try Again');</script>";
+   
             }
         }
+        $sql = "SELECT item_name, customer_name from customer where item_name = '$sales_item' && customer_name = '$sales_buyer'";
+        $result = $connection->query($sql); 
+        $row = $result->fetch_assoc();
 
+        if($result){
+            if(mysqli_num_rows($result) > 0){
+                
+                $qry = "UPDATE customer SET stock = stock + '$sales_quantity' WHERE item_name = '$sales_item' && customer_name = '$sales_buyer'";
+                $result = $connection->query($qry);
+
+            }
+            else{
+                $qry = "INSERT into customer(customer_id, customer_name, stock, item_name) value ('','$sales_buyer','$sales_quantity','$sales_item')";
+                $result = $connection->query($qry);
+  
+            }
+        }
+        
         $connection->close(); 
     }
     if(isset($_POST['submit_gen'])){

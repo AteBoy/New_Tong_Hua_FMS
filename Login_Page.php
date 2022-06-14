@@ -40,7 +40,6 @@
 	if(isset($_GET['logout'])){
 		$logout = $_GET['logout'];
 		$date2 = date("Y-m-d H:i:s a");
-
 		$sql = "UPDATE logs SET logout = '$date2' WHERE logout = $logout";
         $result = $connection->query($sql);
 		header("Location: login_page.php");

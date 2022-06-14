@@ -209,12 +209,7 @@
                                 <th>Action</th>
                             </tr>
                             <?php
-                            $server = "localhost";
-                            $user = "root";
-                            $pass = "";
-                            $db = "financial_db";
-                        
-                            $connection = new mysqli($server, $user, $pass, $db);
+                            include("config.php");
                         
                             if($connection->connect_error){
                                 die("Connection Failed ". $connection->connect_error);
@@ -247,6 +242,33 @@
                                </tr><?php
                            }
                            $connection->close();?>
+                           <?php 
+                                include("config.php");
+
+                                if($connection->connect_error){
+                                    die("Connection Failed ". $connection->connect_error);
+                                }
+    
+                                $sql = "SELECT sum(price) price, sum(quantity) quantity, sum(total) total, sum(debit) debit, sum(credit) credit FROM sales";
+                                $result = $connection->query($sql);
+                                $row = $result->fetch_assoc();
+
+                                echo "<tr>
+                                    <td>Total</td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td>". $row["price"] ."</td>
+                                    <td>". $row["quantity"] ."</td>
+                                    <td>". $row["total"] ."</td>
+                                    <td></td>
+                                    <td>". $row["debit"] ."</td>
+                                    <td>". $row["credit"] ."</td>
+                                
+                                </tr>";
+                                $connection->close();
+                            ?>
                        </table>
                     </div>
                     <div id="add_sales_modal" class="modal">
@@ -301,12 +323,12 @@
                                             <input type="text" placeholder="Enter Explanation" name="sales_exp" id="sales_exp" required>      
                                         </div>
 
-                                        <div style="float:left;margin-right:20px;width: 60%;">
+                                        <div style="float:left;margin-right:20px;width: 60%;" class="autocomplete">
                                             <label for="sales_item"><b>Item Name</b></label>
                                             <input type="text" placeholder="Enter Item Name" name="sales_item" id="sales_item" required>      
                                         </div>
 
-                                        <div style="float:right;width: 35%;">
+                                        <div style="float:right;width: 35%;" class="autocomplete">
                                             <label for="sales_cat"><b>Category</b></label>
                                             <input type="text" placeholder="Enter Category" name="sales_cat" id="sales_cat" required>   
                                         </div>
@@ -358,12 +380,7 @@
                                 <th>Action</th>
                             </tr>
                             <?php
-                            $server = "localhost";
-                            $user = "root";
-                            $pass = "";
-                            $db = "financial_db";
-                        
-                            $connection = new mysqli($server, $user, $pass, $db);
+                            include("config.php");
                         
                             if($connection->connect_error){
                                 die("Connection Failed ". $connection->connect_error);
@@ -384,7 +401,7 @@
                                     <td contenteditable='true' id = 'inventory:item_name:inventory_id:". $row["inventory_id"] ."'>" . $row["item_name"] . "</td>
                                     <td contenteditable='true' id = 'inventory:category:inventory_id:". $row["inventory_id"] ."'>" . $row["category"] . "</td>
                                     <td contenteditable='true' id = 'inventory:price:inventory_id:". $row["inventory_id"] ."'>" . $row["price"] . "</td>
-                                    <td contenteditable='true' id = 'inventory:quantity:inventory_id:". $row["inventory_id"] ."'>" . $row["quantity"] . "</td>
+                                    <td>" . $row["quantity"] . "</td>
                                     <td>" . $row["total"] . "</td>
                                     <td contenteditable='true' id = 'inventory:journal:inventory_id:". $row["inventory_id"] ."'>" . $row["journal"] . "</td>
                                     <td>" . $row["debit"] . "</td>
@@ -396,6 +413,33 @@
                                 </tr><?php
                             }
                             $connection->close();?>
+                            <?php 
+                                include("config.php");
+
+                                if($connection->connect_error){
+                                    die("Connection Failed ". $connection->connect_error);
+                                }
+    
+                                $sql = "SELECT sum(price) price, sum(quantity) quantity, sum(total) total, sum(debit) debit, sum(credit) credit FROM inventory";
+                                $result = $connection->query($sql);
+                                $row = $result->fetch_assoc();
+
+                                echo "<tr>
+                                    <td>Total</td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td>". $row["price"] ."</td>
+                                    <td>". $row["quantity"] ."</td>
+                                    <td>". $row["total"] ."</td>
+                                    <td></td>
+                                    <td>". $row["debit"] ."</td>
+                                    <td>". $row["credit"] ."</td>
+                                
+                                </tr>";
+                                $connection->close();
+                            ?>
                         </table>
                     </div>
                     <div id="add_inv_modal" class="modal">
@@ -451,12 +495,12 @@
                                             <input type="text" placeholder="Enter Explanation" name="inv_exp" id="inv_exp" required>  
                                         </div>
 
-                                        <div style="float:left;margin-right:20px;width: 60%;">
+                                        <div style="float:left;margin-right:20px;width: 60%;" class = "autocomplete">
                                             <label for="inv_item"><b>Item Name</b></label>
                                             <input type="text" placeholder="Enter Item Name" name="inv_item" id="inv_item" required>      
                                         </div>
 
-                                        <div style="float:right;width: 35%;">
+                                        <div style="float:right;width: 35%;" class="autocomplete">
                                             <label for="inv_cat"><b>Category</b></label>
                                             <input type="text" placeholder="Enter Category" name="inv_cat" id="inv_cat" required> 
                                         </div>
@@ -555,6 +599,28 @@
                                 </tr><?php
                             }
                             $connection->close();?>
+                            <?php 
+                                include("config.php");
+
+                                if($connection->connect_error){
+                                    die("Connection Failed ". $connection->connect_error);
+                                }
+    
+                                $sql = "SELECT sum(debit) debit, sum(credit) credit FROM general";
+                                $result = $connection->query($sql);
+                                $row = $result->fetch_assoc();
+
+                                echo "<tr>
+                                    <td>Total</td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td>". $row["debit"] ."</td>
+                                    <td>". $row["credit"] ."</td>
+                                
+                                </tr>";
+                                $connection->close();
+                            ?>
                         </table>
                         <button class = "btn" id = "add_gen">Add General</button>
                         <div id="add_general_modal" class="modal">
@@ -789,6 +855,7 @@
                         <button class = "buttonLink" onclick="openTable(event, 'merch')">Merchandise</button>
                         <button class = "buttonLink" onclick="openTable(event, 'stock')">Stock Record</button>
                         <button class = "buttonLink" onclick="openTable(event, 'supp')">Supplier</button>
+                        <button class = "buttonLink" onclick="openTable(event, 'cus')">Customer</button>
                     </div>
                     <div class = "tab_tb" id = "merch">
                         <input type="text" id = "merch_search" placeholder="Search" >
@@ -827,6 +894,26 @@
                                 </tr><?php
                             }
                             $connection->close();?>
+                            <?php 
+                                include("config.php");
+
+                                if($connection->connect_error){
+                                    die("Connection Failed ". $connection->connect_error);
+                                }
+    
+                                $sql = "SELECT sum(item_stock)stock FROM merchandise";
+                                $result = $connection->query($sql);
+                                $row = $result->fetch_assoc();
+
+                                echo "<tr>
+                                    <td>Total</td>
+                                    <td></td>
+                                    <td></td>
+                                    <td>". $row["stock"] ."</td>
+                                
+                                </tr>";
+                                $connection->close();
+                            ?>
                         </table>
                     </div>
                     <div class = "tab_tb" id = "stock" style="overflow-x:auto; overflow-x:auto;"> 
@@ -938,6 +1025,45 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
+                    <div class = "tab_tb" id = "cus" style="overflow-x:auto; overflow-x:auto;"> 
+                        <input type="text" id = "cus_search" placeholder="Search" >
+                        <table id = "cus_table">
+                            <tr>
+                                <th>Customer ID <i class = "fa fa-sort" onclick="sortTable(0,'sup_table')"></th>
+                                <th>Customer Name <i class = "fa fa-sort" onclick="sortTable(1,'sup_table')"></th>
+                                <th>Stock <i class = "fa fa-sort" onclick="sortTable(2,'sup_table')"></th>
+                                <th>Item Name <i class = "fa fa-sort" onclick="sortTable(3,'sup_table')"></th>
+                                <th>Action</th>
+                            </tr>
+                            <?php
+                            include("config.php");
+                            if($connection->connect_error){
+                                die("Connection Failed ". $connection->connect_error);
+                            }
+
+                            $sql = "SELECT * FROM customer";
+                            $result = $connection->query($sql);
+
+                            if(!$result){
+                                die("Invalid Query: ". $connection_error);
+                            }
+
+                            while($row = $result->fetch_assoc()){
+                                echo "<tbody data-link='row' class='rowlink'>
+                                <tr>
+                                    <td>" . $row["customer_id"] . "</td>
+                                    <td>" . $row["customer_name"] . "</td>
+                                    <td>" . $row["stock"] . "</td>
+                                    <td>" . $row["item_name"] . "</td>
+                                    ";$id = $row["customer_id"];?>
+                                    
+                                    <td><a href="delete.php?id=<?php echo $id;?>&table=customer:customer">Delete</i></a></td>
+                               </tr><?php
+                           }
+                           $connection->close();?>
+                        </table>
+                        
                     </div>
                 </div>
             </div>
@@ -1389,5 +1515,139 @@ function computeTotal(code){
     document.getElementById(code+"_total").value = total;
     
 }
-    </script>
+
+function autocomplete(inp, arr) {
+  /*the autocomplete function takes two arguments,
+  the text field element and an array of possible autocompleted values:*/
+  var currentFocus;
+  /*execute a function when someone writes in the text field:*/
+  inp.addEventListener("input", function(e) {
+      var a, b, i, val = this.value;
+      /*close any already open lists of autocompleted values*/
+      closeAllLists();
+      if (!val) { return false;}
+      currentFocus = -1;
+      /*create a DIV element that will contain the items (values):*/
+      a = document.createElement("DIV");
+      a.setAttribute("id", this.id + "autocomplete-list");
+      a.setAttribute("class", "autocomplete-items");
+      /*append the DIV element as a child of the autocomplete container:*/
+      this.parentNode.appendChild(a);
+      /*for each item in the array...*/
+      for (i = 0; i < arr.length; i++) {
+        /*check if the item starts with the same letters as the text field value:*/
+        if (arr[i].substr(0, val.length).toUpperCase() == val.toUpperCase()) {
+          /*create a DIV element for each matching element:*/
+          b = document.createElement("DIV");
+          /*make the matching letters bold:*/
+          b.innerHTML = "<strong>" + arr[i].substr(0, val.length) + "</strong>";
+          b.innerHTML += arr[i].substr(val.length);
+          /*insert a input field that will hold the current array item's value:*/
+          b.innerHTML += "<input type='hidden' value='" + arr[i] + "'>";
+          /*execute a function when someone clicks on the item value (DIV element):*/
+          b.addEventListener("click", function(e) {
+              /*insert the value for the autocomplete text field:*/
+              inp.value = this.getElementsByTagName("input")[0].value;
+              /*close the list of autocompleted values,
+              (or any other open lists of autocompleted values:*/
+              closeAllLists();
+          });
+          a.appendChild(b);
+        }
+      }
+  });
+  /*execute a function presses a key on the keyboard:*/
+  inp.addEventListener("keydown", function(e) {
+      var x = document.getElementById(this.id + "autocomplete-list");
+      if (x) x = x.getElementsByTagName("div");
+      if (e.keyCode == 40) {
+        /*If the arrow DOWN key is pressed,
+        increase the currentFocus variable:*/
+        currentFocus++;
+        /*and and make the current item more visible:*/
+        addActive(x);
+      } else if (e.keyCode == 38) { //up
+        /*If the arrow UP key is pressed,
+        decrease the currentFocus variable:*/
+        currentFocus--;
+        /*and and make the current item more visible:*/
+        addActive(x);
+      } else if (e.keyCode == 13) {
+        /*If the ENTER key is pressed, prevent the form from being submitted,*/
+        e.preventDefault();
+        if (currentFocus > -1) {
+          /*and simulate a click on the "active" item:*/
+          if (x) x[currentFocus].click();
+        }
+      }
+  });
+  function addActive(x) {
+    /*a function to classify an item as "active":*/
+    if (!x) return false;
+    /*start by removing the "active" class on all items:*/
+    removeActive(x);
+    if (currentFocus >= x.length) currentFocus = 0;
+    if (currentFocus < 0) currentFocus = (x.length - 1);
+    /*add class "autocomplete-active":*/
+    x[currentFocus].classList.add("autocomplete-active");
+  }
+  function removeActive(x) {
+    /*a function to remove the "active" class from all autocomplete items:*/
+    for (var i = 0; i < x.length; i++) {
+      x[i].classList.remove("autocomplete-active");
+    }
+  }
+  function closeAllLists(elmnt) {
+    /*close all autocomplete lists in the document,
+    except the one passed as an argument:*/
+    var x = document.getElementsByClassName("autocomplete-items");
+    for (var i = 0; i < x.length; i++) {
+      if (elmnt != x[i] && elmnt != inp) {
+        x[i].parentNode.removeChild(x[i]);
+      }
+    }
+  }
+  /*execute a function when someone clicks in the document:*/
+  document.addEventListener("click", function (e) {
+      closeAllLists(e.target);
+  });
+    }
+
+    /*An array containing all the country names in the world:*/
+
+    <?php 
+        include("config.php");
+        if($connection->connect_error){
+            die("Connection Failed ". $connection->connect_error);
+        }
+        $temp = [];
+        $sql = "SELECT item_name FROM merchandise";
+        $result = $connection->query($sql);
+        
+        for($i = 0; $row = $result->fetch_assoc(); $i++){
+            $temp[$i] = $row['item_name'];
+        }
+        $item = json_encode($temp);
+
+        $sql = "SELECT item_category FROM merchandise";
+        $result = $connection->query($sql);
+        
+        for($i = 0; $row = $result->fetch_assoc(); $i++){
+            $temp[$i] = $row['item_category'];
+        }
+        $category = json_encode($temp);
+        
+    ?>
+    var items =  <?php echo $item; ?>;
+    var category =  <?php echo $category; ?>;
+    /*initiate the autocomplete function on the "myInput" element, and pass along the countries array as possible autocomplete values:*/
+    autocomplete(document.getElementById("inv_item"), items);
+    autocomplete(document.getElementById("sales_item"), items);
+    autocomplete(document.getElementById("inv_cat"), category);
+    autocomplete(document.getElementById("sales_cat"), category);
+
+   /* object.onunload() = function(){
+        window.location.href = "login_page.php?logout<?php echo $log_id?>";
+    }*/
+</script>
 </html>

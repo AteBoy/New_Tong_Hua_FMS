@@ -116,7 +116,6 @@ body {
     width: 100%;
     height: 5%;
     border-bottom: 1px black solid;
-    position: sticky;
 }
 #navHeader{
     color: skyblue;
@@ -171,7 +170,7 @@ body {
     margin: 0%;
     padding-top: 10px;
 }
-#acc_search, #merch_search, #stock_search, #supp_search, #ap_search, #ar_search{
+#acc_search, #merch_search, #stock_search, #supp_search, #ap_search, #ar_search, #cus_search{
     width: 10%;
     font-size: 12px;
     height: 1%;
@@ -418,4 +417,38 @@ td{
   }
   i{
       cursor: pointer;
+  }
+  .autocomplete {
+    position: relative;
+    display: inline-block;
+  }
+  
+  .autocomplete-items {
+    position: absolute;
+    border: 1px solid #d4d4d4;
+    border-bottom: none;
+    border-top: none;
+    z-index: 99;
+    /*position the autocomplete items to be the same width as the container:*/
+    top: 100%;
+    left: 0;
+    right: 0;
+  }
+  
+  .autocomplete-items div {
+    padding: 10px;
+    cursor: pointer;
+    background-color: #fff; 
+    border-bottom: 1px solid #d4d4d4; 
+  }
+  
+  /*when hovering an item:*/
+  .autocomplete-items div:hover {
+    background-color: #e9e9e9; 
+  }
+  
+  /*when navigating through the items using the arrow keys:*/
+  .autocomplete-active {
+    background-color: DodgerBlue !important; 
+    color: #ffffff; 
   }

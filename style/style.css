@@ -170,14 +170,15 @@ body {
     margin: 0%;
     padding-top: 10px;
 }
-#acc_search, #merch_search, #stock_search, #supp_search, #ap_search, #ar_search, #cus_search{
-    width: 10%;
+#acc_search, #merch_search, #stock_search, #supp_search, #ap_search, #ar_search, #cus_search {
+    width: 14%;
     font-size: 12px;
     height: 1%;
     float: right;
-    margin-bottom: 5px;
-    margin-top: 50px;
     border: black solid 1px;
+    outline: none;
+    position: relative;
+    top: 20px;
 }
 #stock_switch{
     width: 10%;
@@ -190,11 +191,12 @@ body {
     color: white; 
     border: 2px solid darkblue;
 }
-.btn{
-    background-color: #749EFF; 
-    color: white; 
-    border: 2px solid darkblue;
-    padding: 16px 32px;
+.accbtn {
+    background-color: #749EFF;
+    color: white;
+    border: 1px solid darkblue;
+    margin-right: 20px;
+    padding: 10px 28px;
     text-align: center;
     text-decoration: none;
     display: inline-block;
@@ -202,8 +204,23 @@ body {
     transition-duration: 0.4s;
     cursor: pointer;
     position: fixed;
-    bottom: -4px;
-    right: 10px;
+    top: 110px;
+    left: 370px;
+}
+.btn {
+    background-color: #749EFF;
+    color: white;
+    border: 1px solid darkblue;
+    padding: 10px 28px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    transition-duration: 0.4s;
+    cursor: pointer;
+    position: fixed;
+    top: 120px;
+    right: 80px;
 }
 .btn:hover, .btn.active, #stock_switch:hover, #stock_switch.active{
     background-color: skyblue;
@@ -213,7 +230,7 @@ table, td, th{
     border: 1px solid black;
 }
 table{
-    margin-top: 20px;
+    margin-top: 15px;
     width: 100%;
     border-collapse: collapse;
     margin-left: auto;
@@ -224,7 +241,7 @@ tbody{
     overflow-x: hidden;
 }
 td{
-    height: 50px !important;
+    height: 40px !important;
 }
 th, td{
     text-align: left;
@@ -233,9 +250,9 @@ th, td{
 tr:hover{
     background-color: #D6EEEE;
 }
-.journal_buttons button{
+.journal_buttons button {
     border: none;
-    padding: 16px 32px;
+    padding: 10px 18px;
     text-align: center;
     text-decoration: none;
     display: inline-block;
@@ -243,17 +260,17 @@ tr:hover{
     margin-right: 20px;
     transition-duration: 0.4s;
     cursor: pointer;
-    background-color: white; 
-    color: black; 
-    border: 2px solid #A8FFDB;
+    background-color: white;
+    color: black;
+    border: 2px solid #749EFF;
 }
-.journal_buttons button:hover, .journal_buttons button.active{
-    background-color: #A8FFDB;
+    .journal_buttons button:hover, .journal_buttons button.active {
+    background-color: #749EFF;
     color: white;
-}
-.financial_buttons button{
+    }
+.financial_buttons button {
     border: none;
-    padding: 16px 32px;
+    padding: 10px 18px;
     text-align: center;
     text-decoration: none;
     display: inline-block;
@@ -261,13 +278,13 @@ tr:hover{
     margin-right: 20px;
     transition-duration: 0.4s;
     cursor: pointer;
-    background-color: white; 
-    color: black; 
-    border: 2px solid #B3C3F7;
+    background-color: white;
+    color: black;
+    border: 2px solid #749EFF;
 }
-.financial_buttons button:hover, .financial_buttons button.active{
-    background-color: #B3C3F7; 
-    color: white; 
+.financial_buttons button:hover, .financial_buttons button.active {
+    background-color: #749EFF;
+    color: white;
 }
 .tab_tb{
     width: 100%;
@@ -276,14 +293,15 @@ tr:hover{
 .account_frame, .inventory_frame, .financial_frame, .journal_frame{
     width: 90%;
     margin: auto;
+    
 }
 .inventory_buttons, .financial_buttons, .journal_buttons{
     padding-top: 20px;
     margin: 0%;
 }
-.inventory_buttons button{
+.inventory_buttons button {
     border: none;
-    padding: 16px 32px;
+    padding: 10px 18px;
     text-align: center;
     text-decoration: none;
     display: inline-block;
@@ -291,13 +309,13 @@ tr:hover{
     margin-right: 20px;
     transition-duration: 0.4s;
     cursor: pointer;
-    background-color: white; 
-    color: black; 
-    border: 2px solid #ECBA9A;
+    background-color: white;
+    color: black;
+    border: 2px solid #749EFF;
 }
-.inventory_buttons button:hover, .inventory_buttons button.active{
-    background-color: #ECBA9A; 
-    color: white; 
+.inventory_buttons button:hover, .inventory_buttons button.active {
+    background-color: #749EFF;
+    color: white;
 }
 th p{
     color: red;

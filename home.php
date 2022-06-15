@@ -127,7 +127,7 @@
                            $connection->close();?>
                        </table>
                 </div>
-                <button class = "btn" id = "add_acc">Add Account</button>
+                <button class = "accbtn" id = "add_acc">Add Account</button>
                 <div id="create_acc_modal" class="modal">
 
                     <div class="modal-content">
@@ -843,7 +843,7 @@
                             <th>Account Amount</th>
                         </tr>
 						<?php
-                            $server = "localhost";
+                          /*  $server = "localhost";
                             $user = "root";
                             $pass = "";
                             $db = "financial_db";
@@ -908,8 +908,9 @@
                                      <td><a href="delete.php?id=<?php echo $id;?>&table=account recievables">Delete</i></a></td>
                                 </tr><?php
 								
-                            }
-                            $connection->close();?>
+                            }*/
+                            $connection->close();?> 
+
                     </table>
                 </div>
             </div>

@@ -1231,7 +1231,7 @@
                            }
                            $connection->close();?>
                     </table>
-                    <button class = "btn" id = "add_admin">Register</button>
+                    <button class = "adminregbtn" id = "add_admin">Register</button>
                         <div id="add_admin_modal" class="modal">
                             <div class="modal-content">
                                 <div class="modal-header">

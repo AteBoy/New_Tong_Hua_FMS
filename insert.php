@@ -127,14 +127,21 @@
         $inv_debit = $_POST['inv_debit'];
         $inv_credit = $_POST['inv_credit'];
         $exp = $_POST['inv_exp'];
-        $title;
-        for ($i = 0; $i < count($inv_acc); $i++) {
+        
+        $acc = $inv_acc[0];
+        $debit = $inv_debit[0];
+        $credit = $inv_credit[0];
+
+        $qry = "INSERT INTO inventory(inventory_id, account_id, inv_date, supplier_id, item_name, category, price, quantity, total, journal, debit, credit, explanation) VALUES ('','$acc','$date',(SELECT supplier_id from supplier where supplier_name = '$inv_sup'),'$inv_item','$inv_cat','$inv_price','$inv_quantity','$total',(select account_type from account where account_id = '$acc'), '$debit', '$credit','$exp')";
+        $result = $connection->query($qry);
+
+        for ($i = 1; $i < count($inv_acc); $i++) {
             if (strlen($inv_acc[$i]) !== 0) {
                 $acc = $inv_acc[$i];
                 $debit = $inv_debit[$i];
                 $credit = $inv_credit[$i];
-
-                $qry = "INSERT INTO inventory(inventory_id, account_id, inv_date, supplier_id, item_name, category, price, quantity, total, journal, debit, credit, explanation) VALUES ('','$acc','$date',(SELECT supplier_id from supplier where supplier_name = '$inv_sup'),'$inv_item','$inv_cat','$inv_price','$inv_quantity','$total',(select account_type from account where account_id = '$acc'), '$debit', '$credit','$exp')";
+             
+                $qry = "INSERT INTO sub(sub_id, acc_id, transaction_id, credit, debit, type) VALUES('','$acc',(select inventory_id from inventory order by inventory_id desc limit 1),'$credit','$debit','inventory')";
                 $result = $connection->query($qry);
             }
         }
@@ -156,7 +163,8 @@
    
             }
         }
-       
+        $qry = "INSERT INTO stock(stock_id, stock_date, supplier_name, item_id, category, price, quantity, total, stock_status) VALUES('','$date','$inv_sup',(select item_id from merchandise where item_name = '$inv_item' && item_category = '$inv_cat'),'$inv_cat','$inv_price','$inv_quantity','$total','in')";
+        $result = $connection->query($qry);
         $connection->close(); 
     }
     if(isset($_POST['submit_sales'])){
@@ -176,17 +184,22 @@
         $sql = "SELECT item_name, item_category from merchandise where item_name = '$sales_item' && item_category = '$sales_cat'";
         $result = $connection->query($sql); 
         $row = $result->fetch_assoc();
-
+        
         if($result){
             if(mysqli_num_rows($result) > 0){
+                $acc = $sales_acc[0];
+                $debit = $sales_debit[0];
+                $credit = $sales_credit[0];
 
-                for ($i = 0; $i < count($sales_acc); $i++) {
+                $qry = "INSERT INTO sales(sales_id, account_id, sales_date, buyer_name, item_name, category, price, quantity, total, journal, debit, credit, explanation) VALUES ('','$acc','$date','$sales_buyer','$sales_item','$sales_cat','$sales_price','$sales_quantity','$total',(select account_type from account where account_id = '$acc'), '$debit', '$credit','$exp')";
+                $result = $connection->query($qry);
+                for ($i = 1; $i < count($sales_acc); $i++) {
                     if (strlen($sales_acc[$i]) !== 0) {
                         $acc = $sales_acc[$i];
                         $debit = $sales_debit[$i];
                         $credit = $sales_credit[$i];
         
-                        $qry = "INSERT INTO sales(sales_id, account_id, sales_date, buyer_name, item_name, category, price, quantity, total, journal, debit, credit, explanation) VALUES ('','$acc','$date','$sales_buyer','$sales_item','$sales_cat','$sales_price','$sales_quantity','$total',(select account_type from account where account_id = '$acc'), '$debit', '$credit','$exp')";
+                        $qry = "INSERT INTO sub(sub_id, acc_id, transaction_id, credit, debit, type) VALUES('','$acc',(select sales_id from sales order by sales_id desc limit 1),'$credit','$debit','sales')";
                         $result = $connection->query($qry);
                     }
                 }
@@ -220,7 +233,8 @@
   
             }
         }
-        
+        $qry = "INSERT INTO stock(stock_id, stock_date, supplier_name, item_id, category, price, quantity, total, stock_status) VALUES('','$date','$sales_buyer',(select item_id from merchandise where item_name = '$sales_item' && item_category = '$sales_cat'),'$sales_cat','$sales_price','$sales_quantity','$total','out')";
+        $result = $connection->query($qry);
         $connection->close(); 
     }
     if(isset($_POST['submit_gen'])){

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 14, 2022 at 09:23 AM
+-- Generation Time: Jun 23, 2022 at 04:15 PM
 -- Server version: 10.4.19-MariaDB
 -- PHP Version: 8.0.7
 
@@ -85,8 +85,12 @@ CREATE TABLE `customer` (
 --
 
 INSERT INTO `customer` (`customer_id`, `customer_name`, `stock`, `item_name`) VALUES
-(16, 'shiori', 20, 'Pink Cloth'),
-(17, 'earl', 100, 'Red Cloth');
+(16, 'shiori', 30, 'Pink Cloth'),
+(17, 'earl', 100, 'Red Cloth'),
+(18, 'Reil', 210, 'Blue Cloth'),
+(27, 'Reil', 10, 'Red Cloth'),
+(28, 'Shio', 20, 'Red Cloth'),
+(29, 'shio', 10, 'Blue Cloth');
 
 -- --------------------------------------------------------
 
@@ -141,12 +145,8 @@ CREATE TABLE `inventory` (
 --
 
 INSERT INTO `inventory` (`inventory_id`, `account_id`, `inv_date`, `supplier_id`, `item_name`, `category`, `price`, `quantity`, `total`, `journal`, `debit`, `credit`, `Explanation`) VALUES
-(135, 3000, '2022-06-10', 1, 'Pink Cloth', 'Cloth', 100, 100, 10000, 'Owners Equ', 69, 16, 'idk'),
-(136, 1003, '2022-06-10', 1, 'Red Cloth', 'Cloth', 100, 200, 20000, 'Asset', 0, 69, 'dwdwa'),
-(137, 1003, '2022-06-10', 2, 'Pink Cloth', 'Cloth', 20, 100, 2000, 'Asset', 69, 0, 'dwadwa'),
-(138, 2000, '2022-06-13', 1, 'Pink Cloth', 'Cloth', 100, 30, 3000, 'Liability', 4, 100, 'dwadwa'),
-(139, 1001, '2022-06-13', 1, 'Red Button', 'Button', 33, 100, 3300, 'Assets', 11, 11, 'dwadaw'),
-(140, 1003, '2022-06-13', 1, 'Pink Cloth', 'Cloth', 10, 1000, 10000, 'Asset', 11, 11, 'dwada');
+(221, 2000, '2022-06-23', 1, 'Red Cloth', 'Cloth', 20, 100, 2000, 'Liability', 10, 10, 'dwa'),
+(222, 2000, '2022-06-23', 1, 'Red Cloth', 'Cloth', 43, 10, 430, 'Liability', 10, 10, 'dwa');
 
 -- --------------------------------------------------------
 
@@ -202,7 +202,14 @@ INSERT INTO `logs` (`log_id`, `admin_id`, `login`, `logout`) VALUES
 (22, 1001, '2022-06-13 14:36:49', '2022-06-14 09:14:11'),
 (23, 1001, '2022-06-14 09:11:48', '2022-06-14 09:14:11'),
 (24, 1001, '2022-06-14 09:13:03', '2022-06-14 09:14:11'),
-(25, 1001, '2022-06-14 09:15:08', '2022-06-14 09:15:25');
+(25, 1001, '2022-06-14 09:15:08', '2022-06-14 09:15:25'),
+(26, 1001, '2022-06-14 13:32:44', '0000-00-00 00:00:00'),
+(27, 1001, '2022-06-21 13:26:41', '0000-00-00 00:00:00'),
+(28, 1001, '2022-06-21 15:58:36', '0000-00-00 00:00:00'),
+(29, 1001, '2022-06-21 16:23:06', '0000-00-00 00:00:00'),
+(30, 1001, '2022-06-21 16:24:36', '0000-00-00 00:00:00'),
+(31, 1001, '2022-06-22 13:03:26', '0000-00-00 00:00:00'),
+(32, 1001, '2022-06-23 13:09:33', '0000-00-00 00:00:00');
 
 -- --------------------------------------------------------
 
@@ -222,9 +229,9 @@ CREATE TABLE `merchandise` (
 --
 
 INSERT INTO `merchandise` (`item_id`, `item_name`, `item_category`, `item_stock`) VALUES
-(3, 'Pink Cloth', 'Cloth', 890),
-(4, 'Red Cloth', 'Cloth', -50),
-(5, 'Red Button', 'Button', 100);
+(14, 'Blue Cloth', 'Cloth', 320),
+(15, 'Red Cloth', 'Cloth', 260),
+(16, 'Green Cloth', 'Cloth', 1100);
 
 -- --------------------------------------------------------
 
@@ -253,13 +260,71 @@ CREATE TABLE `sales` (
 --
 
 INSERT INTO `sales` (`sales_id`, `account_id`, `sales_date`, `buyer_name`, `item_name`, `category`, `price`, `quantity`, `total`, `journal`, `debit`, `credit`, `explanation`) VALUES
-(7, 1003, '2022-06-10', 'Shio', 'Pink Cloth', 'Cloth', 200, 100, 20000, 'Asset', 69, 100, 'dwadaw'),
-(8, 1003, '2022-06-10', 'Shio', 'Red Cloth', 'Cloth', 60, 50, 3000, 'Asset', 11, 11, 'dwadwa'),
-(10, 1003, '2022-06-10', 'shiori', 'Pink Cloth', 'Cloth', 100, 10, 1000, 'Asset', 11, 11, 'dwadwa'),
-(12, 1003, '2022-06-13', 'shiori', 'Pink Cloth', 'Cloth', 1, 100, 100, 'Asset', 33, 100, 'dwadwa'),
-(13, 2000, '2022-06-13', 'earl', 'Red Cloth', 'Cloth', 5, 100, 500, 'Liability', 11, 11, 'dwadwa'),
-(14, 2000, '2022-06-13', 'earl', 'Red Cloth', 'Cloth', 5, 100, 500, 'Liability', 11, 11, 'dwadwa'),
-(15, 1003, '2022-06-13', 'shiori', 'Pink Cloth', 'Cloth', 100, 10, 1000, 'Asset', 1, 1, 'dwa');
+(27, 1001, '2022-06-23', 'Reil', 'Blue Cloth', 'Cloth', 5, 10, 50, 'Assets', 10, 10, 'ew'),
+(28, 2000, '2022-06-23', 'Shio', 'Red Cloth', 'Cloth', 10, 10, 100, 'Liability', 10, 10, 'dwa'),
+(30, 1003, '2022-06-23', 'shio', 'Blue Cloth', 'Cloth', 40, 10, 400, 'Asset', 10, 10, 'dwadaw');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `stock`
+--
+
+CREATE TABLE `stock` (
+  `stock_id` int(6) NOT NULL,
+  `stock_date` date NOT NULL,
+  `supplier_name` varchar(20) NOT NULL,
+  `item_id` int(6) NOT NULL,
+  `category` varchar(20) NOT NULL,
+  `price` float NOT NULL,
+  `quantity` int(6) NOT NULL,
+  `total` float NOT NULL,
+  `stock_status` varchar(10) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `stock`
+--
+
+INSERT INTO `stock` (`stock_id`, `stock_date`, `supplier_name`, `item_id`, `category`, `price`, `quantity`, `total`, `stock_status`) VALUES
+(10, '2022-06-23', 'Reil', 15, 'Cloth', 50, 10, 500, 'out'),
+(11, '2022-06-23', 'shiori', 14, 'Cloth', 5, 100, 500, 'in'),
+(12, '2022-06-23', 'Reil', 15, 'Cloth', 5, 10, 50, 'out'),
+(13, '2022-06-23', 'shiori', 14, 'Cloth', 10, 100, 1000, 'in'),
+(14, '2022-06-23', 'shiori', 15, 'Cloth', 10, 10, 100, 'in'),
+(15, '2022-06-23', 'shiori', 14, 'Cloth', 50, 100, 5000, 'in'),
+(16, '2022-06-23', 'shiori', 15, 'Cloth', 50, 100, 5000, 'in'),
+(17, '2022-06-23', 'Reil', 14, 'Cloth', 5, 10, 50, 'out'),
+(18, '2022-06-23', 'Shio', 15, 'Cloth', 10, 10, 100, 'out'),
+(19, '2022-06-23', 'shiori', 15, 'Cloth', 20, 100, 2000, 'in'),
+(20, '2022-06-23', 'Shio', 15, 'Cloth', 10, 10, 100, 'out'),
+(21, '2022-06-23', 'shio', 14, 'Cloth', 40, 10, 400, 'out'),
+(22, '2022-06-23', 'shiori', 15, 'Cloth', 43, 10, 430, 'in');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `sub`
+--
+
+CREATE TABLE `sub` (
+  `sub_id` int(6) NOT NULL,
+  `acc_id` int(6) NOT NULL,
+  `transaction_id` int(6) NOT NULL,
+  `credit` int(6) DEFAULT NULL,
+  `debit` int(6) DEFAULT NULL,
+  `type` varchar(20) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `sub`
+--
+
+INSERT INTO `sub` (`sub_id`, `acc_id`, `transaction_id`, `credit`, `debit`, `type`) VALUES
+(19, 3000, 27, 10, 10, 'sales'),
+(20, 3000, 221, 10, 10, 'inventory'),
+(21, 1001, 221, 10, 10, 'inventory'),
+(22, 3000, 30, 1, 1, 'sales');
 
 -- --------------------------------------------------------
 
@@ -359,6 +424,20 @@ ALTER TABLE `sales`
   ADD KEY `fk_account` (`account_id`);
 
 --
+-- Indexes for table `stock`
+--
+ALTER TABLE `stock`
+  ADD PRIMARY KEY (`stock_id`),
+  ADD KEY `FK_stockItem` (`item_id`);
+
+--
+-- Indexes for table `sub`
+--
+ALTER TABLE `sub`
+  ADD PRIMARY KEY (`sub_id`),
+  ADD KEY `FK_subAcc` (`acc_id`);
+
+--
 -- Indexes for table `supplier`
 --
 ALTER TABLE `supplier`
@@ -390,7 +469,7 @@ ALTER TABLE `admin`
 -- AUTO_INCREMENT for table `customer`
 --
 ALTER TABLE `customer`
-  MODIFY `customer_id` int(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `customer_id` int(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
 
 --
 -- AUTO_INCREMENT for table `general`
@@ -402,7 +481,7 @@ ALTER TABLE `general`
 -- AUTO_INCREMENT for table `inventory`
 --
 ALTER TABLE `inventory`
-  MODIFY `inventory_id` int(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=141;
+  MODIFY `inventory_id` int(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=223;
 
 --
 -- AUTO_INCREMENT for table `journal`
@@ -414,19 +493,31 @@ ALTER TABLE `journal`
 -- AUTO_INCREMENT for table `logs`
 --
 ALTER TABLE `logs`
-  MODIFY `log_id` int(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+  MODIFY `log_id` int(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
 
 --
 -- AUTO_INCREMENT for table `merchandise`
 --
 ALTER TABLE `merchandise`
-  MODIFY `item_id` int(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `item_id` int(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT for table `sales`
 --
 ALTER TABLE `sales`
-  MODIFY `sales_id` int(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `sales_id` int(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
+
+--
+-- AUTO_INCREMENT for table `stock`
+--
+ALTER TABLE `stock`
+  MODIFY `stock_id` int(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
+
+--
+-- AUTO_INCREMENT for table `sub`
+--
+ALTER TABLE `sub`
+  MODIFY `sub_id` int(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
 -- AUTO_INCREMENT for table `supplier`
@@ -476,6 +567,18 @@ ALTER TABLE `logs`
 --
 ALTER TABLE `sales`
   ADD CONSTRAINT `fk_account` FOREIGN KEY (`account_id`) REFERENCES `account` (`account_id`);
+
+--
+-- Constraints for table `stock`
+--
+ALTER TABLE `stock`
+  ADD CONSTRAINT `FK_stockItem` FOREIGN KEY (`item_id`) REFERENCES `merchandise` (`item_id`);
+
+--
+-- Constraints for table `sub`
+--
+ALTER TABLE `sub`
+  ADD CONSTRAINT `FK_subAcc` FOREIGN KEY (`acc_id`) REFERENCES `account` (`account_id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

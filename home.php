@@ -240,8 +240,33 @@
                                     
                                     <td><a href="delete.php?id=<?php echo $id;?>&table=sales:sales_id">Delete</i></a></td>
                                </tr><?php
+                               $sql = "SELECT * FROM sub where transaction_id = $id";
+                               $results = $connection->query($sql);
+                               if($results){
+                                   if(mysqli_num_rows($results) > 0){
+                                       while($row = $results->fetch_assoc()){
+
+                                           echo "<tr>
+                                           <td></td>
+                                           <td></td>
+                                           <td></td>
+                                           <td></td>
+                                           <td></td>
+                                           <td></td>
+                                           <td></td>
+                                           <td></td>
+                                           <td></td>
+                                           <td>" . $row["debit"] . "</td>
+                                           <td>" . $row["credit"] . "</td>
+                                           
+                                           </tr>";
+                                           $sub = $row["sub_id"];
+                                           
+                                       }
+                                   }
+                               }
                            }
-                           $connection->close();?>
+                           ?>
                            <?php 
                                 include("config.php");
 
@@ -249,7 +274,7 @@
                                     die("Connection Failed ". $connection->connect_error);
                                 }
     
-                                $sql = "SELECT sum(price) price, sum(quantity) quantity, sum(total) total, sum(debit) debit, sum(credit) credit FROM sales";
+                                $sql = "SELECT sum(price) price, sum(quantity) quantity, sum(total) total, sum(sales.debit) + sum(sub.debit) debit, sum(sales.credit) + sum(sub.credit) credit FROM sales, sub where transaction_id = sales_id";
                                 $result = $connection->query($sql);
                                 $row = $result->fetch_assoc();
 
@@ -407,12 +432,38 @@
                                     <td>" . $row["debit"] . "</td>
                                     <td>" . $row["credit"] . "</td>
                                     
-                                    ";$id = $row["inventory_id"];?>
-                                    
-                                     <td><a href="delete.php?id=<?php echo $id;?>&table=inventory:inventory_id">Delete</i></a></td>
-                                </tr><?php
+                                    ";$id = $row["inventory_id"];
+                                   
+                                    ?><td><a href="delete.php?id=<?php echo $id;?>&table=inventory:inventory_id">Delete</i></a></td>
+                                    </tr>
+                                    <?php
+                                    $sql = "SELECT * FROM sub where transaction_id = $id";
+                                    $results = $connection->query($sql);
+                                    if($results){
+                                        if(mysqli_num_rows($results) > 0){
+                                            while($row = $results->fetch_assoc()){
+
+                                                echo "<tr>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td>" . $row["debit"] . "</td>
+                                                <td>" . $row["credit"] . "</td>
+                                                
+                                                </tr>";
+                                                $sub = $row["sub_id"];
+                                                
+                                            }
+                                        }
+                                    }
                             }
-                            $connection->close();?>
+                            ?>
                             <?php 
                                 include("config.php");
 
@@ -420,7 +471,7 @@
                                     die("Connection Failed ". $connection->connect_error);
                                 }
     
-                                $sql = "SELECT sum(price) price, sum(quantity) quantity, sum(total) total, sum(debit) debit, sum(credit) credit FROM inventory";
+                                $sql = "SELECT sum(price) price, sum(quantity) quantity, sum(total) total, sum(inventory.debit) + sum(sub.debit) debit, sum(inventory.credit) + sum(sub.credit) credit FROM inventory, sub where type = 'inventory'";
                                 $result = $connection->query($sql);
                                 $row = $result->fetch_assoc();
 
@@ -843,7 +894,7 @@
                             <th>Account Amount</th>
                         </tr>
 						<?php
-                          /*  $server = "localhost";
+                         /*   $server = "localhost";
                             $user = "root";
                             $pass = "";
                             $db = "financial_db";
@@ -908,9 +959,8 @@
                                      <td><a href="delete.php?id=<?php echo $id;?>&table=account recievables">Delete</i></a></td>
                                 </tr><?php
 								
-                            }*/
-                            $connection->close();?> 
-
+                            }
+                            $connection->close();*/?>
                     </table>
                 </div>
             </div>
@@ -992,7 +1042,6 @@
                             <table>
                                 <tr>
                                     <th>Stock ID</th>
-                                    <th>Journal ID</th>
                                     <th>Date</th>
                                     <th>Item ID</th>
                                     <th>Item Name</th>
@@ -1004,15 +1053,44 @@
                                     <th>Action</th>
                                 </tr>
                                 <tr>
-                                    
-                                </tr>
+                                <?php
+                                include("config.php");
+                                if($connection->connect_error){
+                                    die("Connection Failed ". $connection->connect_error);
+                                }
+
+                                $sql = "SELECT stock_id, stock_date, stock.item_id, item_name, supplier_name, category, price, quantity, total FROM stock, merchandise where stock.item_id = merchandise.item_id && stock_status = 'in'";
+                                $result = $connection->query($sql);
+
+                                if(!$result){
+                                    die("Invalid Query: ". $connection_error);
+                                }
+
+                                while($row = $result->fetch_assoc()){
+                                    echo "<tbody data-link='row' class='rowlink'>
+                                    <tr>
+                                        <td>" . $row["stock_id"] . "</td>
+                                        <td>" . $row["stock_date"] . "</td>
+                                        <td>" . $row["item_id"] . "</td>
+                                        <td>" . $row["item_name"] . "</td>
+                                        <td>" . $row["supplier_name"] . "</td>
+                                        <td>" . $row["category"] . "</td>
+                                        <td>" . $row["price"] . "</td>
+                                        <td>" . $row["quantity"] . "</td>
+                                        <td>" . $row["total"] . "</td>
+                                        
+                                        ";$id = $row["stock_id"];?>
+                                        
+                                        <td><a href="delete.php?id=<?php echo $id;?>&table=stock:stock_id">Delete</i></a></td>
+                                </tr><?php
+                                }
+                                $connection->close();?>
                             </table>
                         </div>
                         <div class = "stock_tb" id = "out" style="display:none;" > 
                             <table>
                                 <tr>
                                     <th>Stock ID</th>
-                                    <th>Journal ID</th>
                                     <th>Date</th>
                                     <th>Item ID</th>
                                     <th>Item Name</th>
@@ -1024,8 +1102,38 @@
                                     <th>Action</th>
                                 </tr>
                                 <tr>
-                                    
-                                </tr>
+                                <?php
+                                include("config.php");
+                                if($connection->connect_error){
+                                    die("Connection Failed ". $connection->connect_error);
+                                }
+
+                                $sql = "SELECT stock_id, stock_date, stock.item_id, item_name, supplier_name, category, price, quantity, total FROM stock, merchandise where stock.item_id = merchandise.item_id && stock_status = 'out'";
+                                $result = $connection->query($sql);
+
+                                if(!$result){
+                                    die("Invalid Query: ". $connection_error);
+                                }
+
+                                while($row = $result->fetch_assoc()){
+                                    echo "<tbody data-link='row' class='rowlink'>
+                                    <tr>
+                                        <td>" . $row["stock_id"] . "</td>
+                                        <td>" . $row["stock_date"] . "</td>
+                                        <td>" . $row["item_id"] . "</td>
+                                        <td>" . $row["item_name"] . "</td>
+                                        <td>" . $row["supplier_name"] . "</td>
+                                        <td>" . $row["category"] . "</td>
+                                        <td>" . $row["price"] . "</td>
+                                        <td>" . $row["quantity"] . "</td>
+                                        <td>" . $row["total"] . "</td>
+                                        
+                                        ";$id = $row["stock_id"];?>
+                                        
+                                        <td><a href="delete.php?id=<?php echo $id;?>&table=stock:stock_id">Delete</i></a></td>
+                                </tr><?php
+                                }
+                                $connection->close();?>
                             </table>
                         </div>
                     </div>

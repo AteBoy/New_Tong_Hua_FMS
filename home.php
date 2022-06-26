@@ -169,27 +169,10 @@
                 </div> 
                 <div class = "journal_frame">
                     <div class = "journal_buttons">
-                        <button class = "buttonLink" onclick="openTable(event, 'journal')">Journal Entry</button>
                         <button class = "buttonLink" onclick="openTable(event, 'sale_j')">Sales Journal</button>
                         <button class = "buttonLink" onclick="openTable(event, 'inv_j')">Inventory Journal</button>
                         <button class = "buttonLink" onclick="openTable(event, 'gen_j')">General Journal</button>
                     </div>
-                    <div class = "tab_tb" id = "journal">
-                        <table id = "journal_table">
-                            <tr>
-                                <th>Date <i class = "fa fa-sort" onclick="sortTable(0,'journal_table')"></i></th>
-                                <th>Account Title and Explanation <i class = "fa fa-sort" onclick="sortTable(1,'journal_table')"></i></th>
-                                <th>Journal Entry ID <i class = "fa fa-sort" onclick="sortTable(2,'journal_table')"></i></th>
-                                <th>Journal <i class = "fa fa-sort" onclick="sortTable(3,'journal_table')"></i></th>
-                                <th>Debit <i class = "fa fa-sort" onclick="sortTable(4,'journal_table')"></i></th>
-                                <th>Credit <i class = "fa fa-sort" onclick="sortTable(5,'journal_table')"></i></th>
-                                <th>Action</th>
-                            </tr>
-                            <tr>
-                               
-                            </tr>
-                        </table>
-        
                     </div>
                     <div class = "tab_tb" id = "sale_j" style="overflow-x:auto;">
                         <button class = "btn" id = "add_sales">New Entry</button>
@@ -608,69 +591,68 @@
                     <div class = "tab_tb" id = "gen_j">
                         <table id = "gen_table">
                             <tr>
-                                <th>General Journal ID <i class = "fa fa-sort" onclick="sortTable(0,'gen_table')"></th>
-                                <th>Date <i class = "fa fa-sort" onclick="sortTable(1,'gen_table')"></th>
-                                <th>Account ID <i class = "fa fa-sort" onclick="sortTable(2,'gen_table')"></th>
-                                <th>Journal <i class = "fa fa-sort" onclick="sortTable(3,'gen_table')"></th>
-                                <th>Debit <i class = "fa fa-sort" onclick="sortTable(4,'gen_table')"></th>
-                                <th>Credit <i class = "fa fa-sort" onclick="sortTable(5,'gen_table')"></th>
+                                <th>Date <i class = "fa fa-sort" onclick="sortTable(0,'journal_table')"></i></th>
+                                <th>Account Title and Explanation</i></th>
+                                <th>Journal Entry ID <i class = "fa fa-sort" onclick="sortTable(2,'journal_table')"></i></th>
+                                <th>Debit <i class = "fa fa-sort" onclick="sortTable(4,'journal_table')"></i></th>
+                                <th>Credit <i class = "fa fa-sort" onclick="sortTable(5,'journal_table')"></i></th>
                                 <th>Action</th>
                             </tr>
-                                <?php
-                            $server = "localhost";
-                            $user = "root";
-                            $pass = "";
-                            $db = "financial_db";
-                        
-                            $connection = new mysqli($server, $user, $pass, $db);
-                        
-                            if($connection->connect_error){
-                                die("Connection Failed ". $connection->connect_error);
+                            <!-- Contents General Journal -->
+                            <?php
+                            $servername = "localhost";
+                            $username = "root";
+                            $password = "";
+                            $database = "financial_db";
+
+                            // Create connection
+                            $connection = new mysqli($servername, $username, $password, $database);
+
+                            // Check connection
+                            if ($connection->connect_error) {
+                                die("Connection failed: " . $connection->connect_error);
                             }
 
-                            $sql = "SELECT * FROM general";
+                            // read all row from asset table
+                            $sql = "SELECT
+                                        journal_entry.je_posting_id,
+                                        journal_entry.je_date,
+                                        journal_entry.je_id,
+                                        account.account_name,
+                                        journal_entry.je_amount,
+                                        journal_entry.je_desc
+                                    FROM
+                                        journal_entry
+                                    INNER JOIN account ON journal_entry.je_account_id=account.account_id
+                                    ORDER BY je_posting_id";
                             $result = $connection->query($sql);
 
-                            if(!$result){
-                                die("Invalid Query: ". $connection_error);
+                            if (!$result) {
+                                die("Invalid query: " . $connection->error);
                             }
 
-                            while($row = $result->fetch_assoc()){
+                            // read data of each row
+                            while($row = $result->fetch_assoc()) {
+                                if ($row["journal_entry_amount"] > 0){
                                 echo "<tr>
-                                    <td>" . $row["general_id"] . "</td>
-                                    <td>" . $row["date"] . "</td>
-                                    <td>" . $row["account_id"] . "</td>
-                                    <td>" . $row["journal"] . "</td>
-                                    <td>" . $row["debit"] . "</td>
-                                    <td>" . $row["credit"] . "</td>
-                                    
-                                    ";$id = $row["general_id"];?>
-                                    
-                                     <td><a href="delete.php?id=<?php echo $id;?>&table=general:general_id">Delete</i></a></td>
-                                </tr><?php
-                            }
-                            $connection->close();?>
-                            <?php 
-                                include("config.php");
-
-                                if($connection->connect_error){
-                                    die("Connection Failed ". $connection->connect_error);
-                                }
-    
-                                $sql = "SELECT sum(debit) debit, sum(credit) credit FROM general";
-                                $result = $connection->query($sql);
-                                $row = $result->fetch_assoc();
-
-                                echo "<tr>
-                                    <td>Total</td>
+                                    <td>" . $row["je_date"] . "</td>
+                                    <td>" . $row["account_name"] . "</td>
+                                    <td>" . $row["je_amount"] . "</td>
                                     <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td>". $row["debit"] ."</td>
-                                    <td>". $row["credit"] ."</td>
-                                
                                 </tr>";
-                                $connection->close();
+                                }
+                                else {
+                                echo "<tr>
+                                    <td>" . $row["je_date"] . "</td>
+                                    <td>" . $row["account_name"] . "</td>
+                                    <td></td>
+                                    <td>" . $row["je_amount"]*-1 . "</td>
+                                </tr>";
+                                }
+                            }
+
+                            $connection->close();
+
                             ?>
                         </table>
                         <button class = "btn" id = "add_gen">Add General</button>

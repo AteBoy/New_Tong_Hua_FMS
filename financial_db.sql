@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.1.1
+-- version 5.2.0
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 23, 2022 at 04:15 PM
--- Server version: 10.4.19-MariaDB
--- PHP Version: 8.0.7
+-- Generation Time: Jun 26, 2022 at 10:22 PM
+-- Server version: 10.4.24-MariaDB
+-- PHP Version: 7.4.29
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -163,6 +163,21 @@ CREATE TABLE `journal` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `journal_entry`
+--
+
+CREATE TABLE `journal_entry` (
+  `je_posting_id` varchar(100) NOT NULL,
+  `je_date` date NOT NULL,
+  `je_id` varchar(100) NOT NULL,
+  `je_account_id` int(11) NOT NULL,
+  `je_amount` float NOT NULL,
+  `je_desc` varchar(100) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `logs`
 --
 
@@ -209,7 +224,8 @@ INSERT INTO `logs` (`log_id`, `admin_id`, `login`, `logout`) VALUES
 (29, 1001, '2022-06-21 16:23:06', '0000-00-00 00:00:00'),
 (30, 1001, '2022-06-21 16:24:36', '0000-00-00 00:00:00'),
 (31, 1001, '2022-06-22 13:03:26', '0000-00-00 00:00:00'),
-(32, 1001, '2022-06-23 13:09:33', '0000-00-00 00:00:00');
+(32, 1001, '2022-06-23 13:09:33', '0000-00-00 00:00:00'),
+(33, 1001, '2022-06-26 20:59:14', '0000-00-00 00:00:00');
 
 -- --------------------------------------------------------
 
@@ -404,6 +420,12 @@ ALTER TABLE `journal`
   ADD KEY `journal_entry` (`journal_entry`);
 
 --
+-- Indexes for table `journal_entry`
+--
+ALTER TABLE `journal_entry`
+  ADD PRIMARY KEY (`je_posting_id`);
+
+--
 -- Indexes for table `logs`
 --
 ALTER TABLE `logs`
@@ -493,7 +515,7 @@ ALTER TABLE `journal`
 -- AUTO_INCREMENT for table `logs`
 --
 ALTER TABLE `logs`
-  MODIFY `log_id` int(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
+  MODIFY `log_id` int(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
 
 --
 -- AUTO_INCREMENT for table `merchandise`

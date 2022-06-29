@@ -1,56 +1,11 @@
 <!DOCTYPE html>
-<?php
-   include("config.php");
-   session_start();
-    if($connection->connect_error){
-       die("Connection FailedL ". $connection->connect_error);
-    }
-    $error = "";
-    if(isset($_POST['submit_login'])) {
 
-        $user = $_POST['username'];
-        $pass = $_POST['password']; 
-      
-        $sql = "SELECT admin_id, admin_role FROM admin WHERE admin_name = '$user' and admin_pass = '$pass'";
-        $result = $connection->query($sql);
-        $row = $result->fetch_assoc();
-		$admin = $row["admin_id"];
-		$role = $row["admin_role"];
-        $count = mysqli_num_rows($result);
-            
-        if($count == 1) {
-            $_SESSION['login_user'] = $user;
-			$date = date("Y-m-d H:i:s a");
-			$qry = "INSERT INTO logs (log_id, admin_id, login, logout) VALUES ('','$admin','$date','')";
-			$result = $connection->query($qry);
-
-			$sql = "SELECT log_id FROM logs order by log_id desc limit 1";
-			$result = $connection->query($sql);
-			$row = $result->fetch_assoc();
-			$log_id = $row["log_id"];
-
-			$_SESSION['log_id'] = $log_id;
-			$_SESSION['role'] = $role;
-			$connection->close(); 
-            header("location: home.php");
-        }else {
-            $error = "Your Login UserName or Password is invalid";
-        }
-    }
-	if(isset($_GET['logout'])){
-		$logout = $_GET['logout'];
-		$date2 = date("Y-m-d H:i:s a");
-		$sql = "UPDATE logs SET logout = '$date2' WHERE logout = $logout";
-        $result = $connection->query($sql);
-		header("Location: login_page.php");
-	}
-?>
 <html lang = "eng" dir = "ltr">
 
 	<head>
 		<meta charset = "utf-8">
 		<title> New Legazpi Tong Hua Trading Login </title>
-		 <link rel="stylesheet" href="style/login.css">	
+		 <link rel="stylesheet" href="style/login.css?t=<?php echo round(microtime(true)*1000);?>">	
 	</head>
 	
 	<body>
@@ -109,6 +64,53 @@
 				?>
             <div style = "font-size:11px; color:#cc0000; margin-top:10px"><?php echo $error; ?></div>
 	</body>
+	<?php
+   include("config.php");
+   session_start();
+    if($connection->connect_error){
+       die("Connection FailedL ". $connection->connect_error);
+    }
+    $error = "";
+    if(isset($_POST['submit_login'])) {
+
+        $user = $_POST['username'];
+        $pass = $_POST['password']; 
+      
+        $sql = "SELECT admin_id, admin_role FROM admin WHERE admin_name = '$user' and admin_pass = '$pass'";
+        $result = $connection->query($sql);
+        $row = $result->fetch_assoc();
+		$admin = $row["admin_id"];
+		$role = $row["admin_role"];
+        $count = mysqli_num_rows($result);
+            
+        if($count == 1) {
+            $_SESSION['login_user'] = $user;
+			$date = date("Y-m-d H:i:s a");
+			$qry = "INSERT INTO logs (log_id, admin_id, login, logout) VALUES ('','$admin','$date','')";
+			$result = $connection->query($qry);
+
+			$sql = "SELECT log_id FROM logs order by log_id desc limit 1";
+			$result = $connection->query($sql);
+			$row = $result->fetch_assoc();
+			$log_id = $row["log_id"];
+
+			$_SESSION['log_id'] = $log_id;
+			$_SESSION['role'] = $role;
+			$connection->close(); 
+            header("location: home.php");
+        }else {
+            $error = "Your Login UserName or Password is invalid";
+			echo "<script>alert('$error');</script>";
+        }
+    }
+	if(isset($_GET['logout'])){
+		$logout = $_GET['logout'];
+		$date2 = date("Y-m-d H:i:s a");
+		$sql = "UPDATE logs SET logout = '$date2' WHERE logout = $logout";
+        $result = $connection->query($sql);
+		header("Location: login_page.php");
+	}
+	?>
 	<script>
 		var modal = document.getElementById("reset_modal");
 		var reset = document.getElementById("reset_pass");

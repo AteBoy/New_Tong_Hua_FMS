@@ -173,7 +173,7 @@
                         <button class = "buttonLink" onclick="openTable(event, 'inv_j')">Inventory Journal</button>
                         <button class = "buttonLink" onclick="openTable(event, 'gen_j')">General Journal</button>
                     </div>
-                    </div>
+                  
                     <div class = "tab_tb" id = "sale_j" style="overflow-x:auto;">
                         <button class = "btn" id = "add_sales">New Entry</button>
                         <table id = "sales_table">
@@ -600,13 +600,7 @@
                             </tr>
                             <!-- Contents General Journal -->
                             <?php
-                            $servername = "localhost";
-                            $username = "root";
-                            $password = "";
-                            $database = "financial_db";
-
-                            // Create connection
-                            $connection = new mysqli($servername, $username, $password, $database);
+                            include("config.php");
 
                             // Check connection
                             if ($connection->connect_error) {
@@ -1782,7 +1776,7 @@ function autocomplete(inp, arr) {
         $temp = [];
         $sql = "SELECT item_name FROM merchandise";
         $result = $connection->query($sql);
-        
+       
         for($i = 0; $row = $result->fetch_assoc(); $i++){
             $temp[$i] = $row['item_name'];
         }
@@ -1790,10 +1784,19 @@ function autocomplete(inp, arr) {
 
         $sql = "SELECT item_category FROM merchandise";
         $result = $connection->query($sql);
-        
-        for($i = 0; $row = $result->fetch_assoc(); $i++){
-            $temp[$i] = $row['item_category'];
+
+        $j = 0;
+        $c = 0;
+        while($row = $result->fetch_assoc()){
+            $c = $row['item_category'];
+            if($temp[$j] != $c){
+                $j++;
+                $temp[$j] = $row['item_category'];
+                //$temp[0] = $row['item_category'];
+            }
         }
+        $temp[0] = "";
+        $temp[$j+1] = "";
         $category = json_encode($temp);
         
     ?>

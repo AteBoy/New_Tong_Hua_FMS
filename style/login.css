@@ -13,7 +13,7 @@ body {
 
 }
 .body-image {
-    background-image: url("tonghua3.jpg");
+    background-image: url("tonghua1.jpeg");
     filter: blur(2px);
     -webkit-filter: blur(2px);
     height: 100%;

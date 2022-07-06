@@ -2,20 +2,20 @@
 body {
     font-family: "Open Sans", sans-serif;
     margin: 0;
- 
+    overflow-x: hidden;
 }
 .header {
     width: 100%;
-    height: 5%;
-    position: -webkit-sticky;
-    position: sticky;
-    top: 0;
+    height: 40px;
+    top: 0%;
+    margin: auto;
     background-color: #617ced;
 }
 #status{
     top: 20%;
-    right: 1%;
-    position: absolute;
+    right: 5%;
+    left: 94%;
+    position: relative;
     color: blue;
 }
 
@@ -42,15 +42,14 @@ body {
     border-radius: 7px;
     border: 1px solid #dcdcdc;
     display: none;
-    position: absolute;
+    position: fixed;
     background-color: #f1f1f1;
     min-width: 200px;
     overflow: auto;
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
     z-index: 1;
-    left: 100%;
-    right: auto;
-    transform: translateX(-100%);
+    right: 0.5%;
+    margin-top: 5px;
 }
 .user_dropdown a{
     color: black;
@@ -107,16 +106,22 @@ body {
 .content{
     margin-left: auto;
     margin-right: auto;
-    padding-left: 15%;
+    padding-left: 13.5%;
 }
 .tabContent{
     display:none;
 }
 .contentNav {
     width: 100%;
-    height: 5%;
-    border-bottom: 1px black solid;
+    height: 40px;
+    left: auto;
+    border-bottom: 1px black thin;
+    position: relative;
+    -webkit-box-shadow: 0 4px 8px -8px #222;
+    -moz-box-shadow: 0 4px 8px -8px #222;
+    box-shadow: 0 4px 8px -8px #222;
 }
+
 #navHeader{
     color: skyblue;
     float: left;
@@ -134,7 +139,7 @@ body {
 }
 .box_tb {
     width: 20%;
-    height: 20%;
+    height: 180px;
     border-radius: 7px;
     border: 1px solid #dcdcdc;
     margin: 35px;
@@ -208,10 +213,51 @@ body {
     cursor: pointer;
     background-color: white;
     color: black;
-    border: 2px solid #749EFF; 
-    position: fixed;
-    top: 100px;
-    left: 370px;
+    border: 2px solid #749EFF;
+    position: relative;
+    margin-top: -14.5%;
+    margin-left: 2.5%;
+}
+.add_supp_btn {
+    background-color: #04AA6D;
+    color: white;
+    padding: 16px 20px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+    opacity: 0.9;
+    display: inline-block;
+}
+.jrnbtn {
+    background-color: #84CC07;
+    color: white;
+    border: 2px solid #84CC07;
+    padding: 5px 15px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    transition-duration: 0.4s;
+    cursor: pointer;
+    position: absolute;
+    top: 40px;
+    right: 0%;
+}
+.invbtn {
+    background-color: #84CC07;
+    color: white;
+    border: 2px solid #84CC07;
+    padding: 5px 15px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    transition-duration: 0.4s;
+    cursor: pointer;
+    position: absolute;
+    top: 40px;
+    right: 0%;
 }
 .btn {
     background-color: #749EFF;
@@ -224,9 +270,9 @@ body {
     font-size: 16px;
     transition-duration: 0.4s;
     cursor: pointer;
-    position: fixed;
-    top: 120px;
-    right: 80px;
+    position: relative;
+    margin-top: 14.5%;
+    margin-right: 2.5%;
 }
 .btn:hover, .btn.active, #stock_switch:hover, #stock_switch.active{
     background-color: skyblue;
@@ -275,10 +321,10 @@ tr:hover{
     color: black;
     border: 2px solid #749EFF;
 }
-    .journal_buttons button:hover, .journal_buttons button.active {
+.journal_buttons button:hover, .journal_buttons button.active {
     background-color: #749EFF;
     color: white;
-    }
+ }
 .financial_buttons button {
     border: none;
     padding: 10px 18px;
@@ -302,13 +348,13 @@ tr:hover{
     display: none;
 }
 .account_frame, .inventory_frame, .financial_frame, .journal_frame{
-    width: 90%;
+    width: 95%;
+    position: relative;
     margin: auto;
-    
 }
 .inventory_buttons, .financial_buttons, .journal_buttons{
     padding-top: 20px;
-    margin: 0%;
+    margin: auto;
 }
 .inventory_buttons button {
     border: none;
@@ -324,10 +370,44 @@ tr:hover{
     color: black;
     border: 2px solid #749EFF;
 }
+.add_acc {
+    background-color: #04AA6D;
+    color: white;
+    padding: 16px 20px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+    opacity: 0.9;
+    display: inline-block;
+}
 .inventory_buttons button:hover, .inventory_buttons button.active {
     background-color: #749EFF;
     color: white;
 }
+select {
+    appearance: none;
+    outline: 0;
+    border: 0;
+    box-shadow: none;
+    flex: 1;
+    padding: 0 1em;
+    background-color: var(--darkgray);
+    background-image: none;
+    cursor: pointer;
+}
+    select::-ms-expand {
+        display: none;
+    }
+
+.select {
+    position: relative;
+    display: flex;
+    width: 20em;
+    height: 3em;
+    overflow: hidden;
+}
+
 th p{
     color: red;
     padding-bottom: 5px;
@@ -433,14 +513,41 @@ td{
     margin: 8px 0;
     border: none;
     cursor: pointer;
-    width: 100%;
+    width: 70%;
     opacity: 0.9;
+    display: inline-block;
+    right: 0%;
   }
   
   .registerbtn:hover {
     opacity: 1;
   }
-  
+
+  .add_entry {
+    background-color: #04AA6D;
+    color: white;
+    padding: 16px 20px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+    opacity: 0.9;
+    display: inline-block;
+    margin-left: 3%;
+  }
+
+  .remove_entry {
+    background-color: #04AA6D;
+    color: white;
+    padding: 16px 12px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+    margin-right: 7%;
+    margin-left: 2%;
+    opacity: 0.9;
+    display: inline-block;
+  }
+
   a {
     color: dodgerblue;
   }
@@ -483,17 +590,30 @@ td{
   }
 
 .adminregbtn {
-    background-color: #749EFF;
-    color: white;
-    border: 1px solid darkblue;
-    padding: 10px 28px;
+    border: none;
+    padding: 10px 18px;
     text-align: center;
     text-decoration: none;
     display: inline-block;
     font-size: 16px;
+    margin-right: 20px;
     transition-duration: 0.4s;
     cursor: pointer;
-    position: fixed;
-    top: 105px;
-    left: 370px;
+    background-color: white;
+    color: black;
+    border: 2px solid #749EFF;
+    position: relative;
+    margin-top: -160px;
+    margin-left: 0%;
+}
+.reg_admin_acc {
+    background-color: #04AA6D;
+    color: white;
+    padding: 16px 20px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+    opacity: 0.9;
+    display: inline-block;
 }

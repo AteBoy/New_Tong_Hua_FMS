@@ -261,7 +261,7 @@
                                 $result = $connection->query($sql);
                                 $row = $result->fetch_assoc();
 
-                                echo "<tr>
+                                echo "<tr  id = 'tr_bold'>
                                     <td>Total</td>
                                     <td></td>
                                     <td></td>
@@ -457,7 +457,7 @@
                                 $result = $connection->query($sql);
                                 $row = $result->fetch_assoc();
 
-                                echo "<tr>
+                                echo "<tr id = 'tr_bold'>
                                     <td>Total</td>
                                     <td></td>
                                     <td></td>
@@ -946,7 +946,7 @@
                         <button class = "buttonLink" onclick="openTable(event, 'merch')">Merchandise</button>
                         <button class = "buttonLink" onclick="openTable(event, 'stock')">Stock Record</button>
                         <button class = "buttonLink" onclick="openTable(event, 'supp')">Supplier</button>
-                        <button class = "buttonLink" onclick="openTable(event, 'cus')">Customer</button>
+                        <button class = "buttonLink" id = "admin_4" onclick="openTable(event, 'cus')">Customer</button>
                     </div>
                     <div class = "tab_tb" id = "merch">
                         <input type="text" id = "merch_search" placeholder="Search" >
@@ -996,7 +996,7 @@
                                 $result = $connection->query($sql);
                                 $row = $result->fetch_assoc();
 
-                                echo "<tr>
+                                echo "<tr  id = 'tr_bold'>
                                     <td>Total</td>
                                     <td></td>
                                     <td></td>
@@ -1057,6 +1057,32 @@
                                 </tr><?php
                                 }
                                 $connection->close();?>
+                                <?php 
+                                    include("config.php");
+
+                                    if($connection->connect_error){
+                                        die("Connection Failed ". $connection->connect_error);
+                                    }
+        
+                                    $sql = "SELECT sum(price)price, sum(quantity)quantity, sum(total)total FROM stock where stock_status = 'in'";
+                                    $result = $connection->query($sql);
+                                    $row = $result->fetch_assoc();
+
+                                    echo "<tr id = 'tr_bold'>
+                                        <td>Total</td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td>". $row["price"] ."</td>
+                                        <td>". $row["quantity"] ."</td>
+                                        <td>". $row["total"] ."</td>
+                                        <td></td>
+                                    
+                                    </tr>";
+                                    $connection->close();
+                                ?>
                             </table>
                         </div>
                         <div class = "stock_tb" id = "out" style="display:none;" > 
@@ -1066,7 +1092,7 @@
                                     <th>Date</th>
                                     <th>Item ID</th>
                                     <th>Item Name</th>
-                                    <th>Supplier Name</th>
+                                    <th>Customer Name</th>
                                     <th>Category</th>
                                     <th>Item Unit Price</th>
                                     <th>Item Quantity</th>
@@ -1106,6 +1132,32 @@
                                 </tr><?php
                                 }
                                 $connection->close();?>
+                                <?php 
+                                    include("config.php");
+
+                                    if($connection->connect_error){
+                                        die("Connection Failed ". $connection->connect_error);
+                                    }
+        
+                                    $sql = "SELECT sum(price)price, sum(quantity)quantity, sum(total)total FROM stock where stock_status = 'out'";
+                                    $result = $connection->query($sql);
+                                    $row = $result->fetch_assoc();
+
+                                    echo "<tr id = 'tr_bold'>
+                                        <td>Total</td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td>". $row["price"] ."</td>
+                                        <td>". $row["quantity"] ."</td>
+                                        <td>". $row["total"] ."</td>
+                                        <td></td>
+                                    
+                                    </tr>";
+                                    $connection->close();
+                                ?>
                             </table>
                         </div>
                     </div>
@@ -1355,14 +1407,14 @@
     </body>
     <script>
 
-        if(<?php echo json_encode($role); ?> == "Admin"){
+        if(<?php echo json_encode($role); ?> == "Owner"){
+            var i;
+            var limit = 5;
 
-            x = document.getElementById("admin_1");
-            y = document.getElementById("admin_2");
-            z = document.getElementById("admin_3");
-            x.style.display = "none";
-            y.style.display = "none";
-            z.style.display = "none";
+            for(i = 1; i < limit; i++){
+                x = document.getElementById("admin_"+i);
+                x.style.display = "block";
+            }
 
         }
         $(function(){

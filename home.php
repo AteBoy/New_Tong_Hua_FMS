@@ -483,7 +483,7 @@
                                 <h2>Inventory Entry</h2>
                             </div>
                             <div class="modal-body">
-                                <form action="insert.php" method = "post">
+                                <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?> insert.php" method = "post">
                                     <div class="container">
                                         <button type = "button" class = "add_inv_acc">Add</button>
                                         <button type = "button" class="remove_inv_acc">remove</button>
@@ -950,7 +950,7 @@
                         <button class = "buttonLink" onclick="openTable(event, 'merch')">Merchandise</button>
                         <button class = "buttonLink" onclick="openTable(event, 'stock')">Stock Record</button>
                         <button class = "buttonLink" onclick="openTable(event, 'supp')">Supplier</button>
-                        <button class = "buttonLink" id = "admin_4" onclick="openTable(event, 'cus')">Customer</button>
+                        <button id = "admin_4" class = "buttonLink" onclick="openTable(event, 'cus')">Customer</button>
                     </div>
                     <div class = "tab_tb" id = "merch">
                         <input type="text" id = "merch_search" placeholder="Search" >
@@ -1417,7 +1417,7 @@
 
             for(i = 1; i < limit; i++){
                 x = document.getElementById("admin_"+i);
-                x.style.display = "block";
+                x.style.display = "inline-block";
             }
 
         }

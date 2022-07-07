@@ -81,7 +81,7 @@
 		if($connection->connect_error){
 		die("Connection FailedL ". $connection->connect_error);
 		}
-
+		//clearstatcache();
 		function test_input($data) {
 			$data = trim($data);
 			$data = stripslashes($data);
@@ -93,59 +93,94 @@
 			session_start();
 			$user = $_POST['username'];
 			$pass = $_POST['password']; 
+			
 			$ip = $_SERVER["REMOTE_ADDR"];
 			
-			$sql = "SELECT admin_id, admin_role FROM admin WHERE admin_name = '$user' and admin_pass = '$pass'";
+			$qry = "INSERT INTO ip (address,timestamp) VALUES ('$ip',CURRENT_TIMESTAMP)";
+			$result = $connection->query($qry);
+			$sql = "SELECT count(*) AS n FROM ip where address LIKE '$ip' AND timestamp > (now() - interval 10 minute)";
 			$result = $connection->query($sql);
 			$row = $result->fetch_assoc();
-			$admin = $row["admin_id"];
-			$role = $row["admin_role"];
-			$attempt_id;
-			$count = mysqli_num_rows($result);
-			$_SESSION['valid'];
-			$sql = "SELECT count(*) AS n FROM ip where address LIKE '$ip' AND timestamp > (now() - interval 10 minute) AND status = 'Invalid'";
-			$result = $connection->query($sql);
-			$row = $result->fetch_assoc();
-			$attempt = $row["n"];
-			
-			if($attempt > 5){
+			$count = $row["n"];
+			echo "<script>alert('$count');</script>";
+			//$admin = $row["admin_id"];
+			if(!isset($_SESSION['attempt'])){
+				$_SESSION['attempt'] = 0;
+			}
+			if($count > 3){
 				$_SESSION['error'] = 'Attempt limit reach';
 				$err = $_SESSION['error'];
 				echo "<script>alert('$err');</script>";
-				$_SESSION['valid'] = "True";
 			}
-			else if($count == 1) {
-				$_SESSION['login_user'] = $user;
-				$date = date("Y-m-d H:i:s a");
-				$qry = "INSERT INTO logs (log_id, admin_id, login, logout) VALUES ('','$admin','$date','')";
-				$result = $connection->query($qry);
-
-				$sql = "SELECT log_id, admin_id FROM logs order by log_id desc limit 1";
+			//check if there are 3 attempts already
+			/*if($_SESSION['attempt'] == 3){
+				$_SESSION['error'] = 'Attempt limit reach';
+				$err = $_SESSION['error'];
+				echo "<script>alert('$err');</script>";
+			}*/
+			else{
+				$sql = "SELECT admin_id, admin_role FROM admin WHERE admin_name = '$user' and admin_pass = '$pass'";
 				$result = $connection->query($sql);
 				$row = $result->fetch_assoc();
-				$log_id = $row["log_id"];
+				$admin = $row["admin_id"];
+				$role = $row["admin_role"];
+				$attempt_id;
+				$count = mysqli_num_rows($result);
+				
+				if($count == 1) {
+					$_SESSION['login_user'] = $user;
+					$date = date("Y-m-d H:i:s a");
+					$qry = "INSERT INTO logs (log_id, admin_id, login, logout) VALUES ('','$admin','$date','')";
+					$result = $connection->query($qry);
 
-				$_SESSION['log_id'] = $log_id;
+					$sql = "SELECT log_id, admin_id FROM logs order by log_id desc limit 1";
+					$result = $connection->query($sql);
+					$row = $result->fetch_assoc();
+					$log_id = $row["log_id"];
+
+					$_SESSION['log_id'] = $log_id;
 					
-				$_SESSION['role'] = $role;
-				$_SESSION['success'] = 'Login successful';
-				//unset our attempt
-				$_SESSION['valid'] = "False";
+					$_SESSION['role'] = $role;
+					$_SESSION['success'] = 'Login successful';
+					//unset our attempt
+					unset($_SESSION['attempt']);
+					$connection->close(); 
+					header("location: home.php");
+				}
+				if(($_SESSION['attempt']) == 0){
+					//echo "<script>alert('$admin');</script>";
+					$qry = "INSERT INTO login_attempt(attempt_id, attempt) VALUES('','1')";
+					$result = $connection->query($qry);
+					$_SESSION['attempt'] += 1;
+					$sql = "SELECT attempt_id from login_attempt order by attempt_id desc limit 1";
+					$result = $connection->query($sql); 
+					$row = $result->fetch_assoc();
+					$attempt_id = $row["attempt_id"]; //current problem
+					
+					$m = $_SESSION['attempt'];
+					echo "<script>alert('$m');</script>";
+				}
+				else {
+					$_SESSION['error'] = 'Password incorrect';
+					//this is where we put our 3 attempt limit
+					//$_SESSION['attempt'] += 1;
+					echo "<script>alert('$attempt_id');</script>";
 
-				$qry = "UPDATE ip SET status = 'Valid' WHERE address LIKE '$ip' AND timestamp > (now() - interval 10 minute)";
-				$result = $connection->query($qry);
-				$connection->close(); 
-				header("location: home.php");
+					$qry = "UPDATE login_attempt SET attempt = attempt + '1' where attempt_id = $attempt_id";
+					$result = $connection->query($qry);
+					$sql = "SELECT attempt from login_attempt where attempt_id = '$attempt_id'";
+					$result = $connection->query($sql); 
+					$row = $result->fetch_assoc();
+					$temp = $row["attempt"];
+					$_SESSION['attempt'] = $temp;
+					$m = $_SESSION['attempt'];
+					echo "<script>alert('$m');</script>";
+					if($$_SESSION['attempt'] == 3){
+						$_SESSION['attempt_again'] = time() + (5*60);
+					}
+				}
 			}
-			else{
-				$qry = "INSERT INTO ip (address,timestamp,status) VALUES ('$ip',CURRENT_TIMESTAMP,'Invalid')";
-				$result = $connection->query($qry);
-				echo "<script>alert('Inccorect Username/Password');</script>";
-			}
-			
-			
 			// https://www.sourcecodester.com/tutorials/php/12247/how-create-login-attempt-validation-using-php.html
-			// https://stackoverflow.com/questions/37120328/how-to-limit-the-number-of-login-attempts-in-a-login-script
 		}
 		if(isset($_GET['logout'])){
 			$logout = $_GET['logout'];

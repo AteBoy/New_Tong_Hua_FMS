@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.0
+-- version 5.1.1
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 26, 2022 at 10:22 PM
--- Server version: 10.4.24-MariaDB
--- PHP Version: 7.4.29
+-- Generation Time: Jul 07, 2022 at 02:12 PM
+-- Server version: 10.4.19-MariaDB
+-- PHP Version: 8.0.7
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -146,7 +146,40 @@ CREATE TABLE `inventory` (
 
 INSERT INTO `inventory` (`inventory_id`, `account_id`, `inv_date`, `supplier_id`, `item_name`, `category`, `price`, `quantity`, `total`, `journal`, `debit`, `credit`, `Explanation`) VALUES
 (221, 2000, '2022-06-23', 1, 'Red Cloth', 'Cloth', 20, 100, 2000, 'Liability', 10, 10, 'dwa'),
-(222, 2000, '2022-06-23', 1, 'Red Cloth', 'Cloth', 43, 10, 430, 'Liability', 10, 10, 'dwa');
+(222, 2000, '2022-06-23', 1, 'Red Cloth', 'Cloth', 43, 10, 430, 'Liability', 10, 10, 'dwa'),
+(223, 2000, '2022-06-27', 1, 'Blue Button', 'Button', 5, 10, 50, 'Liability', 11, 11, 'dwadwa'),
+(224, 1003, '2022-06-27', 1, 'Pink Button', 'Button', 1, 1, 1, 'Asset', 2, 1, 'dwa');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `ip`
+--
+
+CREATE TABLE `ip` (
+  `address` char(16) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  `timestamp` timestamp NOT NULL DEFAULT current_timestamp(),
+  `status` varchar(10) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `ip`
+--
+
+INSERT INTO `ip` (`address`, `timestamp`, `status`) VALUES
+('::1', '2022-07-07 12:09:48', 'Valid'),
+('::1', '2022-07-07 12:10:00', 'Valid'),
+('::1', '2022-07-07 12:10:04', 'Valid'),
+('::1', '2022-07-07 12:10:11', 'Valid'),
+('::1', '2022-07-07 12:10:33', 'Valid'),
+('::1', '2022-07-07 12:10:36', 'Valid'),
+('::1', '2022-07-07 12:11:24', 'Valid'),
+('::1', '2022-07-07 12:11:43', 'Invalid'),
+('::1', '2022-07-07 12:11:48', 'Invalid'),
+('::1', '2022-07-07 12:11:50', 'Invalid'),
+('::1', '2022-07-07 12:11:54', 'Invalid'),
+('::1', '2022-07-07 12:11:57', 'Invalid'),
+('::1', '2022-07-07 12:11:59', 'Invalid');
 
 -- --------------------------------------------------------
 
@@ -193,39 +226,30 @@ CREATE TABLE `logs` (
 --
 
 INSERT INTO `logs` (`log_id`, `admin_id`, `login`, `logout`) VALUES
-(1, 1001, '2022-05-26 14:39:11', '2022-05-26 14:39:39'),
-(2, 1002, '2022-05-26 14:40:04', '2022-05-26 14:40:09'),
-(3, 1002, '2022-05-26 14:41:14', '2022-05-26 16:52:50'),
-(4, 1001, '2022-05-26 16:50:39', '2022-05-26 16:52:50'),
-(5, 1001, '2022-05-26 16:52:14', '2022-05-26 16:52:50'),
-(6, 1001, '2022-05-30 13:26:49', '2022-06-02 15:16:12'),
-(7, 1001, '2022-05-31 13:15:08', '2022-06-02 15:16:12'),
-(8, 1001, '2022-06-01 13:28:43', '2022-06-02 15:16:12'),
-(9, 1001, '2022-06-02 13:22:14', '2022-06-02 15:16:12'),
-(10, 1001, '2022-06-05 14:13:44', '2022-06-13 14:14:46'),
-(11, 1001, '2022-06-06 14:44:12', '2022-06-13 14:14:46'),
-(12, 1001, '2022-06-09 13:49:45', '2022-06-13 14:14:46'),
-(13, 1001, '2022-06-10 14:13:49', '2022-06-13 14:14:46'),
-(14, 1001, '2022-06-12 14:02:42', '2022-06-13 14:14:46'),
-(15, 1001, '2022-06-13 13:33:57', '2022-06-13 14:14:46'),
-(16, 1001, '2022-06-13 13:58:57', '2022-06-13 14:14:46'),
-(17, 1001, '2022-06-13 14:10:48', '2022-06-13 14:14:46'),
-(18, 1001, '2022-06-13 14:14:54', '2022-06-13 14:17:27'),
-(19, 1001, '2022-06-13 14:17:41', '2022-06-13 14:18:35'),
-(20, 1001, '2022-06-13 14:18:56', '2022-06-13 14:20:24'),
-(21, 1001, '2022-06-13 14:35:46', '2022-06-13 14:36:29'),
-(22, 1001, '2022-06-13 14:36:49', '2022-06-14 09:14:11'),
-(23, 1001, '2022-06-14 09:11:48', '2022-06-14 09:14:11'),
-(24, 1001, '2022-06-14 09:13:03', '2022-06-14 09:14:11'),
-(25, 1001, '2022-06-14 09:15:08', '2022-06-14 09:15:25'),
-(26, 1001, '2022-06-14 13:32:44', '0000-00-00 00:00:00'),
-(27, 1001, '2022-06-21 13:26:41', '0000-00-00 00:00:00'),
-(28, 1001, '2022-06-21 15:58:36', '0000-00-00 00:00:00'),
-(29, 1001, '2022-06-21 16:23:06', '0000-00-00 00:00:00'),
-(30, 1001, '2022-06-21 16:24:36', '0000-00-00 00:00:00'),
-(31, 1001, '2022-06-22 13:03:26', '0000-00-00 00:00:00'),
-(32, 1001, '2022-06-23 13:09:33', '0000-00-00 00:00:00'),
-(33, 1001, '2022-06-26 20:59:14', '0000-00-00 00:00:00');
+(52, 1001, '2022-07-04 15:08:05', '2022-07-04 15:10:17'),
+(53, 1001, '2022-07-04 15:09:39', '2022-07-04 15:10:17'),
+(54, 1001, '2022-07-04 15:09:54', '2022-07-04 15:10:17'),
+(55, 1001, '2022-07-04 15:10:21', '2022-07-04 15:10:27'),
+(56, 1001, '2022-07-04 15:29:24', '2022-07-04 15:29:27'),
+(57, 1001, '2022-07-04 15:29:37', '2022-07-04 15:29:39'),
+(58, 1002, '2022-07-05 12:58:27', '2022-07-05 13:00:43'),
+(59, 1001, '2022-07-05 13:38:11', '2022-07-05 13:38:16'),
+(60, 1001, '2022-07-05 13:55:57', '2022-07-05 13:56:00'),
+(61, 1001, '2022-07-05 15:02:21', '2022-07-05 15:02:23'),
+(62, 1001, '2022-07-05 15:02:42', '2022-07-05 15:02:45'),
+(63, 1001, '2022-07-06 16:25:34', '2022-07-06 16:25:42'),
+(64, 1001, '2022-07-06 16:41:10', '2022-07-06 16:41:13'),
+(65, 1001, '2022-07-06 16:41:23', '2022-07-06 16:41:26'),
+(66, 1001, '2022-07-06 16:43:27', '2022-07-06 16:43:29'),
+(67, 1001, '2022-07-06 16:43:36', '2022-07-06 16:43:38'),
+(68, 1001, '2022-07-06 16:43:51', '2022-07-06 16:43:54'),
+(69, 1001, '2022-07-06 16:43:59', '2022-07-06 16:44:01'),
+(70, 1001, '2022-07-07 13:10:00', '2022-07-07 13:17:15'),
+(71, 1001, '2022-07-07 13:18:01', '2022-07-07 13:18:04'),
+(72, 1001, '2022-07-07 13:31:40', '2022-07-07 13:31:42'),
+(73, 1001, '2022-07-07 13:51:37', '2022-07-07 13:51:41'),
+(74, 1001, '2022-07-07 14:10:18', '2022-07-07 14:10:25'),
+(75, 1001, '2022-07-07 14:11:34', '2022-07-07 14:11:40');
 
 -- --------------------------------------------------------
 
@@ -247,7 +271,9 @@ CREATE TABLE `merchandise` (
 INSERT INTO `merchandise` (`item_id`, `item_name`, `item_category`, `item_stock`) VALUES
 (14, 'Blue Cloth', 'Cloth', 320),
 (15, 'Red Cloth', 'Cloth', 260),
-(16, 'Green Cloth', 'Cloth', 1100);
+(16, 'Green Cloth', 'Cloth', 1100),
+(17, 'Blue Button', 'Button', 10),
+(18, 'Pink Button', 'Button', 1);
 
 -- --------------------------------------------------------
 
@@ -315,7 +341,9 @@ INSERT INTO `stock` (`stock_id`, `stock_date`, `supplier_name`, `item_id`, `cate
 (19, '2022-06-23', 'shiori', 15, 'Cloth', 20, 100, 2000, 'in'),
 (20, '2022-06-23', 'Shio', 15, 'Cloth', 10, 10, 100, 'out'),
 (21, '2022-06-23', 'shio', 14, 'Cloth', 40, 10, 400, 'out'),
-(22, '2022-06-23', 'shiori', 15, 'Cloth', 43, 10, 430, 'in');
+(22, '2022-06-23', 'shiori', 15, 'Cloth', 43, 10, 430, 'in'),
+(23, '2022-06-27', 'shiori', 17, 'Button', 5, 10, 50, 'in'),
+(24, '2022-06-27', 'shiori', 18, 'Button', 1, 1, 1, 'in');
 
 -- --------------------------------------------------------
 
@@ -361,7 +389,8 @@ CREATE TABLE `supplier` (
 
 INSERT INTO `supplier` (`supplier_ID`, `supplier_name`, `address`, `contact`) VALUES
 (1, 'shiori', 'daraga', '09369888542'),
-(2, 'earl', 'daraga', '09324152321');
+(2, 'earl', 'daraga', '09324152321'),
+(5, 'Shio', 'Daraga Legazpi', '09345178452');
 
 -- --------------------------------------------------------
 
@@ -503,25 +532,19 @@ ALTER TABLE `general`
 -- AUTO_INCREMENT for table `inventory`
 --
 ALTER TABLE `inventory`
-  MODIFY `inventory_id` int(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=223;
-
---
--- AUTO_INCREMENT for table `journal`
---
-ALTER TABLE `journal`
-  MODIFY `journal_id` int(5) NOT NULL AUTO_INCREMENT;
+  MODIFY `inventory_id` int(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=225;
 
 --
 -- AUTO_INCREMENT for table `logs`
 --
 ALTER TABLE `logs`
-  MODIFY `log_id` int(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
+  MODIFY `log_id` int(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=76;
 
 --
 -- AUTO_INCREMENT for table `merchandise`
 --
 ALTER TABLE `merchandise`
-  MODIFY `item_id` int(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `item_id` int(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT for table `sales`
@@ -533,7 +556,7 @@ ALTER TABLE `sales`
 -- AUTO_INCREMENT for table `stock`
 --
 ALTER TABLE `stock`
-  MODIFY `stock_id` int(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
+  MODIFY `stock_id` int(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
 -- AUTO_INCREMENT for table `sub`
@@ -545,7 +568,7 @@ ALTER TABLE `sub`
 -- AUTO_INCREMENT for table `supplier`
 --
 ALTER TABLE `supplier`
-  MODIFY `supplier_ID` int(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `supplier_ID` int(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `tags`
@@ -569,14 +592,6 @@ ALTER TABLE `general`
 ALTER TABLE `inventory`
   ADD CONSTRAINT `account_id` FOREIGN KEY (`account_id`) REFERENCES `account` (`account_id`),
   ADD CONSTRAINT `supplier_id` FOREIGN KEY (`supplier_id`) REFERENCES `supplier` (`supplier_ID`);
-
---
--- Constraints for table `journal`
---
-ALTER TABLE `journal`
-  ADD CONSTRAINT `fk_journal_entry` FOREIGN KEY (`journal_entry`) REFERENCES `inventory` (`inventory_id`),
-  ADD CONSTRAINT `journal_ibfk_1` FOREIGN KEY (`journal_entry`) REFERENCES `sales` (`sales_id`),
-  ADD CONSTRAINT `journal_ibfk_2` FOREIGN KEY (`journal_entry`) REFERENCES `general` (`general_id`);
 
 --
 -- Constraints for table `logs`

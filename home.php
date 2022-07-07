@@ -37,8 +37,8 @@
                 <li><a href = "##" class = "tablink" onclick = "openTab(event, 'Receivable')"><span class='icon-field'><i class="fa fa-reply"></i></span> Receivable</a></li>  
                 <li><a href = "##" class = "tablink" onclick = "openTab(event, 'Inventory')"><span class='icon-field'><i class="fa fa-shopping-basket"></i></span> Inventory</a></li> 
                 <li><a href = "##" id = "admin_1" class = "tablink" onclick = "openTab(event, 'Financial_s')"><span class='icon-field'><i class="fa fa-newspaper-o"></i></span> Financial Statement</a></li>      
-                <li><a href = "##" id = "admin_2" class = "tablink" onclick = "openTab(event, 'Logs')">Logs</a></li>
-                <li><a href = "##" id = "admin_3" class = "tablink" onclick = "openTab(event, 'Admin')">Admin</a></li>    
+                <li><a href = "##" id = "admin_2" class = "tablink" onclick = "openTab(event, 'Logs')"><span class='icon-field'><i class="fa fa-list"></i></span> Logs</a></li>
+                <li><a href = "##" id = "admin_3" class = "tablink" onclick = "openTab(event, 'Admin')"><span class='icon-field'><i class="fa fa-user-o"></i></span> Admin</a></li> 
             </ul>
         </aside>
         <div class = "content">
@@ -121,7 +121,7 @@
                                     <td contenteditable='true' id = 'account:account_type:account_id:". $row["account_id"] ."'>" . $row["account_type"] . "</td>
                                     ";$id = $row["account_id"];?>
                                     
-                                    <td><a href="delete.php?id=<?php echo $id;?>&table=account:account_id">Delete</i></a></td>
+                                    <td><a href="delete.php?id=<?php echo $id;?>&table=account:account_id"><i class="fa fa-trash-o"></i></a></td>
                                </tr><?php
                            }
                            $connection->close();?>
@@ -151,7 +151,7 @@
                                     <option value="Expenses">Expenses</option>
                                 </select>
 
-                                <input type = "submit" class = "registerbtn" name = "submit_acc" value = "SUBMIT">
+                                <input type = "submit" class = "add_acc" name = "submit_acc" value = "SUBMIT">
                             </div>
                           </form>
                       </div>
@@ -174,8 +174,8 @@
                         <button class = "buttonLink" onclick="openTable(event, 'gen_j')">General Journal</button>
                     </div>
                   
-                    <div class = "tab_tb" id = "sale_j" style="overflow-x:auto;">
-                        <button class = "btn" id = "add_sales">New Entry</button>
+                    <div class = "tab_tb" id = "sale_j" style="overflow-x:auto; overflow-x:auto;">
+                        <button class = "jrnbtn" id = "add_sales">New Entry</button>
                         <table id = "sales_table">
                             <tr>
                                 <th>Sale ID <i class = "fa fa-sort" onclick="sortTable(0,'sales_table')"></i></th>
@@ -221,7 +221,7 @@
                                     <td>" . $row["credit"] . "</td>
                                     ";$id = $row["sales_id"];?>
                                     
-                                    <td><a href="delete.php?id=<?php echo $id;?>&table=sales:sales_id">Delete</i></a></td>
+                                    <td><a href="delete.php?id=<?php echo $id;?>&table=sales:sales_id"><i class="fa fa-trash-o"></i></a></td>
                                </tr><?php
                                $sql = "SELECT * FROM sub where transaction_id = $id";
                                $results = $connection->query($sql);
@@ -288,8 +288,6 @@
                             <div class="modal-body">
                                 <form action="insert.php" method = "post">
                                     <div class="container">
-                                        <button type = "button" class = "add_sales_acc">Add</button>
-                                        <button type = "button" class="remove_sales_acc">remove</button>
                                         <div id = "new_ch3">
                                             <div style="float:left;margin-right:20px;width: 50%;">
                                                 <label for="sales_acc"><b>Account ID</b></label>
@@ -360,8 +358,9 @@
                                             <label for="sales_quantity"><b>Quantity</b></label>
                                             <input type="number" placeholder="Enter Quantity" name="sales_quantity" id="sales_quantity" required>     
                                         </div>
-
-                                        <button type="submit" class="registerbtn" name="submit_sales">Register</button>    
+                                        <button type = "button" class = "add_entry">Add</button>
+                                        <button type = "button" class = "remove_entry">Remove</button>
+                                        <button type= "submit" class="registerbtn" name="submit_sales">Register</button>    
                                     </div>
                                 </form>
                             </div>
@@ -371,7 +370,7 @@
                         </div>
                     </div>
                     <div class = "tab_tb" id = "inv_j"style="overflow-x:auto;">
-                        <button class = "btn" id = "add_inv">New Entry</button>
+                        <button class = "jrnbtn" id = "add_inv">New Entry</button>
                         <table id = "inv_table">
                             <tr>
                                 <th>Inventory ID <i class = "fa fa-sort" onclick="sortTable(0,'inv_table')"></i></th>
@@ -417,7 +416,7 @@
                                     
                                     ";$id = $row["inventory_id"];
                                    
-                                    ?><td><a href="delete.php?id=<?php echo $id;?>&table=inventory:inventory_id">Delete</i></a></td>
+                                    ?><td><a href="delete.php?id=<?php echo $id;?>&table=inventory:inventory_id"><i class="fa fa-trash-o"></i></a></td>
                                     </tr>
                                     <?php
                                     $sql = "SELECT * FROM sub where transaction_id = $id";
@@ -483,10 +482,8 @@
                                 <h2>Inventory Entry</h2>
                             </div>
                             <div class="modal-body">
-                                <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?> insert.php" method = "post">
+                                <form action="insert.php" method = "post">
                                     <div class="container">
-                                        <button type = "button" class = "add_inv_acc">Add</button>
-                                        <button type = "button" class="remove_inv_acc">remove</button>
                                         <div id = "new_ch2">
                                             <div style="float:left;margin-right:20px;width: 50%;">
                                                 <label for="inv_acc"><b>Account</b></label>
@@ -579,7 +576,8 @@
                                             <label for="inv_quantity"><b>Quantity</b></label>
                                             <input type="number" placeholder="Enter Quantity" name="inv_quantity" id="inv_quantity" required>  
                                         </div>
-
+                                        <button type = "button" class = "add_entry">Add</button>
+                                        <button type = "button" class="remove_entry">Remove</button>
                                         <input type = "submit" class = "registerbtn" name = "submit_inv" value = "SUBMIT">  
                                     </div>
                                 </form>
@@ -649,7 +647,7 @@
 
                             ?>
                         </table>
-                        <button class = "btn" id = "add_gen">Add General</button>
+                        <button class = "jrnbtn" id = "add_gen">New Entry</button>
                         <div id="add_general_modal" class="modal">
                             <div class="modal-content">
                                 <div class="modal-header">
@@ -659,9 +657,6 @@
                                 <div class="modal-body">
                                     <form action="insert.php" method = "post">
                                         <div class="container">
-
-                                        <button type = "button" class = "add_gen_acc">Add</button>
-                                        <button type = "button" class="remove_gen_acc">remove</button>
                                         <div id = "new_ch1">
                                             <div style="float:left;margin-right:20px;width: 50%;">
                                                 <label for="gen_acc"><b>Account</b></label>
@@ -702,7 +697,8 @@
                                                 <input type="text" placeholder="Enter Explanation" name="gen_exp" id="gen_exp" required>      
                                             </div>
                                         </div>
-                                
+                                        <button type = "button" class = "add_entry">Add</button>
+                                        <button type = "button" class="remove_entry">remove</button>
                                         <button type="submit" class="registerbtn" name = "submit_gen">Register</button>
                                     </div>
                                     </form>
@@ -932,7 +928,7 @@
                                     
                                     ";$id = $row["account recievables"];?>
                                     
-                                     <td><a href="delete.php?id=<?php echo $id;?>&table=account recievables">Delete</i></a></td>
+                                     <td><a href="delete.php?id=<?php echo $id;?>&table=account recievables"><i class="fa fa-trash-o"></i></a></td>
                                 </tr><?php
 								
                             }
@@ -950,7 +946,7 @@
                         <button class = "buttonLink" onclick="openTable(event, 'merch')">Merchandise</button>
                         <button class = "buttonLink" onclick="openTable(event, 'stock')">Stock Record</button>
                         <button class = "buttonLink" onclick="openTable(event, 'supp')">Supplier</button>
-                        <button id = "admin_4" class = "buttonLink" onclick="openTable(event, 'cus')">Customer</button>
+                        <button class = "buttonLink" id = "admin_4" onclick="openTable(event, 'cus')">Customer</button>
                     </div>
                     <div class = "tab_tb" id = "merch">
                         <input type="text" id = "merch_search" placeholder="Search" >
@@ -985,7 +981,7 @@
                                         <td>" . $row["item_stock"] . "</td>
                                         ";$id = $row["item_id"];?>
                                         
-                                        <td><a href="delete.php?id=<?php echo $id;?>&table=merchandise:item_id">Delete</i></a></td>
+                                        <td><a href="delete.php?id=<?php echo $id;?>&table=merchandise:item_id"><i class="fa fa-trash-o"></i></a></td>
                                 </tr><?php
                             }
                             $connection->close();?>
@@ -1057,7 +1053,7 @@
                                         
                                         ";$id = $row["stock_id"];?>
                                         
-                                        <td><a href="delete.php?id=<?php echo $id;?>&table=stock:stock_id">Delete</i></a></td>
+                                        <td><a href="delete.php?id=<?php echo $id;?>&table=stock:stock_id"><i class="fa fa-trash-o"></i></a></td>
                                 </tr><?php
                                 }
                                 $connection->close();?>
@@ -1132,7 +1128,7 @@
                                         
                                         ";$id = $row["stock_id"];?>
                                         
-                                        <td><a href="delete.php?id=<?php echo $id;?>&table=stock:stock_id">Delete</i></a></td>
+                                        <td><a href="delete.php?id=<?php echo $id;?>&table=stock:stock_id"><i class="fa fa-trash-o"></i></a></td>
                                 </tr><?php
                                 }
                                 $connection->close();?>
@@ -1197,12 +1193,12 @@
                                     <td contenteditable='true' id = 'supplier:contact:supplier_ID:". $row["supplier_ID"] ."'>" . $row["contact"] . "</td>
                                     ";$id = $row["supplier_ID"];?>
                                     
-                                    <td><a href="delete.php?id=<?php echo $id;?>&table=supplier:supplier_id">Delete</i></a></td>
+                                    <td><a href="delete.php?id=<?php echo $id;?>&table=supplier:supplier_id"><i class="fa fa-trash-o"></i></a></td>
                                </tr><?php
                            }
                            $connection->close();?>
                         </table>
-                        <button class = "btn" id = "add_supplier">Add Supplier</button>
+                        <button class = "invbtn" id = "add_supplier">Add Supplier</button>
                         <div id="add_supplier_modal" class="modal">
                             <div class="modal-content">
                                 <div class="modal-header">
@@ -1222,7 +1218,7 @@
                                         <label for="sup_no"><b>Contact Number</b></label>
                                         <input type="number" placeholder="Enter Contact Number" name="sup_no" id="sup_no" required>
                                         
-                                        <button type="submit" class="registerbtn" name = "submit_sup">Register</button>
+                                        <button type="submit" class="add_supp_btn" name = "submit_sup">Register</button>
                                     </div>
                                     </form>
                                 </div>
@@ -1263,7 +1259,7 @@
                                     <td>" . $row["item_name"] . "</td>
                                     ";$id = $row["customer_id"];?>
                                     
-                                    <td><a href="delete.php?id=<?php echo $id;?>&table=customer:customer">Delete</i></a></td>
+                                    <td><a href="delete.php?id=<?php echo $id;?>&table=customer:customer"><i class="fa fa-trash-o"></i></a></td>
                                </tr><?php
                            }
                            $connection->close();?>
@@ -1311,7 +1307,7 @@
                                     
                                     ";$id = $row["log_id"];?>
                                     
-                                    <td><a href="delete.php?id=<?php echo $id;?>&table=logs:log_id">Delete</i></a></td>
+                                    <td><a href="delete.php?id=<?php echo $id;?>&table=logs:log_id"><i class="fa fa-trash-o"></i></a></td>
                                </tr><?php
                            }
                            $connection->close();?>
@@ -1362,7 +1358,7 @@
                                     <td contenteditable='true' id = 'admin:admin_role:admin_id:". $row["admin_id"] ."'>" . $row["admin_role"] . "</td>
                                     ";$id = $row["admin_id"];?>
                                     
-                                    <td><a href="delete.php?id=<?php echo $id;?>&table=admin:admin_id">Delete</i></a></td>
+                                    <td><a href="delete.php?id=<?php echo $id;?>&table=admin:admin_id"><i class="fa fa-trash-o"></i></a></td>
                                </tr><?php
                            }
                            $connection->close();?>
@@ -1396,7 +1392,7 @@
                                             <option value = "Owner">Owner</option>
                                         </select>
 
-                                        <button type="submit" class="registerbtn" name = "submit_admin">Register</button>
+                                        <button type="submit" class="reg_admin_acc" name = "submit_admin">Register</button>
                                     </div>
                                     </form>
                                 </div>
@@ -1417,7 +1413,7 @@
 
             for(i = 1; i < limit; i++){
                 x = document.getElementById("admin_"+i);
-                x.style.display = "inline-block";
+                x.style.display = "block";
             }
 
         }
@@ -1577,6 +1573,17 @@
                 }
             }
         }
+
+$(document).keydown(function(event) { 
+        if (event.keyCode == 27) { 
+        $('#create_acc_modal').hide();
+        $('#add_sales_modal').hide();
+        $('#add_inv_modal').hide();
+        $('#add_general_modal').hide();
+        $('#add_supplier_modal').hide();
+        $('#add_admin_modal').hide();
+    }
+});
 
 $('.add_gen_acc').on('click', add_gen_acc);
 $('.remove_gen_acc').on('click', remove_gen_acc);
@@ -1863,5 +1870,9 @@ function autocomplete(inp, arr) {
    /* object.onunload() = function(){
         window.location.href = "login_page.php?logout<?php echo $log_id?>";
     }*/
+
+    
+
+</script>
 </script>
 </html>

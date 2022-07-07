@@ -1,16 +1,5 @@
 <!DOCTYPE html>
-<?php
-	session_start();
-	//check if can login again
-	if(isset($_SESSION['attempt_again'])){
-		$now = time();
-		if($now >= $_SESSION['attempt_again']){
-			unset($_SESSION['attempt']);
-			unset($_SESSION['attempt_again']);
-		}
-	}
- 
-?>
+
 <html lang = "eng" dir = "ltr">
 
 	<head>
@@ -24,7 +13,7 @@
 
 		<div class = "center">
 			<h1> Welcome to Tong Hua Trading </h1>
-			<form  action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="post">
+			<form  action="" method="post">
 				<div class="txt_field">
 					<input type="text" name = "username"required>
 					<span></span>
@@ -76,95 +65,62 @@
             <div style = "font-size:11px; color:#cc0000; margin-top:10px"><?php echo $error; ?></div>
 	</body>
 	<?php
-	include("config.php");
-					
-		if($connection->connect_error){
-		die("Connection FailedL ". $connection->connect_error);
-		}
+   include("config.php");
+   session_start();
+    if($connection->connect_error){
+       die("Connection FailedL ". $connection->connect_error);
+    }
+    $error = "";
+    if(isset($_POST['submit_login'])) {
 
-		function test_input($data) {
-			$data = trim($data);
-			$data = stripslashes($data);
-			$data = htmlspecialchars($data);
-			return $data;
-		}
-		$error = "";
-		if(isset($_POST['submit_login'])) {
-			session_start();
-			$user = $_POST['username'];
-			$pass = $_POST['password']; 
-			$ip = $_SERVER["REMOTE_ADDR"];
-			
-			$sql = "SELECT admin_id, admin_role FROM admin WHERE admin_name = '$user' and admin_pass = '$pass'";
+        $user = $_POST['username'];
+        $pass = $_POST['password']; 
+      
+        $sql = "SELECT admin_id, admin_role FROM admin WHERE admin_name = '$user' and admin_pass = '$pass'";
+        $result = $connection->query($sql);
+        $row = $result->fetch_assoc();
+		$admin = $row["admin_id"];
+		$role = $row["admin_role"];
+        $count = mysqli_num_rows($result);
+            
+        if($count == 1) {
+            $_SESSION['login_user'] = $user;
+			$date = date("Y-m-d H:i:s a");
+			$qry = "INSERT INTO logs (log_id, admin_id, login, logout) VALUES ('','$admin','$date','')";
+			$result = $connection->query($qry);
+
+			$sql = "SELECT log_id FROM logs order by log_id desc limit 1";
 			$result = $connection->query($sql);
 			$row = $result->fetch_assoc();
-			$admin = $row["admin_id"];
-			$role = $row["admin_role"];
-			$attempt_id;
-			$count = mysqli_num_rows($result);
-			$_SESSION['valid'];
-			$sql = "SELECT count(*) AS n FROM ip where address LIKE '$ip' AND timestamp > (now() - interval 10 minute) AND status = 'Invalid'";
-			$result = $connection->query($sql);
-			$row = $result->fetch_assoc();
-			$attempt = $row["n"];
-			
-			if($attempt > 5){
-				$_SESSION['error'] = 'Attempt limit reach';
-				$err = $_SESSION['error'];
-				echo "<script>alert('$err');</script>";
-				$_SESSION['valid'] = "True";
-			}
-			else if($count == 1) {
-				$_SESSION['login_user'] = $user;
-				$date = date("Y-m-d H:i:s a");
-				$qry = "INSERT INTO logs (log_id, admin_id, login, logout) VALUES ('','$admin','$date','')";
-				$result = $connection->query($qry);
+			$log_id = $row["log_id"];
 
-				$sql = "SELECT log_id, admin_id FROM logs order by log_id desc limit 1";
-				$result = $connection->query($sql);
-				$row = $result->fetch_assoc();
-				$log_id = $row["log_id"];
+			$_SESSION['log_id'] = $log_id;
+			$_SESSION['role'] = $role;
+			$connection->close(); 
+            header("location: home.php");
+        }else {
+            $error = "Your Login UserName or Password is invalid";
+			echo "<script>alert('$error');</script>";
+        }
+    }
+	if(isset($_GET['logout'])){
+		$logout = $_GET['logout'];
+		$date2 = date("Y-m-d H:i:s a");
+		$sql = "UPDATE logs SET logout = '$date2' WHERE logout = $logout";
+        $result = $connection->query($sql);
+		header("Location: login_page.php");
+	}
+	?>
+	<script>
+		var modal = document.getElementById("reset_modal");
+		var reset = document.getElementById("reset_pass");
+		var span = document.getElementById("close");
 
-				$_SESSION['log_id'] = $log_id;
-					
-				$_SESSION['role'] = $role;
-				$_SESSION['success'] = 'Login successful';
-				//unset our attempt
-				$_SESSION['valid'] = "False";
-
-				$qry = "UPDATE ip SET status = 'Valid' WHERE address LIKE '$ip' AND timestamp > (now() - interval 10 minute)";
-				$result = $connection->query($qry);
-				$connection->close(); 
-				header("location: home.php");
-			}
-			else{
-				$qry = "INSERT INTO ip (address,timestamp,status) VALUES ('$ip',CURRENT_TIMESTAMP,'Invalid')";
-				$result = $connection->query($qry);
-				echo "<script>alert('Inccorect Username/Password');</script>";
-			}
-			
-			
-			// https://www.sourcecodester.com/tutorials/php/12247/how-create-login-attempt-validation-using-php.html
-			// https://stackoverflow.com/questions/37120328/how-to-limit-the-number-of-login-attempts-in-a-login-script
+		reset.onclick = function() {
+			modal.style.display = "block";
 		}
-		if(isset($_GET['logout'])){
-			$logout = $_GET['logout'];
-			$date2 = date("Y-m-d H:i:s a");
-			$sql = "UPDATE logs SET logout = '$date2' WHERE logout = $logout";
-			$result = $connection->query($sql);
-			header("Location: login_page.php");
+		span.onclick = function() {
+			modal.style.display = "none";
 		}
-		?>
-		<script>
-			var modal = document.getElementById("reset_modal");
-			var reset = document.getElementById("reset_pass");
-			var span = document.getElementById("close");
-
-			reset.onclick = function() {
-				modal.style.display = "block";
-			}
-			span.onclick = function() {
-				modal.style.display = "none";
-			}
 	</script>
 </html>

@@ -370,6 +370,7 @@ tr:hover{
     color: black;
     border: 2px solid #749EFF;
 }
+
 .add_acc {
     background-color: #04AA6D;
     color: white;
@@ -618,4 +619,26 @@ td{
     width: 100%;
     opacity: 0.9;
     display: inline-block;
+
+}
+#admin_1, #admin_2, #admin_3, #admin_4 {
+    display: none;
+}
+
+#admin_4 {
+    border: none;
+    padding: 10px 18px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin-right: 20px;
+    transition-duration: 0.4s;
+    cursor: pointer;
+    background-color: white;
+    color: black;
+    border: 2px solid #749EFF;
+    position: relative;
+    top: -42px;
+    left: 450px;
 }

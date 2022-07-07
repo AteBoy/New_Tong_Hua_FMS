@@ -277,11 +277,6 @@
         $result = $connection->query($qry);
         $connection->close(); 
     }
-function val($data) {
-        $data = trim($data);
-        $data = stripslashes($data);
-        $data = htmlspecialchars($data);
-        return $data;
-}
+
 header("Location: home.php");
 ?>

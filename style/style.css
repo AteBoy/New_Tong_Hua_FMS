@@ -619,3 +619,6 @@ td{
     opacity: 0.9;
     display: inline-block;
 }
+#admin_1, #admin_2, #admin_3, #admin_4{
+    display: none;
+}

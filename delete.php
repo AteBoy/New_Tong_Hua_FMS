@@ -29,6 +29,13 @@
         //$qry = "UPDATE merchandise SET item_stock = item_stock - '$quantity' where item_name = '$item_name' && item_category = '$item_cat'";
         $qry = "UPDATE merchandise SET item_stock = item_stock - '$quantity' where item_name = '$item_name' && item_category = '$item_cat'";
         $result = $connection->query($qry);
+
+        $qry = "DELETE from sub where transaction_id = $id";
+        $result = $connection->query($qry);
+    }
+    if($table == "sales"){
+        $qry = "DELETE from sub where transaction_id = $id";
+        $result = $connection->query($qry);
     }
 
     $connection->close(); 

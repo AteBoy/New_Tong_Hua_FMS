@@ -197,7 +197,10 @@
                             if($connection->connect_error){
                                 die("Connection Failed ". $connection->connect_error);
                             }
-
+                            $sql = "SELECT tag_code from tags where tag_name = 'sales'";
+                            $result = $connection->query($sql);
+                            $row = $result->fetch_assoc();
+                            $tag = $row["tag_code"];
                             $sql = "SELECT * FROM sales";
                             $result = $connection->query($sql);
 
@@ -208,17 +211,17 @@
                             while($row = $result->fetch_assoc()){
                                 echo "<tr>
                                     
-                                    <td>" . $row["sales_id"] . "</td>
+                                    <td>". $tag ."-" . $row["sales_id"] . "</td>
                                     <td>" . $row["sales_date"] . "</td>
                                     <td contenteditable='true' id = 'sales:buyer_name:sales_id:". $row["sales_id"] ."'>" . $row["buyer_name"] . "</td>
                                     <td contenteditable='true' id = 'sales:item_name:sales_id:". $row["sales_id"] ."'>" . $row["item_name"] . "</td>
                                     <td contenteditable='true' id = 'sales:category:sales_id:". $row["sales_id"] ."'>" . $row["category"] . "</td>
-                                    <td contenteditable='true' id = 'sales:price:sales_id:". $row["sales_id"] ."'>" . $row["price"] . "</td>
-                                    <td  contenteditable='true' id = 'sales:quantity:sales_id:". $row["sales_id"] ."'>" . $row["quantity"] . "</td>
-                                    <td>" . $row["total"] . "</td>
+                                    <td contenteditable='true' id = 'sales:price:sales_id:". $row["sales_id"] ."'>" . number_format($row["price"],2) . "</td>
+                                    <td>" . $row["quantity"] . "</td>
+                                    <td> " . number_format($row["total"],0) . "</td>
                                     <td  contenteditable='true' id = 'sales:journal:sales_id:". $row["sales_id"] ."'>" . $row["journal"] . "</td>
-                                    <td>" . $row["debit"] . "</td>
-                                    <td>" . $row["credit"] . "</td>
+                                    <td>" . number_format($row["debit"],2) . "</td>
+                                    <td>" . number_format($row["credit"],2) . "</td>
                                     ";$id = $row["sales_id"];?>
                                     
                                     <td><a href="delete.php?id=<?php echo $id;?>&table=sales:sales_id"><i class="fa fa-trash-o"></i></a></td>
@@ -239,8 +242,8 @@
                                            <td></td>
                                            <td></td>
                                            <td></td>
-                                           <td>" . $row["debit"] . "</td>
-                                           <td>" . $row["credit"] . "</td>
+                                           <td>" . number_format($row["debit"] ,2). "</td>
+                                           <td>" . number_format($row["credit"],2) . "</td>
                                            
                                            </tr>";
                                            $sub = $row["sub_id"];
@@ -257,7 +260,7 @@
                                     die("Connection Failed ". $connection->connect_error);
                                 }
     
-                                $sql = "SELECT sum(price) price, sum(quantity) quantity, sum(total) total, sum(sales.debit) + sum(sub.debit) debit, sum(sales.credit) + sum(sub.credit) credit FROM sales, sub where transaction_id = sales_id";
+                                $sql = "SELECT format(sum(price),2) price, format(sum(quantity),2) quantity, format(sum(total),0) total FROM sales";
                                 $result = $connection->query($sql);
                                 $row = $result->fetch_assoc();
 
@@ -270,10 +273,15 @@
                                     <td>". $row["price"] ."</td>
                                     <td>". $row["quantity"] ."</td>
                                     <td>". $row["total"] ."</td>
-                                    <td></td>
-                                    <td>". $row["debit"] ."</td>
-                                    <td>". $row["credit"] ."</td>
-                                
+                                    <td></td>";
+                                    $sql = "SELECT format(SUM(t.credit),2) credit, format(sum(t.debit),2) debit FROM (SELECT credit, debit FROM sales UNION ALL SELECT credit, debit FROM sub where type = 'sales') t";
+                                    $result = $connection->query($sql);
+                                    $row = $result->fetch_assoc();
+                                    echo"
+                                        <td>". $row["debit"] ."</td>
+                                        <td>". $row["credit"] ."</td>
+                                        <td></td>
+                                    
                                 </tr>";
                                 $connection->close();
                             ?>
@@ -358,6 +366,20 @@
                                             <label for="sales_quantity"><b>Quantity</b></label>
                                             <input type="number" placeholder="Enter Quantity" name="sales_quantity" id="sales_quantity" required>     
                                         </div>
+                                        <div style="float:left;margin-right:20px;width: 25%;">
+                                            <label for="measurement"><b>Measurement Type</b></label>
+                                            <select name="sales_type" id = "sales_type" required>
+                                                <option value = "~">None</option>
+                                                <option value = "Yard">Yard/s</option>
+                                                <option value = "Piece">Piece/s</option>
+                                                <option value = "Meter">Meter/s</option>
+                                                <option value = "Box">Box/s</option>
+                                            </select>
+                                        </div>
+                                        <div style="float:right;margin-right:20px;width: 22%;">
+                                            <label for="sales_measure"><b>Measure</b></label>
+                                            <input type="number" placeholder="Enter Measure" name="sales_measure" id="sales_measure" value = "0" required>  
+                                        </div>
                                         <button type = "button" class = "add_entry" id = "add_sales_acc">Add</button>
                                         <button type = "button" class = "remove_entry" id = "remove_sales_acc">Remove</button>
                                         <button type= "submit" class="registerbtn" name="submit_sales">Register</button>    
@@ -392,8 +414,11 @@
                             if($connection->connect_error){
                                 die("Connection Failed ". $connection->connect_error);
                             }
-
-                            $sql = "SELECT * FROM inventory";
+                            $sql = "SELECT tag_code from tags where tag_name = 'inventory'";
+                            $result = $connection->query($sql);
+                            $row = $result->fetch_assoc();
+                            $tag = $row["tag_code"];
+                            $sql = "SELECT inventory_id, inv_date, supplier_name, item_name, category, price, quantity, total, journal, debit, credit FROM inventory, supplier where inventory.supplier_id = supplier.supplier_id";
                             $result = $connection->query($sql);
 
                             if(!$result){
@@ -402,17 +427,17 @@
 
                             while($row = $result->fetch_assoc()){
                                 echo "<tr>
-                                    <td>" . $row["inventory_id"] . "</td>
+                                    <td>". $tag ."-". + $row["inventory_id"] . "</td>
                                     <td>" . $row["inv_date"] . "</td>
-                                    <td>" . $row["supplier_id"] . "</td>
+                                    <td>" . $row["supplier_name"] . "</td>
                                     <td contenteditable='true' id = 'inventory:item_name:inventory_id:". $row["inventory_id"] ."'>" . $row["item_name"] . "</td>
                                     <td contenteditable='true' id = 'inventory:category:inventory_id:". $row["inventory_id"] ."'>" . $row["category"] . "</td>
                                     <td contenteditable='true' id = 'inventory:price:inventory_id:". $row["inventory_id"] ."'>" . $row["price"] . "</td>
-                                    <td>" . $row["quantity"] . "</td>
-                                    <td>" . $row["total"] . "</td>
+                                    <td>" . number_format($row["quantity"],0) . "</td>
+                                    <td>" . number_format($row["total"],2) . "</td>
                                     <td contenteditable='true' id = 'inventory:journal:inventory_id:". $row["inventory_id"] ."'>" . $row["journal"] . "</td>
-                                    <td>" . $row["debit"] . "</td>
-                                    <td>" . $row["credit"] . "</td>
+                                    <td>" . number_format($row["debit"],2) . "</td>
+                                    <td>" . number_format($row["credit"],2) . "</td>
                                     
                                     ";$id = $row["inventory_id"];
                                    
@@ -435,8 +460,9 @@
                                                 <td></td>
                                                 <td></td>
                                                 <td></td>
-                                                <td>" . $row["debit"] . "</td>
-                                                <td>" . $row["credit"] . "</td>
+                                                <td>" . number_format($row["debit"],2) . "</td>
+                                                <td>" . number_format($row["credit"],2) . "</td>
+                                                <td></td>
                                                 
                                                 </tr>";
                                                 $sub = $row["sub_id"];
@@ -453,10 +479,10 @@
                                     die("Connection Failed ". $connection->connect_error);
                                 }
     
-                                $sql = "SELECT sum(price) price, sum(quantity) quantity, sum(total) total, sum(inventory.debit) + sum(sub.debit) debit, sum(inventory.credit) + sum(sub.credit) credit FROM inventory, sub where type = 'inventory'";
+                                $sql = "SELECT format(sum(price),2) price, format(sum(quantity),0) quantity, format(sum(total),2) total FROM inventory";
                                 $result = $connection->query($sql);
                                 $row = $result->fetch_assoc();
-
+                               
                                 echo "<tr id = 'tr_bold'>
                                     <td>Total</td>
                                     <td></td>
@@ -466,9 +492,14 @@
                                     <td>". $row["price"] ."</td>
                                     <td>". $row["quantity"] ."</td>
                                     <td>". $row["total"] ."</td>
-                                    <td></td>
+                                    <td></td>";
+                                $sql = "SELECT SUM(t.credit) credit, sum(t.debit) debit FROM (SELECT credit, debit FROM inventory UNION ALL SELECT credit, debit FROM sub where type = 'inventory') t";
+                                $result = $connection->query($sql);
+                                $row = $result->fetch_assoc();
+                                echo"
                                     <td>". $row["debit"] ."</td>
                                     <td>". $row["credit"] ."</td>
+                                    
                                 
                                 </tr>";
                                 $connection->close();
@@ -575,6 +606,20 @@
                                         <div style="float:right;margin-right:20px;width: 22%;">
                                             <label for="inv_quantity"><b>Quantity</b></label>
                                             <input type="number" placeholder="Enter Quantity" name="inv_quantity" id="inv_quantity" required>  
+                                        </div>
+                                        <div style="float:left;margin-right:20px;width: 25%;">
+                                            <label for="measurement"><b>Measurement Type</b></label>
+                                            <select name="inv_type" id = "inv_type" required>
+                                                <option value = "~">None</option>
+                                                <option value = "Yard">Yard/s</option>
+                                                <option value = "Piece">Piece/s</option>
+                                                <option value = "Meter">Meter/s</option>
+                                                <option value = "Box">Box/s</option>
+                                            </select>
+                                        </div>
+                                        <div style="float:right;margin-right:20px;width: 22%;">
+                                            <label for="inv_measure"><b>Measure</b></label>
+                                            <input type="number" placeholder="Enter Measure" name="inv_measure" id="inv_measure" value = "0" required>  
                                         </div>
                                         <button type = "button" class = "add_entry" id = "add_inv_acc">Add</button>
                                         <button type = "button" class="remove_entry" id = "remove_inv_acc">Remove</button>
@@ -978,7 +1023,7 @@
                                         <td>" . $row["item_id"] . "</td>
                                         <td contenteditable='true' id = 'merchandise:item_name:item_id:". $row["item_id"] ."'>" . $row["item_name"] . "</td>
                                         <td contenteditable='true' id = 'merchandise:item_category:item_id:". $row["item_id"] ."'>" . $row["item_category"] . "</td>
-                                        <td>" . $row["item_stock"] . "</td>
+                                        <td>" . number_format($row["item_stock"],0) . "</td>
                                         ";$id = $row["item_id"];?>
                                         
                                         <td><a href="delete.php?id=<?php echo $id;?>&table=merchandise:item_id"><i class="fa fa-trash-o"></i></a></td>
@@ -992,7 +1037,7 @@
                                     die("Connection Failed ". $connection->connect_error);
                                 }
     
-                                $sql = "SELECT sum(item_stock)stock FROM merchandise";
+                                $sql = "SELECT format(sum(item_stock),0)stock FROM merchandise";
                                 $result = $connection->query($sql);
                                 $row = $result->fetch_assoc();
 
@@ -1031,7 +1076,7 @@
                                     die("Connection Failed ". $connection->connect_error);
                                 }
 
-                                $sql = "SELECT stock_id, stock_date, stock.item_id, item_name, supplier_name, category, price, quantity, total FROM stock, merchandise where stock.item_id = merchandise.item_id && stock_status = 'in'";
+                                $sql = "SELECT stock_id, stock_date, stock.item_id, item_name, supplier_name, category, format(price,2) price, format(quantity,0) quantity, format(total,2) total FROM stock, merchandise where stock.item_id = merchandise.item_id && stock_status = 'in'";
                                 $result = $connection->query($sql);
 
                                 if(!$result){
@@ -1064,7 +1109,7 @@
                                         die("Connection Failed ". $connection->connect_error);
                                     }
         
-                                    $sql = "SELECT sum(price)price, sum(quantity)quantity, sum(total)total FROM stock where stock_status = 'in'";
+                                    $sql = "SELECT format(sum(price),2)price, format(sum(quantity),0)quantity, format(sum(total),2)total FROM stock where stock_status = 'in'";
                                     $result = $connection->query($sql);
                                     $row = $result->fetch_assoc();
 
@@ -1079,7 +1124,7 @@
                                         <td>". $row["quantity"] ."</td>
                                         <td>". $row["total"] ."</td>
                                         <td></td>
-                                    
+
                                     </tr>";
                                     $connection->close();
                                 ?>
@@ -1871,7 +1916,24 @@ function autocomplete(inp, arr) {
         window.location.href = "login_page.php?logout<?php echo $log_id?>";
     }*/
 
-    
+    document.getElementById('inv_type').addEventListener('change', function (e) {
+        if (e.target.value === "~") {
+            document.getElementById("inv_measure").readOnly = true;
+            
+        }
+        else{
+            document.getElementById("inv_measure").readOnly = false;
+        }
+    });
+    document.getElementById('sales_type').addEventListener('change', function (e) {
+        if (e.target.value === "~") {
+            document.getElementById("sales_measure").readOnly = true;
+            
+        }
+        else{
+            document.getElementById("sales_measure").readOnly = false;
+        }
+    });
 
 </script>
 </script>

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 07, 2022 at 02:12 PM
+-- Generation Time: Jul 13, 2022 at 04:11 PM
 -- Server version: 10.4.19-MariaDB
 -- PHP Version: 8.0.7
 
@@ -74,7 +74,7 @@ INSERT INTO `admin` (`admin_id`, `admin_name`, `admin_pass`, `admin_contact`, `a
 --
 
 CREATE TABLE `customer` (
-  `customer_id` int(6) NOT NULL,
+  `customer_id` int(4) UNSIGNED ZEROFILL NOT NULL,
   `customer_name` varchar(10) NOT NULL,
   `stock` int(10) NOT NULL,
   `item_name` varchar(20) NOT NULL
@@ -85,12 +85,14 @@ CREATE TABLE `customer` (
 --
 
 INSERT INTO `customer` (`customer_id`, `customer_name`, `stock`, `item_name`) VALUES
-(16, 'shiori', 30, 'Pink Cloth'),
-(17, 'earl', 100, 'Red Cloth'),
-(18, 'Reil', 210, 'Blue Cloth'),
-(27, 'Reil', 10, 'Red Cloth'),
-(28, 'Shio', 20, 'Red Cloth'),
-(29, 'shio', 10, 'Blue Cloth');
+(0016, 'shiori', 30, 'Pink Cloth'),
+(0017, 'earl', 100, 'Red Cloth'),
+(0018, 'Reil', 230, 'Blue Cloth'),
+(0027, 'Reil', 10, 'Red Cloth'),
+(0028, 'Shio', 20, 'Red Cloth'),
+(0029, 'shio', 30, 'Blue Cloth'),
+(0030, 'reil', 100, 'Green Cloth'),
+(0031, 'fang', 10, 'Green Cloth');
 
 -- --------------------------------------------------------
 
@@ -116,7 +118,8 @@ INSERT INTO `general` (`general_id`, `account_id`, `debit`, `credit`, `journal`,
 (15, 1003, 69, 69, 'Asset', '2022-05-16', 'yes'),
 (16, 1001, 43, 50, 'Assets', '2022-05-16', 'dwa'),
 (17, 2000, 42, 32, 'Liability', '2022-05-16', 'dwa'),
-(19, 2000, 12, 12, 'Liability', '2022-05-16', 'dwa');
+(19, 2000, 12, 12, 'Liability', '2022-05-16', 'dwa'),
+(20, 1003, 20, 20, 'Asset', '2022-07-09', 'dwadaw');
 
 -- --------------------------------------------------------
 
@@ -125,7 +128,7 @@ INSERT INTO `general` (`general_id`, `account_id`, `debit`, `credit`, `journal`,
 --
 
 CREATE TABLE `inventory` (
-  `inventory_id` int(6) NOT NULL,
+  `inventory_id` int(4) UNSIGNED ZEROFILL NOT NULL,
   `account_id` int(6) NOT NULL,
   `inv_date` date NOT NULL,
   `supplier_id` int(6) NOT NULL,
@@ -145,10 +148,9 @@ CREATE TABLE `inventory` (
 --
 
 INSERT INTO `inventory` (`inventory_id`, `account_id`, `inv_date`, `supplier_id`, `item_name`, `category`, `price`, `quantity`, `total`, `journal`, `debit`, `credit`, `Explanation`) VALUES
-(221, 2000, '2022-06-23', 1, 'Red Cloth', 'Cloth', 20, 100, 2000, 'Liability', 10, 10, 'dwa'),
-(222, 2000, '2022-06-23', 1, 'Red Cloth', 'Cloth', 43, 10, 430, 'Liability', 10, 10, 'dwa'),
-(223, 2000, '2022-06-27', 1, 'Blue Button', 'Button', 5, 10, 50, 'Liability', 11, 11, 'dwadwa'),
-(224, 1003, '2022-06-27', 1, 'Pink Button', 'Button', 1, 1, 1, 'Asset', 2, 1, 'dwa');
+(0222, 2000, '2022-06-23', 1, 'Red Cloth', 'Cloth', 43, 10, 430, 'Liability', 10, 10, 'dwa'),
+(0223, 2000, '2022-06-27', 1, 'Blue Button', 'Button', 5, 10, 50, 'Liability', 11, 11, 'dwadwa'),
+(0227, 1003, '2022-07-10', 1, 'Green Cloth', 'Cloth', 100, 20, 2000, 'Asset', 10, 10, 'dwa');
 
 -- --------------------------------------------------------
 
@@ -179,7 +181,14 @@ INSERT INTO `ip` (`address`, `timestamp`, `status`) VALUES
 ('::1', '2022-07-07 12:11:50', 'Invalid'),
 ('::1', '2022-07-07 12:11:54', 'Invalid'),
 ('::1', '2022-07-07 12:11:57', 'Invalid'),
-('::1', '2022-07-07 12:11:59', 'Invalid');
+('::1', '2022-07-07 12:11:59', 'Invalid'),
+('::1', '2022-07-09 04:26:02', 'Valid'),
+('::1', '2022-07-12 13:43:02', 'Invalid'),
+('::1', '2022-07-12 13:43:17', 'Invalid'),
+('::1', '2022-07-12 13:43:26', 'Invalid'),
+('::1', '2022-07-12 13:43:31', 'Invalid'),
+('::1', '2022-07-12 13:43:43', 'Invalid'),
+('::1', '2022-07-12 13:43:53', 'Invalid');
 
 -- --------------------------------------------------------
 
@@ -249,7 +258,28 @@ INSERT INTO `logs` (`log_id`, `admin_id`, `login`, `logout`) VALUES
 (72, 1001, '2022-07-07 13:31:40', '2022-07-07 13:31:42'),
 (73, 1001, '2022-07-07 13:51:37', '2022-07-07 13:51:41'),
 (74, 1001, '2022-07-07 14:10:18', '2022-07-07 14:10:25'),
-(75, 1001, '2022-07-07 14:11:34', '2022-07-07 14:11:40');
+(75, 1001, '2022-07-07 14:11:34', '2022-07-07 14:11:40'),
+(76, 1001, '2022-07-07 14:27:21', '2022-07-07 14:29:01'),
+(77, 1002, '2022-07-07 14:29:05', '2022-07-07 14:29:09'),
+(78, 1001, '2022-07-07 14:48:22', '2022-07-09 06:25:57'),
+(79, 1001, '2022-07-07 15:07:01', '2022-07-09 06:25:57'),
+(80, 1001, '2022-07-07 15:19:30', '2022-07-09 06:25:57'),
+(81, 1001, '2022-07-07 15:38:22', '2022-07-09 06:25:57'),
+(82, 1001, '2022-07-09 06:23:21', '2022-07-09 06:25:57'),
+(83, 1001, '2022-07-09 06:26:10', '2022-07-09 06:26:16'),
+(84, 1002, '2022-07-09 06:26:21', '2022-07-09 06:28:15'),
+(85, 1001, '2022-07-09 06:28:19', '2022-07-12 15:41:44'),
+(86, 1001, '2022-07-10 06:36:19', '2022-07-12 15:41:44'),
+(87, 1001, '2022-07-10 13:52:42', '2022-07-12 15:41:44'),
+(88, 1001, '2022-07-11 14:24:38', '2022-07-12 15:41:44'),
+(89, 1001, '2022-07-12 13:08:11', '2022-07-12 15:41:44'),
+(90, 1001, '2022-07-12 14:23:13', '2022-07-12 15:41:44'),
+(91, 1001, '2022-07-12 15:41:50', '2022-07-12 15:42:01'),
+(92, 1001, '2022-07-12 15:42:05', '2022-07-12 15:42:22'),
+(93, 1001, '2022-07-12 15:42:28', '2022-07-12 15:42:38'),
+(94, 1001, '2022-07-12 15:42:54', '2022-07-12 15:42:59'),
+(95, 1001, '2022-07-12 15:54:06', '0000-00-00 00:00:00'),
+(96, 1001, '2022-07-13 13:51:20', '0000-00-00 00:00:00');
 
 -- --------------------------------------------------------
 
@@ -269,10 +299,10 @@ CREATE TABLE `merchandise` (
 --
 
 INSERT INTO `merchandise` (`item_id`, `item_name`, `item_category`, `item_stock`) VALUES
-(14, 'Blue Cloth', 'Cloth', 320),
+(14, 'Blue Cloth', 'Cloth', 370),
 (15, 'Red Cloth', 'Cloth', 260),
-(16, 'Green Cloth', 'Cloth', 1100),
-(17, 'Blue Button', 'Button', 10),
+(16, 'Green Cloth', 'Cloth', 1010),
+(17, 'Blue Button', 'Button', 32),
 (18, 'Pink Button', 'Button', 1);
 
 -- --------------------------------------------------------
@@ -282,7 +312,7 @@ INSERT INTO `merchandise` (`item_id`, `item_name`, `item_category`, `item_stock`
 --
 
 CREATE TABLE `sales` (
-  `sales_id` int(6) NOT NULL,
+  `sales_id` int(4) UNSIGNED ZEROFILL NOT NULL,
   `account_id` int(6) NOT NULL,
   `sales_date` date NOT NULL,
   `buyer_name` varchar(20) NOT NULL,
@@ -302,9 +332,12 @@ CREATE TABLE `sales` (
 --
 
 INSERT INTO `sales` (`sales_id`, `account_id`, `sales_date`, `buyer_name`, `item_name`, `category`, `price`, `quantity`, `total`, `journal`, `debit`, `credit`, `explanation`) VALUES
-(27, 1001, '2022-06-23', 'Reil', 'Blue Cloth', 'Cloth', 5, 10, 50, 'Assets', 10, 10, 'ew'),
-(28, 2000, '2022-06-23', 'Shio', 'Red Cloth', 'Cloth', 10, 10, 100, 'Liability', 10, 10, 'dwa'),
-(30, 1003, '2022-06-23', 'shio', 'Blue Cloth', 'Cloth', 40, 10, 400, 'Asset', 10, 10, 'dwadaw');
+(0028, 2000, '2022-06-23', 'Shio', 'Red Cloth', 'Cloth', 10, 10, 100, 'Liability', 10, 10, 'dwa'),
+(0031, 1001, '2022-07-09', 'Shio', 'Blue Cloth', 'Cloth', 200, 20, 4000, 'Assets', 10, 10, 'dwdwa'),
+(0033, 1003, '2022-07-10', 'reil', 'Green Cloth', 'Cloth', 50, 100, 5000, 'Asset', 10, 10, 'dwadw'),
+(0034, 2000, '2022-07-12', 'kei', 'Blue Cloth', 'Cloth', 100, 20, 2000, 'Liability', 11, 11, 'dwad'),
+(0035, 1001, '2022-07-12', 'fang', 'Blue Cloth', 'Cloth', 100, 10, 1000, 'Assets', 11, 11, 'dwadwa'),
+(0036, 2000, '2022-07-12', 'fang', 'Green Cloth', 'Cloth', 100, 10, 1000, 'Liability', 11, 11, 'dwa');
 
 -- --------------------------------------------------------
 
@@ -313,7 +346,7 @@ INSERT INTO `sales` (`sales_id`, `account_id`, `sales_date`, `buyer_name`, `item
 --
 
 CREATE TABLE `stock` (
-  `stock_id` int(6) NOT NULL,
+  `stock_id` int(4) UNSIGNED ZEROFILL NOT NULL,
   `stock_date` date NOT NULL,
   `supplier_name` varchar(20) NOT NULL,
   `item_id` int(6) NOT NULL,
@@ -329,21 +362,31 @@ CREATE TABLE `stock` (
 --
 
 INSERT INTO `stock` (`stock_id`, `stock_date`, `supplier_name`, `item_id`, `category`, `price`, `quantity`, `total`, `stock_status`) VALUES
-(10, '2022-06-23', 'Reil', 15, 'Cloth', 50, 10, 500, 'out'),
-(11, '2022-06-23', 'shiori', 14, 'Cloth', 5, 100, 500, 'in'),
-(12, '2022-06-23', 'Reil', 15, 'Cloth', 5, 10, 50, 'out'),
-(13, '2022-06-23', 'shiori', 14, 'Cloth', 10, 100, 1000, 'in'),
-(14, '2022-06-23', 'shiori', 15, 'Cloth', 10, 10, 100, 'in'),
-(15, '2022-06-23', 'shiori', 14, 'Cloth', 50, 100, 5000, 'in'),
-(16, '2022-06-23', 'shiori', 15, 'Cloth', 50, 100, 5000, 'in'),
-(17, '2022-06-23', 'Reil', 14, 'Cloth', 5, 10, 50, 'out'),
-(18, '2022-06-23', 'Shio', 15, 'Cloth', 10, 10, 100, 'out'),
-(19, '2022-06-23', 'shiori', 15, 'Cloth', 20, 100, 2000, 'in'),
-(20, '2022-06-23', 'Shio', 15, 'Cloth', 10, 10, 100, 'out'),
-(21, '2022-06-23', 'shio', 14, 'Cloth', 40, 10, 400, 'out'),
-(22, '2022-06-23', 'shiori', 15, 'Cloth', 43, 10, 430, 'in'),
-(23, '2022-06-27', 'shiori', 17, 'Button', 5, 10, 50, 'in'),
-(24, '2022-06-27', 'shiori', 18, 'Button', 1, 1, 1, 'in');
+(0010, '2022-06-23', 'Reil', 15, 'Cloth', 50, 10, 500, 'out'),
+(0011, '2022-06-23', 'shiori', 14, 'Cloth', 5, 100, 500, 'in'),
+(0012, '2022-06-23', 'Reil', 15, 'Cloth', 5, 10, 50, 'out'),
+(0013, '2022-06-23', 'shiori', 14, 'Cloth', 10, 100, 1000, 'in'),
+(0014, '2022-06-23', 'shiori', 15, 'Cloth', 10, 10, 100, 'in'),
+(0015, '2022-06-23', 'shiori', 14, 'Cloth', 50, 100, 5000, 'in'),
+(0016, '2022-06-23', 'shiori', 15, 'Cloth', 50, 100, 5000, 'in'),
+(0017, '2022-06-23', 'Reil', 14, 'Cloth', 5, 10, 50, 'out'),
+(0018, '2022-06-23', 'Shio', 15, 'Cloth', 10, 10, 100, 'out'),
+(0019, '2022-06-23', 'shiori', 15, 'Cloth', 20, 100, 2000, 'in'),
+(0020, '2022-06-23', 'Shio', 15, 'Cloth', 10, 10, 100, 'out'),
+(0021, '2022-06-23', 'shio', 14, 'Cloth', 40, 10, 400, 'out'),
+(0022, '2022-06-23', 'shiori', 15, 'Cloth', 43, 10, 430, 'in'),
+(0023, '2022-06-27', 'shiori', 17, 'Button', 5, 10, 50, 'in'),
+(0024, '2022-06-27', 'shiori', 18, 'Button', 1, 1, 1, 'in'),
+(0025, '2022-07-09', 'Shio', 14, 'Cloth', 100, 20, 2000, 'out'),
+(0026, '2022-07-09', 'reil', 14, 'Cloth', 100, 20, 2000, 'out'),
+(0027, '2022-07-09', 'shiori', 14, 'Cloth', 100, 20, 2000, 'in'),
+(0028, '2022-07-10', 'shiori', 14, 'Cloth', 100, 100, 10000, 'in'),
+(0029, '2022-07-10', 'shiori', 16, 'Cloth', 100, 20, 2000, 'in'),
+(0030, '2022-07-10', 'reil', 16, 'Cloth', 50, 100, 5000, 'out'),
+(0031, '2022-07-12', 'kei', 14, 'Cloth', 100, 20, 2000, 'out'),
+(0032, '2022-07-12', 'fang', 14, 'Cloth', 100, 10, 1000, 'out'),
+(0033, '2022-07-12', 'fang', 16, 'Cloth', 100, 10, 1000, 'out'),
+(0034, '2022-07-13', 'shiori', 17, 'Button', 100, 22, 2200, 'in');
 
 -- --------------------------------------------------------
 
@@ -365,10 +408,8 @@ CREATE TABLE `sub` (
 --
 
 INSERT INTO `sub` (`sub_id`, `acc_id`, `transaction_id`, `credit`, `debit`, `type`) VALUES
-(19, 3000, 27, 10, 10, 'sales'),
-(20, 3000, 221, 10, 10, 'inventory'),
-(21, 1001, 221, 10, 10, 'inventory'),
-(22, 3000, 30, 1, 1, 'sales');
+(26, 3000, 227, 20, 20, 'inventory'),
+(27, 2000, 33, 20, 20, 'sales');
 
 -- --------------------------------------------------------
 
@@ -399,10 +440,20 @@ INSERT INTO `supplier` (`supplier_ID`, `supplier_name`, `address`, `contact`) VA
 --
 
 CREATE TABLE `tags` (
-  `tag_id` int(6) NOT NULL,
-  `tag_code` varchar(6) NOT NULL,
+  `tag_code` varchar(5) NOT NULL,
   `tag_name` varchar(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `tags`
+--
+
+INSERT INTO `tags` (`tag_code`, `tag_name`) VALUES
+('1001', 'cloth'),
+('1002', 'button'),
+('GEN', 'general'),
+('INV', 'inventory'),
+('SLS', 'sales');
 
 --
 -- Indexes for dumped tables
@@ -498,7 +549,7 @@ ALTER TABLE `supplier`
 -- Indexes for table `tags`
 --
 ALTER TABLE `tags`
-  ADD PRIMARY KEY (`tag_id`);
+  ADD PRIMARY KEY (`tag_code`);
 
 --
 -- AUTO_INCREMENT for dumped tables
@@ -520,25 +571,25 @@ ALTER TABLE `admin`
 -- AUTO_INCREMENT for table `customer`
 --
 ALTER TABLE `customer`
-  MODIFY `customer_id` int(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
+  MODIFY `customer_id` int(4) UNSIGNED ZEROFILL NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
 
 --
 -- AUTO_INCREMENT for table `general`
 --
 ALTER TABLE `general`
-  MODIFY `general_id` int(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `general_id` int(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT for table `inventory`
 --
 ALTER TABLE `inventory`
-  MODIFY `inventory_id` int(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=225;
+  MODIFY `inventory_id` int(4) UNSIGNED ZEROFILL NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=229;
 
 --
 -- AUTO_INCREMENT for table `logs`
 --
 ALTER TABLE `logs`
-  MODIFY `log_id` int(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=76;
+  MODIFY `log_id` int(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=97;
 
 --
 -- AUTO_INCREMENT for table `merchandise`
@@ -550,31 +601,25 @@ ALTER TABLE `merchandise`
 -- AUTO_INCREMENT for table `sales`
 --
 ALTER TABLE `sales`
-  MODIFY `sales_id` int(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
+  MODIFY `sales_id` int(4) UNSIGNED ZEROFILL NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
 
 --
 -- AUTO_INCREMENT for table `stock`
 --
 ALTER TABLE `stock`
-  MODIFY `stock_id` int(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+  MODIFY `stock_id` int(4) UNSIGNED ZEROFILL NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
 
 --
 -- AUTO_INCREMENT for table `sub`
 --
 ALTER TABLE `sub`
-  MODIFY `sub_id` int(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
+  MODIFY `sub_id` int(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
 
 --
 -- AUTO_INCREMENT for table `supplier`
 --
 ALTER TABLE `supplier`
   MODIFY `supplier_ID` int(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
-
---
--- AUTO_INCREMENT for table `tags`
---
-ALTER TABLE `tags`
-  MODIFY `tag_id` int(6) NOT NULL AUTO_INCREMENT;
 
 --
 -- Constraints for dumped tables

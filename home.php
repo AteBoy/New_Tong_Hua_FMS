@@ -635,62 +635,183 @@
                         <table id = "gen_table">
                             <tr>
                                 <th>Date <i class = "fa fa-sort" onclick="sortTable(0,'journal_table')"></i></th>
-                                <th>Account Title and Explanation</i></th>
-                                <th>Journal Entry ID <i class = "fa fa-sort" onclick="sortTable(2,'journal_table')"></i></th>
+                                <th>Journal Entry ID</i></th>
+                                <th>Accounts <i class = "fa fa-sort" onclick="sortTable(2,'journal_table')"></i></th>
                                 <th>Debit <i class = "fa fa-sort" onclick="sortTable(4,'journal_table')"></i></th>
                                 <th>Credit <i class = "fa fa-sort" onclick="sortTable(5,'journal_table')"></i></th>
                                 <th>Action</th>
                             </tr>
-                            <!-- Contents General Journal -->
                             <?php
-                            include("config.php");
+                                $servername = "localhost";
+                                $username = "root";
+                                $password = "";
+                                $database = "financial_db";
 
-                            // Check connection
-                            if ($connection->connect_error) {
-                                die("Connection failed: " . $connection->connect_error);
-                            }
+                                // Create connection
+                                $connection = new mysqli($servername, $username, $password, $database);
 
-                            // read all row from asset table
-                            $sql = "SELECT
-                                        journal_entry.je_posting_id,
-                                        journal_entry.je_date,
-                                        journal_entry.je_id,
-                                        account.account_name,
-                                        journal_entry.je_amount,
-                                        journal_entry.je_desc
-                                    FROM
-                                        journal_entry
-                                    INNER JOIN account ON journal_entry.je_account_id=account.account_id
-                                    ORDER BY je_posting_id";
-                            $result = $connection->query($sql);
-
-                            if (!$result) {
-                                die("Invalid query: " . $connection->error);
-                            }
-
-                            // read data of each row
-                            while($row = $result->fetch_assoc()) {
-                                if ($row["journal_entry_amount"] > 0){
-                                echo "<tr>
-                                    <td>" . $row["je_date"] . "</td>
-                                    <td>" . $row["account_name"] . "</td>
-                                    <td>" . $row["je_amount"] . "</td>
-                                    <td></td>
-                                </tr>";
+                                // Check connection
+                                if ($connection->connect_error) {
+                                    die("Connection failed: " . $connection->connect_error);
                                 }
-                                else {
-                                echo "<tr>
-                                    <td>" . $row["je_date"] . "</td>
-                                    <td>" . $row["account_name"] . "</td>
-                                    <td></td>
-                                    <td>" . $row["je_amount"]*-1 . "</td>
-                                </tr>";
+
+                                $counter_sql = "SELECT
+                                                    journal_entry.journal_entry_date,
+                                                    journal_entry.journal_entry_id,
+                                                    account.account_name,
+                                                    account.account_type,
+                                                    journal_entry.journal_entry_amount,
+                                                    journal_entry.journal_entry_description
+                                                FROM
+                                                    journal_entry
+                                                INNER JOIN account ON journal_entry.journal_entry_account_id = account.account_id
+                                                ORDER BY
+                                                    journal_entry_id DESC
+                                                LIMIT 1";
+                                $result_counter = $connection->query($counter_sql);
+
+                                while ($row_counter = $result_counter->fetch_assoc()) {
+                                    $counter = str_replace('JS-', ' ', $row_counter["journal_entry_id"]);
+                                    $counter = intval($counter);
+                                    $counter_date = $row_counter["journal_entry_date"];
+                                    $default_journal_counter = $row_counter["journal_entry_id"];
                                 }
-                            }
 
-                            $connection->close();
+                                while ($counter > 0) { 
+                                    $temp_id = str_pad($counter, 6,0, STR_PAD_LEFT);
+                                    $temp_id =  "JS-".$temp_id;
+                                    $j = 1;
 
-                            ?>
+                                    $counter2 = "SELECT COUNT(*)
+                                            FROM
+                                                journal_entry
+                                            WHERE journal_entry_id = '$temp_id'";
+                                    $counter2 = intval($counter2);
+
+                                    $sql = "SELECT
+                                            journal_entry.journal_entry_posting_id,
+                                            journal_entry.journal_entry_date,
+                                            journal_entry.journal_entry_id,
+                                            account.account_name,
+                                            account.account_type,
+                                            journal_entry.journal_entry_amount,
+                                            journal_entry.journal_entry_description
+                                        FROM
+                                            journal_entry
+                                        INNER JOIN account ON journal_entry.journal_entry_account_id=account.account_id
+                                        WHERE journal_entry_id = '$temp_id'";
+                                    $result = $connection->query($sql);
+
+                                    if (!$result) {
+                                        die("Invalid query: " . $connection->error);
+                                    }
+
+                                    // read data of each row
+                                    while($row = $result->fetch_assoc()) {
+                                        if ($j == 1) {
+                                            if ($row["journal_entry_amount"] > 0){
+                                                if ($row["account_type"] == "Asset" || $row["account_type"] == "Expenses") {
+                                                    echo "<tr>
+                                                        <td>" . $row["journal_entry_date"] . "</td>
+                                                        <td>" . $row["journal_entry_id"] . "</td>
+                                                        <td>" . $row["account_name"] . "</td>
+                                                        <td>" . $row["journal_entry_amount"] . "</td>                    
+                                                        <td></td>
+                                                    </tr>";
+                                                }
+                                                else if ($row["account_type"] == "Liability" || $row["account_type"] == "Owners Equity" || $row["account_type"] == "Income") {
+                                                    echo "<tr>
+                                                        <td>" . $row["journal_entry_date"] . "</td>
+                                                        <td>" . $row["journal_entry_id"] . "</td>			                
+                                                        <td>" . $row["account_name"] . "</td>
+                                                        <td></td>
+                                                        <td>" . $row["journal_entry_amount"] . "</td>                    
+                                                    </tr>";	
+                                                }
+                                            }
+                                            elseif ($row["journal_entry_amount"] < 0) {
+                                                if ($row["account_type"] == "Asset" || $row["account_type"] == "Expenses") {
+                                                    echo "<tr>
+                                                        <td>" . $row["journal_entry_date"] . "</td>
+                                                        <td>" . $row["journal_entry_id"] . "</td>		                    
+                                                        <td>" . $row["account_name"] . "</td>
+                                                        <td></td>
+                                                        <td>" . $row["journal_entry_amount"]*-1 . "</td>
+                                                    </tr>";
+                                                }
+                                                else if ($row["account_type"] == "Liability" || $row["account_type"] == "Owners Equity" || $row["account_type"] == "Income") {
+                                                    echo "<tr>
+                                                        <td>" . $row["journal_entry_date"] . "</td>
+                                                        <td>" . $row["journal_entry_id"] . "</td>		                    
+                                                        <td>" . $row["account_name"] . "</td>
+                                                        <td>" . $row["journal_entry_amount"]*-1 . "</td>
+                                                        <td></td>
+                                                    </tr>";
+                                                }
+                                            }
+
+                                            $j = $j + 1;	
+                                        }
+
+                                        else {
+                                            if ($row["journal_entry_amount"] > 0){
+                                                if ($row["account_type"] == "Asset" || $row["account_type"] == "Expenses") {
+                                                    echo "<tr>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td>" . $row["account_name"] . "</td>
+                                                        <td>" . $row["journal_entry_amount"] . "</td>                    
+                                                        <td></td>
+                                                    </tr>";
+                                                }
+                                                else if ($row["account_type"] == "Liability" || $row["account_type"] == "Owners Equity" || $row["account_type"] == "Income") {
+                                                    echo "<tr>
+                                                        <td></td>
+                                                        <td></td>			                
+                                                        <td>" . $row["account_name"] . "</td>
+                                                        <td></td>
+                                                        <td>" . $row["journal_entry_amount"] . "</td>                    
+                                                    </tr>";	
+                                                }
+                                            }
+                                            elseif ($row["journal_entry_amount"] < 0) {
+                                                if ($row["account_type"] == "Asset" || $row["account_type"] == "Expenses") {
+                                                    echo "<tr>
+                                                        <td></td>
+                                                        <td></td>	                    
+                                                        <td>" . $row["account_name"] . "</td>
+                                                        <td></td>
+                                                        <td>" . $row["journal_entry_amount"]*-1 . "</td>
+                                                    </tr>";
+                                                }
+                                                else if ($row["account_type"] == "Liability" || $row["account_type"] == "Owners Equity" || $row["account_type"] == "Income") {
+                                                    echo "<tr>
+                                                        <td></td>
+                                                        <td></td>		                    
+                                                        <td>" . $row["account_name"] . "</td>
+                                                        <td>" . $row["journal_entry_amount"]*-1 . "</td>
+                                                        <td></td>
+                                                    </tr>";
+                                                }
+                                            }
+
+                                            echo "<tr>
+                                                <td></td>
+                                                <td></td>		                    
+                                                <td><i>" . $row["journal_entry_description"] . "</i></td>
+                                                <td></td>
+                                                <td></td>
+                                            </tr>";						 
+
+                                            $j++;          	
+                                        }			
+                                    }
+                                    $counter--;
+                                }
+
+                                $connection->close();
+
+                                ?>
                         </table>
                         <button class = "jrnbtn" id = "add_gen">New Entry</button>
                         <div id="add_general_modal" class="modal">
@@ -700,42 +821,95 @@
                                     <h2>General Entry</h2>
                                 </div>
                                 <div class="modal-body">
-                                    <form action="insert.php" method = "post">
+                                    <form action="insert_general_journal.php" method = "post">
                                         <div class="container">
+                                            <!-- Gen. Account Row 1 -->
                                             <div id = "new_ch1">
                                                 <div style="float:left;margin-right:20px;width: 50%;">
                                                     <label for="gen_acc"><b>Account</b></label>
-                                                    <select name="gen_acc[]" required>
+                                                    <select name="gen_acc[]">
                                                         <option id = "total_ch1" value = "1">Account</option>
                                                         <?php
-                                                            include("config.php");
-                                                            if($connection->connect_error){
-                                                                die("Connection Failed ". $connection->connect_error);
+                                                            $servername = "localhost";
+                                                            $username = "root";
+                                                            $password = "";
+                                                            $database = "financial_db";
+
+                                                            // Create connection
+                                                            $connection = new mysqli($servername, $username, $password, $database);
+
+                                                            // Check connection
+                                                            if ($connection->connect_error) {
+                                                                die("Connection failed: " . $connection->connect_error);
                                                             }
 
-                                                            $sql = "SELECT account_name, account_id FROM account";
+                                                            $sql = "SELECT
+                                                                        account_name
+                                                                    FROM 
+                                                                    account";
+
                                                             $result = $connection->query($sql);
 
-                                                            if(!$result){
-                                                                die("Invalid Query: ". $connection_error);
+                                                            while ($row = $result->fetch_assoc()) {
+                                                                $display_account_name = preg_replace('/(?<!\ )[A-Z][a-z]/', ' $0', $row["account_name"]);
+                                                                echo
+                                                                    "<option value= " . $row["account_name"] . " >" . $display_account_name . " </option>";
                                                             }
 
-                                                            while($row = $result->fetch_assoc()){
-                                                                echo "
-                                                                <option value=".$row["account_id"].">".$row["account_name"]."</option>
-                                                                ";
-                                                            }
                                                             $connection->close();
                                                         ?>
                                                     </select>
                                                 </div>  
                                                 <div style="float:right;width: 22%;">
                                                     <label for="gen_debit">Debit</label>
-                                                    <input type="number" id="gen_debit" name="gen_debit[]" required>
+                                                    <input type="number" id="gen_debit" name="gen_debit[]">
                                                 </div>
                                                 <div style="float:right;margin-right:20px;width: 22%;">
                                                     <label for="gen_credit">Credit</label>
-                                                    <input type="number" id="gen_credit" name="gen_credit[]" required>
+                                                    <input type="number" id="gen_credit" name="gen_credit[]">
+                                                        </div>    
+                                            </div>
+                                            <!-- Gen. Account Row 2 -->
+                                            <div id = "new_ch1">
+                                                <div style="float:left;margin-right:20px;width: 50%;">
+                                                    <select name="gen_acc[]">
+                                                        <option id = "total_ch1" value = "1">Account</option>
+                                                        <?php
+                                                            $servername = "localhost";
+                                                            $username = "root";
+                                                            $password = "";
+                                                            $database = "financial_db";
+
+                                                            // Create connection
+                                                            $connection = new mysqli($servername, $username, $password, $database);
+
+                                                            // Check connection
+                                                            if ($connection->connect_error) {
+                                                                die("Connection failed: " . $connection->connect_error);
+                                                            }
+
+                                                            $sql = "SELECT
+                                                                        account_name
+                                                                    FROM 
+                                                                    account";
+
+                                                            $result = $connection->query($sql);
+
+                                                            while ($row = $result->fetch_assoc()) {
+                                                                $display_account_name = preg_replace('/(?<!\ )[A-Z][a-z]/', ' $0', $row["account_name"]);
+                                                                echo
+                                                                    "<option value= " . $row["account_name"] . " >" . $display_account_name . " </option>";
+                                                            }
+
+                                                            $connection->close();
+                                                        ?>
+                                                    </select>
+                                                </div>  
+                                                <div style="float:right;width: 22%;">
+                                                    <input type="number" id="gen_debit" name="gen_debit[]">
+                                                </div>
+                                                <div style="float:right;margin-right:20px;width: 22%;">
+                                                    <input type="number" id="gen_credit" name="gen_credit[]">
                                                         </div>    
                                             </div>
                                             <div style="float:left;;width: 100%;">
@@ -744,7 +918,7 @@
                                             </div>     
                                             <button type = "button" class = "add_entry" id = "add_gen_acc">Add</button>
                                             <button type = "button" class="remove_entry" id = "remove_gen_acc">remove</button>
-                                            <button type="submit" class="registerbtn" name = "submit_gen">Register</button>
+                                            <button type="submit" class="registerbtn">Register</button>
                                         </div>
                                     </form>
                                 </div>

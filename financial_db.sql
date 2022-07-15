@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.1.1
+-- version 5.2.0
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 13, 2022 at 04:11 PM
--- Server version: 10.4.19-MariaDB
--- PHP Version: 8.0.7
+-- Generation Time: Jul 15, 2022 at 06:54 PM
+-- Server version: 10.4.24-MariaDB
+-- PHP Version: 7.4.29
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -209,12 +209,12 @@ CREATE TABLE `journal` (
 --
 
 CREATE TABLE `journal_entry` (
-  `je_posting_id` varchar(100) NOT NULL,
-  `je_date` date NOT NULL,
-  `je_id` varchar(100) NOT NULL,
-  `je_account_id` int(11) NOT NULL,
-  `je_amount` float NOT NULL,
-  `je_desc` varchar(100) NOT NULL
+  `journal_entry_posting_id` varchar(100) NOT NULL,
+  `journal_entry_date` date NOT NULL,
+  `journal_entry_id` varchar(100) NOT NULL,
+  `journal_entry_account_id` int(11) NOT NULL,
+  `journal_entry_amount` float NOT NULL,
+  `journal_entry_description` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -503,7 +503,8 @@ ALTER TABLE `journal`
 -- Indexes for table `journal_entry`
 --
 ALTER TABLE `journal_entry`
-  ADD PRIMARY KEY (`je_posting_id`);
+  ADD PRIMARY KEY (`journal_entry_posting_id`),
+  ADD KEY `je_account_id` (`journal_entry_account_id`);
 
 --
 -- Indexes for table `logs`

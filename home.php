@@ -197,74 +197,257 @@
                             if($connection->connect_error){
                                 die("Connection Failed ". $connection->connect_error);
                             }
-                            $sql = "SELECT tag_code from tags where tag_name = 'sales'";
-                            $result = $connection->query($sql);
-                            $row = $result->fetch_assoc();
-                            $tag = $row["tag_code"];
-                            $sql = "SELECT * FROM sales";
-                            $result = $connection->query($sql);
+                            
+                            $counter_sql = "SELECT
+                                                    
+                                                    sales.sales_date,
+                                                    sales.buyer_name,      
+                                                    sales.item_name,
+                                                    sales.category,
+                                                    sales.price,
+                                                    sales.quantity,
+                                                    sales.total,
+                                                    sales.sales_amount,
+                                                    sales.sales_entry_id,
+                                                    sales.Explanation,
+                                                    account.account_name,
+                                                    account.account_type
+                                                FROM
+                                                sales
+                                                INNER JOIN account ON sales.account_id = account.account_id
+                                                ORDER BY
+                                                    sales_posting_id DESC
+                                                LIMIT 1";
+                            $result_counter = $connection->query($counter_sql);
+                            while ($row_counter = $result_counter->fetch_assoc()) {
+                                $counter = str_replace('SLS-', ' ', $row_counter["sales_entry_id"]);
+                                $counter = intval($counter);
+                                $counter_date = $row_counter["sales_date"];
+                                $default_journal_counter = $row_counter["sales_entry_id"];
+                            }
+                            while ($counter > 0) { 
+                                $temp_id = str_pad($counter, 6,0, STR_PAD_LEFT);
+                                $temp_id =  "SLS-".$temp_id;
+                                $j = 1;
+                                
+                                $counter2 = "SELECT COUNT(*)
+                                        FROM
+                                            sales
+                                        WHERE sales_entry_id = '$temp_id'";
+                                $counter2 = intval($counter2);
 
-                            if(!$result){
-                                die("Invalid Query: ". $connection_error);
+                                $sql = "SELECT
+                                        sales.sales_posting_id,
+                                        sales.sales_date,
+                                        sales.buyer_name,
+                                        sales.item_name,
+                                        sales.category,
+                                        sales.price,
+                                        sales.quantity,
+                                        sales.total,
+                                        sales.sales_amount,
+                                        sales.sales_entry_id,
+                                        sales.Explanation,
+                                        account.account_name,
+                                        account.account_type,
+                                        sales.explanation
+                                    FROM
+                                    sales
+                                    INNER JOIN account ON sales.account_id=account.account_id
+                                    WHERE sales_entry_id = '$temp_id'";
+                                $result = $connection->query($sql);
+
+                                if (!$result) {
+                                    die("Invalid query: " . $connection->error);
+                                }
+
+                                // read data of each row
+                                $t = mysqli_num_rows($result);
+                                
+                                while($row = $result->fetch_assoc()) {
+                                 
+                                    //echo "<script>alert('');</script>";
+                                    if ($j == 1) {
+                                        
+                                        if ($row["sales_amount"] > 0){
+
+                                            if ($row["account_type"] == "Asset" || $row["account_type"] == "Expenses") {
+                                                echo "<tr>
+                                                    <td>" . $row["sales_entry_id"] . "</td>
+                                                    <td>" . $row["sales_date"] . "</td>
+                                                    <td>" . $row["buyer_name"] . "</td>
+                                                    <td contenteditable='true' id = 'sales:item_name:sales_entry_id:". $row["sales_entry_id"] ."'>" . $row["item_name"] . "</td>
+                                                    <td contenteditable='true' id = 'sales:category:sales_entry_id:". $row["sales_entry_id"] ."'>" . $row["category"] . "</td>
+                                                    <td contenteditable='true' id = 'sales:price:sales_entry_id:". $row["sales_entry_id"] ."'>" . number_format($row["price"],2) . "</td>
+                                                    <td>" . number_format($row["quantity"],0) . "</td>
+                                                    <td>" . number_format($row["total"],2) . "</td>
+                                                    <td>". $row["account_name"] ."</td>
+                                                    <td>" . number_format($row["sales_amount"],2) . "</td>
+                                                    <td></td>";
+                                                    $id = $row["sales_entry_id"];?>
+                                                    <td><a href="delete.php?id=<?php echo $id;?>&table=sales:sales_entry_id"><i class="fa fa-trash-o"></i></a></td>
+                                                <?php "</tr>";
+                                            }
+                                            else if ($row["account_type"] == "Liability" || $row["account_type"] == "Owners Equity" || $row["account_type"] == "Income") {
+                                                echo "<tr>
+                                                    <td>" . $row["sales_entry_id"] . "</td>
+                                                    <td>" . $row["inv_date"] . "</td>
+                                                    <td>" . $row["buyer_name"] . "</td>
+                                                    <td contenteditable='true' id = 'sales:item_name:sales_entry_id:". $row["sales_entry_id"] ."'>" . $row["item_name"] . "</td>
+                                                    <td contenteditable='true' id = 'sales:category:sales_entry_id:". $row["sales_entry_id"] ."'>" . $row["category"] . "</td>
+                                                    <td contenteditable='true' id = 'sales:price:sales_entry_id:". $row["sales_entry_id"] ."'>" . number_format($row["price"],2) . "</td>
+                                                    <td>" . number_format($row["quantity"],0) . "</td>
+                                                    <td>" . number_format($row["total"],2) . "</td>
+                                                    <td>". $row["account_name"] ."<td>
+                                                    <td></td>
+                                                    ";
+                                                    $id = $row["sales_entry_id"];?>
+                                                    <td><a href="delete.php?id=<?php echo $id;?>&table=sales:sales_entry_id"><i class="fa fa-trash-o"></i></a></td>
+                                                <?php "</tr>";
+                                            }
+                                        }
+                                        elseif ($row["sales_amount"] < 0) {
+                                 
+                                            if ($row["account_type"] == "Asset" || $row["account_type"] == "Expenses") {
+                                                echo "<tr>
+                                                    <td>" . $row["sales_entry_id"] . "</td>
+                                                    <td>" . $row["sales_date"] . "</td>
+                                                    <td>" . $row["buyer_name"] . "</td>
+                                                    <td contenteditable='true' id = 'sales:item_name:sales_entry_id:". $row["sales_entry_id"] ."'>" . $row["item_name"] . "</td>
+                                                    <td contenteditable='true' id = 'sales:category:sales_entry_id:". $row["sales_entry_id"] ."'>" . $row["category"] . "</td>
+                                                    <td contenteditable='true' id = 'sales:price:sales_entry_id:". $row["sales_entry_id"] ."'>" . number_format($row["price"],2) . "</td>
+                                                    <td>" . number_format($row["quantity"],0) . "</td>
+                                                    <td>" . number_format($row["total"],2) . "</td>
+                                                    <td>". $row["account_name"] ."</td>
+                                                    <td></td>
+                                                    <td>" . number_format(($row["sales_amount"]*-1),2) . "</td>
+                                                    ";
+                                                    $id = $row["sales_entry_id"];?>
+                                                    <td><a href="delete.php?id=<?php echo $id;?>&table=sales:sales_entry_id"><i class="fa fa-trash-o"></i></a></td>
+                                                <?php "</tr>";
+                                            }
+                                            else if ($row["account_type"] == "Liability" || $row["account_type"] == "Owners Equity" || $row["account_type"] == "Income") {
+                                                echo "<tr>
+                                                    td>" . $row["sales_entry_id"] . "</td>
+                                                    <td>" . $row["sales_date"] . "</td>
+                                                    <td>" . $row["buyer_name"] . "</td>
+                                                    <td contenteditable='true' id = 'sales:item_name:sales_entry_id:". $row["sales_entry_id"] ."'>" . $row["item_name"] . "</td>
+                                                    <td contenteditable='true' id = 'sales:category:sales_entry_id:". $row["sales_entry_id"] ."'>" . $row["category"] . "</td>
+                                                    <td contenteditable='true' id = 'sales:price:sales_entry_id:". $row["sales_entry_id"] ."'>" . number_format($row["price"],2) . "</td>
+                                                    <td>" . number_format($row["quantity"],0) . "</td>
+                                                    <td>" . number_format($row["total"],2) . "</td>
+                                                    <td>". $row["account_name"] ."</td>
+                                                    <td>" . number_format(($row["sales_amount"]*-1),2) . "</td>
+                                                    <td></td>";
+                                                    $id = $row["sales_entry_id"];?>
+                                                    <td><a href="delete.php?id=<?php echo $id;?>&table=sales:sales_entry_id"><i class="fa fa-trash-o"></i></a></td>
+                                                <?php "</tr>";
+                                            }
+                                        }
+
+                                        $j = $j + 1;	
+                                    }
+
+                                    else {
+                                        if ($row["sales_amount"] > 0){
+                                            if ($row["account_type"] == "Asset" || $row["account_type"] == "Expenses") {
+                                                echo "<tr>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td>" . $row["account_name"] . "</td>
+                                                    <td>" . number_format($row["sales_amount"],2) . "</td>                    
+                                                    <td></td>
+                                                </tr>";
+                                            }
+                                            else if ($row["account_type"] == "Liability" || $row["account_type"] == "Owners Equity" || $row["account_type"] == "Income") {
+                                                echo "<tr>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>		                
+                                                    <td>" . $row["account_name"] . "</td>
+                                                    <td></td>
+                                                    <td>" . number_format($row["sales_amount"],2) . "</td>                    
+                                                </tr>";	
+                                            }
+                                        }
+                                        elseif ($row["sales_amount"] < 0) {
+                                            if ($row["account_type"] == "Asset" || $row["account_type"] == "Expenses") {
+                                                echo "<tr>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>                    
+                                                    <td>" . $row["account_name"] . "</td>
+                                                    <td></td>
+                                                    <td>" . number_format(($row["sales_amount"]*-1),2) . "</td>
+                                                </tr>";
+                                            }
+                                            else if ($row["account_type"] == "Liability" || $row["account_type"] == "Owners Equity" || $row["account_type"] == "Income") {
+                                                echo "<tr>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>	                    
+                                                    <td>" . $row["account_name"] . "</td>
+                                                    <td>" . number_format(($row["sales_amount"]*-1),2) . "</td>
+                                                    <td></td>
+                                                </tr>";
+                                            }
+                                        }
+              
+                                        if($j == $t){
+                                            echo "<tr>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>	                    
+                                            <td><i>" . $row["explanation"] . "</i></td>
+                                            <td></td>
+                                            <td></td>
+                                        </tr>";		
+                                        }
+                                        $j++;          	
+                                    }			
+                                }
+                                $counter--;
                             }
 
-                            while($row = $result->fetch_assoc()){
-                                echo "<tr>
-                                    
-                                    <td>". $tag ."-" . $row["sales_id"] . "</td>
-                                    <td>" . $row["sales_date"] . "</td>
-                                    <td contenteditable='true' id = 'sales:buyer_name:sales_id:". $row["sales_id"] ."'>" . $row["buyer_name"] . "</td>
-                                    <td contenteditable='true' id = 'sales:item_name:sales_id:". $row["sales_id"] ."'>" . $row["item_name"] . "</td>
-                                    <td contenteditable='true' id = 'sales:category:sales_id:". $row["sales_id"] ."'>" . $row["category"] . "</td>
-                                    <td contenteditable='true' id = 'sales:price:sales_id:". $row["sales_id"] ."'>" . number_format($row["price"],2) . "</td>
-                                    <td>" . $row["quantity"] . "</td>
-                                    <td> " . number_format($row["total"],0) . "</td>
-                                    <td  contenteditable='true' id = 'sales:journal:sales_id:". $row["sales_id"] ."'>" . $row["journal"] . "</td>
-                                    <td>" . number_format($row["debit"],2) . "</td>
-                                    <td>" . number_format($row["credit"],2) . "</td>
-                                    ";$id = $row["sales_id"];?>
-                                    
-                                    <td><a href="delete.php?id=<?php echo $id;?>&table=sales:sales_id"><i class="fa fa-trash-o"></i></a></td>
-                               </tr><?php
-                               $sql = "SELECT * FROM sub where transaction_id = $id";
-                               $results = $connection->query($sql);
-                               if($results){
-                                   if(mysqli_num_rows($results) > 0){
-                                       while($row = $results->fetch_assoc()){
-
-                                           echo "<tr>
-                                           <td></td>
-                                           <td></td>
-                                           <td></td>
-                                           <td></td>
-                                           <td></td>
-                                           <td></td>
-                                           <td></td>
-                                           <td></td>
-                                           <td></td>
-                                           <td>" . number_format($row["debit"] ,2). "</td>
-                                           <td>" . number_format($row["credit"],2) . "</td>
-                                           
-                                           </tr>";
-                                           $sub = $row["sub_id"];
-                                           
-                                       }
-                                   }
-                               }
-                           }
-                           ?>
-                           <?php 
+                            $connection->close();
+                             
                                 include("config.php");
 
                                 if($connection->connect_error){
                                     die("Connection Failed ". $connection->connect_error);
                                 }
     
-                                $sql = "SELECT format(sum(price),2) price, format(sum(quantity),2) quantity, format(sum(total),0) total FROM sales";
+                                $sql = "SELECT format(sum(price),2) price, format(sum(quantity),0) quantity, format(sum(total),2) total, sum(debit) debit,sum(credit) credit FROM sales";
                                 $result = $connection->query($sql);
                                 $row = $result->fetch_assoc();
-
-                                echo "<tr  id = 'tr_bold'>
+                               
+                                echo "<tr id = 'tr_bold'>
                                     <td>Total</td>
                                     <td></td>
                                     <td></td>
@@ -273,18 +456,16 @@
                                     <td>". $row["price"] ."</td>
                                     <td>". $row["quantity"] ."</td>
                                     <td>". $row["total"] ."</td>
-                                    <td></td>";
-                                    $sql = "SELECT format(SUM(t.credit),2) credit, format(sum(t.debit),2) debit FROM (SELECT credit, debit FROM sales UNION ALL SELECT credit, debit FROM sub where type = 'sales') t";
-                                    $result = $connection->query($sql);
-                                    $row = $result->fetch_assoc();
-                                    echo"
-                                        <td>". $row["debit"] ."</td>
-                                        <td>". $row["credit"] ."</td>
-                                        <td></td>
+                                    <td></td>
                                     
-                                </tr>";
+                                    <td>". number_format($row["debit"],2) ."</td>
+                                    <td>". number_format(($row["credit"]*-1),2) ."</td>
+                                    <td></td>";
+                                
                                 $connection->close();
+                           
                             ?>
+                       
                        </table>
                     </div>
                     <div id="add_sales_modal" class="modal">
@@ -294,7 +475,7 @@
                                 <h2>Sales Entry</h2>
                             </div>
                             <div class="modal-body">
-                                <form action="insert.php" method = "post">
+                                <form action="insert_sales.php?id=sales:sales_posting_id:sales_entry_id" method = "post">
                                     <div class="container">
                                         <div id = "new_ch3">
                                             <div style="float:left;margin-right:20px;width: 50%;">
@@ -325,11 +506,47 @@
                                             </div>
                                             <div style="float:right;width: 22%;">
                                                 <label for="sales_debit">Debit</label>
-                                                <input type="number" id="sales_debit" name="sales_debit[]" required>
+                                                <input type="number" id="sales_debit" name="sales_debit[]">
                                             </div>
                                             <div style="float:right;margin-right:20px;width: 22%;">
                                                 <label for="sales_credit">Credit</label>
-                                                <input type="number" id="sales_credit" name="sales_credit[]" required>
+                                                <input type="number" id="sales_credit" name="sales_credit[]">
+                                            </div>
+                                        </div>
+                                        <div id = "new_ch3">
+                                            <div style="float:left;margin-right:20px;width: 50%;">
+                                                <label for="sales_acc"><b>Account ID</b></label>
+                                                <select name="sales_acc[]" required>
+                                                <option id = "total_ch3" value = "1">Account</option>
+                                                <?php
+                                                    include("config.php");
+                                                    if($connection->connect_error){
+                                                        die("Connection Failed ". $connection->connect_error);
+                                                    }
+
+                                                    $sql = "SELECT account_id, account_name FROM account";
+                                                    $result = $connection->query($sql);
+
+                                                    if(!$result){
+                                                        die("Invalid Query: ". $connection_error);
+                                                    }
+
+                                                    while($row = $result->fetch_assoc()){
+                                                        echo "
+                                                    <option value=".$row["account_id"].">".$row["account_name"]."</option>
+                                                    ";
+                                                    }
+                                                    $connection->close();
+                                                ?>
+                                                </select>
+                                            </div>
+                                            <div style="float:right;width: 22%;">
+                                                <label for="sales_debit">Debit</label>
+                                                <input type="number" id="sales_debit" name="sales_debit[]">
+                                            </div>
+                                            <div style="float:right;margin-right:20px;width: 22%;">
+                                                <label for="sales_credit">Credit</label>
+                                                <input type="number" id="sales_credit" name="sales_credit[]">
                                             </div>
                                         </div>
                                         <div style="float:left;;width: 100%;">
@@ -414,72 +631,253 @@
                             if($connection->connect_error){
                                 die("Connection Failed ". $connection->connect_error);
                             }
-                            $sql = "SELECT tag_code from tags where tag_name = 'inventory'";
-                            $result = $connection->query($sql);
-                            $row = $result->fetch_assoc();
-                            $tag = $row["tag_code"];
-                            $sql = "SELECT inventory_id, inv_date, supplier_name, item_name, category, price, quantity, total, journal, debit, credit FROM inventory, supplier where inventory.supplier_id = supplier.supplier_id";
-                            $result = $connection->query($sql);
-
-                            if(!$result){
-                                die("Invalid Query: ". $connection_error);
+                            
+                            //$sql = "SELECT inventory_id, inv_date, supplier_name, item_name, category, price, quantity, total, debit, credit FROM inventory, supplier where inventory.supplier_id = supplier.supplier_id";
+                            $counter_sql = "SELECT
+                                                    
+                                                    inventory.inv_date,
+                                                    supplier.supplier_name,
+                                                    inventory.item_name,
+                                                    inventory.category,
+                                                    inventory.price,
+                                                    inventory.quantity,
+                                                    inventory.total,
+                                                    inventory.inv_amount,
+                                                    inventory.inventory_entry_id,
+                                                    inventory.Explanation,
+                                                    account.account_name,
+                                                    account.account_type
+                                                FROM
+                                                    inventory
+                                                INNER JOIN account ON inventory.account_id = account.account_id
+                                                INNER JOIN supplier ON inventory.supplier_id = supplier.supplier_id
+                                                ORDER BY
+                                                    inventory_posting_id DESC
+                                                LIMIT 1";
+                            $result_counter = $connection->query($counter_sql);
+                            while ($row_counter = $result_counter->fetch_assoc()) {
+                                $counter = str_replace('INV-', ' ', $row_counter["inventory_entry_id"]);
+                                $counter = intval($counter);
+                                $counter_date = $row_counter["inv_date"];
+                                $default_journal_counter = $row_counter["inventory_entry_id"];
                             }
+                            while ($counter > 0) { 
+                                $temp_id = str_pad($counter, 6,0, STR_PAD_LEFT);
+                                $temp_id =  "INV-".$temp_id;
+                                $j = 1;
+                                
+                                $counter2 = "SELECT COUNT(*)
+                                        FROM
+                                            inventory
+                                        WHERE inventory_entry_id = '$temp_id'";
+                                $counter2 = intval($counter2);
 
-                            while($row = $result->fetch_assoc()){
-                                echo "<tr>
-                                    <td>". $tag ."-". + $row["inventory_id"] . "</td>
-                                    <td>" . $row["inv_date"] . "</td>
-                                    <td>" . $row["supplier_name"] . "</td>
-                                    <td contenteditable='true' id = 'inventory:item_name:inventory_id:". $row["inventory_id"] ."'>" . $row["item_name"] . "</td>
-                                    <td contenteditable='true' id = 'inventory:category:inventory_id:". $row["inventory_id"] ."'>" . $row["category"] . "</td>
-                                    <td contenteditable='true' id = 'inventory:price:inventory_id:". $row["inventory_id"] ."'>" . $row["price"] . "</td>
-                                    <td>" . number_format($row["quantity"],0) . "</td>
-                                    <td>" . number_format($row["total"],2) . "</td>
-                                    <td contenteditable='true' id = 'inventory:journal:inventory_id:". $row["inventory_id"] ."'>" . $row["journal"] . "</td>
-                                    <td>" . number_format($row["debit"],2) . "</td>
-                                    <td>" . number_format($row["credit"],2) . "</td>
-                                    
-                                    ";$id = $row["inventory_id"];
-                                   
-                                    ?><td><a href="delete.php?id=<?php echo $id;?>&table=inventory:inventory_id"><i class="fa fa-trash-o"></i></a></td>
-                                    </tr>
-                                    <?php
-                                    $sql = "SELECT * FROM sub where transaction_id = $id";
-                                    $results = $connection->query($sql);
-                                    if($results){
-                                        if(mysqli_num_rows($results) > 0){
-                                            while($row = $results->fetch_assoc()){
+                                $sql = "SELECT
+                                        inventory.inventory_posting_id,
+                                        inventory.inv_date,
+                                        supplier.supplier_name,
+                                        inventory.item_name,
+                                        inventory.category,
+                                        inventory.price,
+                                        inventory.quantity,
+                                        inventory.total,
+                                        inventory.inv_amount,
+                                        inventory.inventory_entry_id,
+                                        inventory.Explanation,
+                                        account.account_name,
+                                        account.account_type,
+                                        inventory.explanation
+                                    FROM
+                                        inventory
+                                    INNER JOIN account ON inventory.account_id=account.account_id
+                                    INNER JOIN supplier ON inventory.supplier_id = supplier.supplier_id
+                                    WHERE inventory_entry_id = '$temp_id'";
+                                $result = $connection->query($sql);
 
+                                if (!$result) {
+                                    die("Invalid query: " . $connection->error);
+                                }
+
+                                // read data of each row
+                                $t = mysqli_num_rows($result);
+                                
+                                while($row = $result->fetch_assoc()) {
+                                 
+                                    //echo "<script>alert('');</script>";
+                                    if ($j == 1) {
+                                        if ($row["inv_amount"] > 0){
+                                            if ($row["account_type"] == "Asset" || $row["account_type"] == "Expenses") {
                                                 echo "<tr>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td>" . number_format($row["debit"],2) . "</td>
-                                                <td>" . number_format($row["credit"],2) . "</td>
-                                                <td></td>
-                                                
-                                                </tr>";
-                                                $sub = $row["sub_id"];
-                                                
+                                                    <td>" . $row["inventory_entry_id"] . "</td>
+                                                    <td>" . $row["inv_date"] . "</td>
+                                                    <td>" . $row["supplier_name"] . "</td>
+                                                    <td contenteditable='true' id = 'inventory:item_name:inventory_entry_id:". $row["inventory_entry_id"] ."'>" . $row["item_name"] . "</td>
+                                                    <td contenteditable='true' id = 'inventory:category:inventory_entry_id:". $row["inventory_entry_id"] ."'>" . $row["category"] . "</td>
+                                                    <td contenteditable='true' id = 'inventory:price:inventory_entry_id:". $row["inventory_entry_id"] ."'>" . number_format($row["price"],2) . "</td>
+                                                    <td>" . number_format($row["quantity"],0) . "</td>
+                                                    <td>" . number_format($row["total"],2) . "</td>
+                                                    <td>". $row["account_name"] ."</td>
+                                                    <td>" . number_format($row["inv_amount"],2) . "</td>
+                                                    <td></td>";
+                                                    $id = $row["inventory_entry_id"];?>
+                                                    <td><a href="delete.php?id=<?php echo $id;?>&table=inventory:inventory_entry_id"><i class="fa fa-trash-o"></i></a></td>
+                                                <?php "</tr>";
+                                            }
+                                            else if ($row["account_type"] == "Liability" || $row["account_type"] == "Owners Equity" || $row["account_type"] == "Income") {
+                                                echo "<tr>
+                                                    <td>" . $row["inventory_entry_id"] . "</td>
+                                                    <td>" . $row["inv_date"] . "</td>
+                                                    <td>" . $row["supplier_name"] . "</td>
+                                                    <td contenteditable='true' id = 'inventory:item_name:inventory_entry_id:". $row["inventory_entry_id"] ."'>" . $row["item_name"] . "</td>
+                                                    <td contenteditable='true' id = 'inventory:category:inventory_entry_id:". $row["inventory_entry_id"] ."'>" . $row["category"] . "</td>
+                                                    <td contenteditable='true' id = 'inventory:price:inventory_entry_id:". $row["inventory_entry_id"] ."'>" . number_format($row["price"],2) . "</td>
+                                                    <td>" . number_format($row["quantity"],0) . "</td>
+                                                    <td>" . number_format($row["total"],2) . "</td>
+                                                    <td>". $row["account_name"] ."<td>
+                                                    <td></td>
+                                                    ";
+                                                    $id = $row["inventory_entry_id"];?>
+                                                    <td><a href="delete.php?id=<?php echo $id;?>&table=inventory:inventory_entry_id"><i class="fa fa-trash-o"></i></a></td>
+                                                <?php "</tr>";
                                             }
                                         }
+                                        elseif ($row["inv_amount"] < 0) {
+                                            if ($row["account_type"] == "Asset" || $row["account_type"] == "Expenses") {
+                                                echo "<tr>
+                                                    <td>" . $row["inventory_entry_id"] . "</td>
+                                                    <td>" . $row["inv_date"] . "</td>
+                                                    <td>" . $row["supplier_name"] . "</td>
+                                                    <td contenteditable='true' id = 'inventory:item_name:inventory_entry_id:". $row["inventory_entry_id"] ."'>" . $row["item_name"] . "</td>
+                                                    <td contenteditable='true' id = 'inventory:category:inventory_entry_id:". $row["inventory_entry_id"] ."'>" . $row["category"] . "</td>
+                                                    <td contenteditable='true' id = 'inventory:price:inventory_entry_id:". $row["inventory_entry_id"] ."'>" . number_format($row["price"],2) . "</td>
+                                                    <td>" . number_format($row["quantity"],0) . "</td>
+                                                    <td>" . number_format($row["total"],2) . "</td>
+                                                    <td>". $row["account_name"] ."</td>
+                                                    <td></td>
+                                                    <td>" . number_format(($row["inv_amount"]*-1),2) . "</td>
+                                                    ";
+                                                    $id = $row["inventory_entry_id"];?>
+                                                    <td><a href="delete.php?id=<?php echo $id;?>&table=inventory:inventory_entry_id"><i class="fa fa-trash-o"></i></a></td>
+                                                <?php "</tr>";
+                                            }
+                                            else if ($row["account_type"] == "Liability" || $row["account_type"] == "Owners Equity" || $row["account_type"] == "Income") {
+                                                echo "<tr>
+                                                    <td>" . $row["inventory_entry_id"] . "</td>
+                                                    <td>" . $row["inv_date"] . "</td>
+                                                    <td>" . $row["supplier_name"] . "</td>
+                                                    <td contenteditable='true' id = 'inventory:item_name:inventory_entry_id:". $row["inventory_entry_id"] ."'>" . $row["item_name"] . "</td>
+                                                    <td contenteditable='true' id = 'inventory:category:inventory_entry_id:". $row["inventory_entry_id"] ."'>" . $row["category"] . "</td>
+                                                    <td contenteditable='true' id = 'inventory:price:inventory_entry_id:". $row["inventory_entry_id"] ."'>" . number_format($row["price"],2) . "</td>
+                                                    <td>" . number_format($row["quantity"],0) . "</td>
+                                                    <td>" . number_format($row["total"],2) . "</td>
+                                                    <td>". $row["account_name"] ."</td>
+                                                    <td>" . number_format(($row["inv_amount"]*-1),2) . "</td>
+                                                    <td></td>";
+                                                    $id = $row["inventory_entry_id"];?>
+                                                    <td><a href="delete.php?id=<?php echo $id;?>&table=inventory:inventory_entry_id"><i class="fa fa-trash-o"></i></a></td>
+                                                <?php "</tr>";
+                                            }
+                                        }
+
+                                        $j = $j + 1;	
                                     }
+
+                                    else {
+                                        if ($row["inv_amount"] > 0){
+                                            if ($row["account_type"] == "Asset" || $row["account_type"] == "Expenses") {
+                                                echo "<tr>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td>" . $row["account_name"] . "</td>
+                                                    <td>" . number_format($row["inv_amount"],2) . "</td>                    
+                                                    <td></td>
+                                                </tr>";
+                                            }
+                                            else if ($row["account_type"] == "Liability" || $row["account_type"] == "Owners Equity" || $row["account_type"] == "Income") {
+                                                echo "<tr>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>		                
+                                                    <td>" . $row["account_name"] . "</td>
+                                                    <td></td>
+                                                    <td>" . number_format($row["inv_amount"],2) . "</td>                    
+                                                </tr>";	
+                                            }
+                                        }
+                                        elseif ($row["inv_amount"] < 0) {
+                                            if ($row["account_type"] == "Asset" || $row["account_type"] == "Expenses") {
+                                                echo "<tr>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>                    
+                                                    <td>" . $row["account_name"] . "</td>
+                                                    <td></td>
+                                                    <td>" . number_format(($row["inv_amount"]*-1),2) . "</td>
+                                                </tr>";
+                                            }
+                                            else if ($row["account_type"] == "Liability" || $row["account_type"] == "Owners Equity" || $row["account_type"] == "Income") {
+                                                echo "<tr>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>	                    
+                                                    <td>" . $row["account_name"] . "</td>
+                                                    <td>" . number_format(($row["inv_amount"]*-1),2) . "</td>
+                                                    <td></td>
+                                                </tr>";
+                                            }
+                                        }
+              
+                                        if($j == $t){
+                                            echo "<tr>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>	                    
+                                            <td><i>" . $row["explanation"] . "</i></td>
+                                            <td></td>
+                                            <td></td>
+                                        </tr>";		
+                                        }
+                                        $j++;          	
+                                    }			
+                                }
+                                $counter--;
                             }
-                            ?>
-                            <?php 
+
+                            $connection->close();
+                             
                                 include("config.php");
 
                                 if($connection->connect_error){
                                     die("Connection Failed ". $connection->connect_error);
                                 }
     
-                                $sql = "SELECT format(sum(price),2) price, format(sum(quantity),0) quantity, format(sum(total),2) total FROM inventory";
+                                $sql = "SELECT format(sum(price),2) price, format(sum(quantity),0) quantity, format(sum(total),2) total, sum(debit) debit,sum(credit) credit FROM inventory";
                                 $result = $connection->query($sql);
                                 $row = $result->fetch_assoc();
                                
@@ -492,18 +890,16 @@
                                     <td>". $row["price"] ."</td>
                                     <td>". $row["quantity"] ."</td>
                                     <td>". $row["total"] ."</td>
-                                    <td></td>";
-                                $sql = "SELECT SUM(t.credit) credit, sum(t.debit) debit FROM (SELECT credit, debit FROM inventory UNION ALL SELECT credit, debit FROM sub where type = 'inventory') t";
-                                $result = $connection->query($sql);
-                                $row = $result->fetch_assoc();
-                                echo"
-                                    <td>". $row["debit"] ."</td>
-                                    <td>". $row["credit"] ."</td>
+                                    <td></td>
                                     
+                                    <td>". number_format($row["debit"],2) ."</td>
+                                    <td>". number_format(($row["credit"]*-1),2) ."</td>
+                                    <td></td>";
                                 
-                                </tr>";
                                 $connection->close();
+                           
                             ?>
+                            
                         </table>
                     </div>
                     <div id="add_inv_modal" class="modal">
@@ -513,7 +909,7 @@
                                 <h2>Inventory Entry</h2>
                             </div>
                             <div class="modal-body">
-                                <form action="insert.php" method = "post">
+                                <form action="insert_inventory.php" method = "post">
                                     <div class="container">
                                         <div id = "new_ch2">
                                             <div style="float:left;margin-right:20px;width: 50%;">
@@ -544,13 +940,48 @@
                                             </div>
                                             <div style="float:right;width: 22%;">
                                                 <label for="inv_debit">Debit</label>
-                                                <input type="number" id="inv_debit" name="inv_debit[]" required>
+                                                <input type="number" id="inv_debit" name="inv_debit[]">
                                             </div>
 
                                             <div style="float:right;margin-right:20px;width: 22%;">
                                                 <label for="inv_credit">Credit</label>
-                                                <input type="number" id="inv_credit" name="inv_credit[]" required>
+                                                <input type="number" id="inv_credit" name="inv_credit[]">
                                             </div>
+                                        </div>
+                                        <div id = "new_ch2">
+                                                <div style="float:left;margin-right:20px;width: 50%;">
+                                                    <select name="inv_acc[]">
+                                                        <option id = "total_ch2" value = "1">Account</option>
+                                                        <?php
+                                                            include("config.php");
+                                                            // Check connection
+                                                            if ($connection->connect_error) {
+                                                                die("Connection failed: " . $connection->connect_error);
+                                                            }
+
+                                                            $sql = "SELECT
+                                                                        account_name
+                                                                    FROM 
+                                                                    account";
+
+                                                            $result = $connection->query($sql);
+
+                                                            while ($row = $result->fetch_assoc()) {
+                                                                $display_account_name = preg_replace('/(?<!\ )[A-Z][a-z]/', ' $0', $row["account_name"]);
+                                                                echo
+                                                                    "<option value= " . $row["account_name"] . " >" . $display_account_name . " </option>";
+                                                            }
+
+                                                            $connection->close();
+                                                        ?>
+                                                    </select>
+                                                </div>  
+                                                <div style="float:right;width: 22%;">
+                                                    <input type="number" id="inv_debit" name="inv_debit[]">
+                                                </div>
+                                                <div style="float:right;margin-right:20px;width: 22%;">
+                                                    <input type="number" id="inv_credit" name="inv_credit[]">
+                                                </div>    
                                         </div>
                                         <div style="float:left;;width: 100%;">
                                             <label for="inv_exp"><b>Explanation</b></label>
@@ -641,14 +1072,8 @@
                                 <th>Credit <i class = "fa fa-sort" onclick="sortTable(5,'journal_table')"></i></th>
                                 <th>Action</th>
                             </tr>
-                            <?php
-                                $servername = "localhost";
-                                $username = "root";
-                                $password = "";
-                                $database = "financial_db";
-
-                                // Create connection
-                                $connection = new mysqli($servername, $username, $password, $database);
+                            <?php 
+                                include("config.php");
 
                                 // Check connection
                                 if ($connection->connect_error) {
@@ -676,7 +1101,7 @@
                                     $counter_date = $row_counter["journal_entry_date"];
                                     $default_journal_counter = $row_counter["journal_entry_id"];
                                 }
-
+                                
                                 while ($counter > 0) { 
                                     $temp_id = str_pad($counter, 6,0, STR_PAD_LEFT);
                                     $temp_id =  "JS-".$temp_id;
@@ -707,7 +1132,11 @@
                                     }
 
                                     // read data of each row
+                                    $t = mysqli_num_rows($result);
+                                    
                                     while($row = $result->fetch_assoc()) {
+                                     
+                                        //echo "<script>alert('');</script>";
                                         if ($j == 1) {
                                             if ($row["journal_entry_amount"] > 0){
                                                 if ($row["account_type"] == "Asset" || $row["account_type"] == "Expenses") {
@@ -716,17 +1145,21 @@
                                                         <td>" . $row["journal_entry_id"] . "</td>
                                                         <td>" . $row["account_name"] . "</td>
                                                         <td>" . $row["journal_entry_amount"] . "</td>                    
-                                                        <td></td>
-                                                    </tr>";
+                                                        <td></td>";
+                                                        $id = $row["journal_entry_id"];?>
+                                                        <td><a href="delete.php?id=<?php echo $id;?>&table=journal_entry:journal_entry_id"><i class="fa fa-trash-o"></i></a></td>
+                                                    <?php "</tr>";
                                                 }
                                                 else if ($row["account_type"] == "Liability" || $row["account_type"] == "Owners Equity" || $row["account_type"] == "Income") {
                                                     echo "<tr>
                                                         <td>" . $row["journal_entry_date"] . "</td>
                                                         <td>" . $row["journal_entry_id"] . "</td>			                
                                                         <td>" . $row["account_name"] . "</td>
-                                                        <td></td>
-                                                        <td>" . $row["journal_entry_amount"] . "</td>                    
-                                                    </tr>";	
+                                                        <td></td>";
+                                                        $id = $row["journal_entry_id"];
+                                                        ?>
+                                                        <td><a href="delete.php?id=<?php echo $id;?>&table=journal_entry:journal_entry_id"><i class="fa fa-trash-o"></i></a></td>
+                                                    <?php "</tr>";
                                                 }
                                             }
                                             elseif ($row["journal_entry_amount"] < 0) {
@@ -736,8 +1169,11 @@
                                                         <td>" . $row["journal_entry_id"] . "</td>		                    
                                                         <td>" . $row["account_name"] . "</td>
                                                         <td></td>
-                                                        <td>" . $row["journal_entry_amount"]*-1 . "</td>
-                                                    </tr>";
+                                                        <td>" . $row["journal_entry_amount"]*-1 . "</td>";
+                                                        $id = $row["journal_entry_id"];
+                                                        ?>
+                                                        <td><a href="delete.php?id=<?php echo $id;?>&table=journal_entry:journal_entry_id"><i class="fa fa-trash-o"></i></a></td>
+                                                    <?php "</tr>";
                                                 }
                                                 else if ($row["account_type"] == "Liability" || $row["account_type"] == "Owners Equity" || $row["account_type"] == "Income") {
                                                     echo "<tr>
@@ -745,8 +1181,10 @@
                                                         <td>" . $row["journal_entry_id"] . "</td>		                    
                                                         <td>" . $row["account_name"] . "</td>
                                                         <td>" . $row["journal_entry_amount"]*-1 . "</td>
-                                                        <td></td>
-                                                    </tr>";
+                                                        <td></td>";
+                                                        $id = $row["journal_entry_id"];?>
+                                                        <td><a href="delete.php?id=<?php echo $id;?>&table=journal_entry:journal_entry_id"><i class="fa fa-trash-o"></i></a></td>
+                                                    <?php "</tr>";
                                                 }
                                             }
 
@@ -794,15 +1232,16 @@
                                                     </tr>";
                                                 }
                                             }
-
-                                            echo "<tr>
+ 				 
+                                            if($j == $t){
+                                                echo "<tr>
                                                 <td></td>
                                                 <td></td>		                    
                                                 <td><i>" . $row["journal_entry_description"] . "</i></td>
                                                 <td></td>
                                                 <td></td>
-                                            </tr>";						 
-
+                                            </tr>";		
+                                            }
                                             $j++;          	
                                         }			
                                     }
@@ -830,14 +1269,7 @@
                                                     <select name="gen_acc[]">
                                                         <option id = "total_ch1" value = "1">Account</option>
                                                         <?php
-                                                            $servername = "localhost";
-                                                            $username = "root";
-                                                            $password = "";
-                                                            $database = "financial_db";
-
-                                                            // Create connection
-                                                            $connection = new mysqli($servername, $username, $password, $database);
-
+                                                            include("config.php");
                                                             // Check connection
                                                             if ($connection->connect_error) {
                                                                 die("Connection failed: " . $connection->connect_error);
@@ -875,14 +1307,7 @@
                                                     <select name="gen_acc[]">
                                                         <option id = "total_ch1" value = "1">Account</option>
                                                         <?php
-                                                            $servername = "localhost";
-                                                            $username = "root";
-                                                            $password = "";
-                                                            $database = "financial_db";
-
-                                                            // Create connection
-                                                            $connection = new mysqli($servername, $username, $password, $database);
-
+                                                            include("config.php");
                                                             // Check connection
                                                             if ($connection->connect_error) {
                                                                 die("Connection failed: " . $connection->connect_error);
@@ -1084,74 +1509,6 @@
                             <th>Total Collection</th>
                             <th>Account Amount</th>
                         </tr>
-						<?php
-                         /*   $server = "localhost";
-                            $user = "root";
-                            $pass = "";
-                            $db = "financial_db";
-                        
-                            $connection = new mysqli($server, $user, $pass, $db);
-                        
-                            if($connection->connect_error){
-                                die("Connection Failed ". $connection->connect_error);
-                            }
-
-                            $sql = "SELECT * FROM account recievables";
-							
-                            $result = $connection->query($sql);
-
-                            if(!$result){
-                                die("Invalid Query: ". $connection_error);
-                            }
-							
-							$query = "SELECT SUM(Initial Payment) AS sum FROM 'account recievables'";
-							
-							$query_result = mysqli_query($conn , $query);
-							
-							while($row = mysqli_fetch_assoc($query result)){
-								$output = "Total Initial Payment"." ".$row['sum'];
-							}
-							
-							$query = "SELECT SUM(Collection of AR) AS sum2 FROM 'account recievables'";
-							
-							$query_result = mysqli_query($conn , $query);
-							
-							while($row = mysqli_fetch_assoc($query result)){
-								$output2 = "Total Collection of AR"." ".$row['sum2'];
-							}
-							
-							$query = "SELECT SUM(Total Collection) AS sum3 FROM 'account recievables'";
-							
-							$query_result = mysqli_query($conn , $query);
-							
-							while($row = mysqli_fetch_assoc($query result)){
-								$output3 = "Total"." ".$row['sum3'];
-							}
-							
-							$query = "SELECT SUM(Account Amount) AS sum4 FROM 'account recievables'";
-							
-							$query_result = mysqli_query($conn , $query);
-							
-							while($row = mysqli_fetch_assoc($query result)){
-								$output4 = "Total Account Amount"." ".$row['sum4'];
-							}
-
-                            while($row = $result->fetch_assoc()){
-                                echo "<tr>
-                                    <td>" . $row["Account Payable ID"] . "</td>
-                                    <td>" . $row["Inventory ID"] . "</td>
-									<td contenteditable='true' id = 'inventory:item_name:inventory_id:". $row["Inventory ID"] ."'>" . $row["item_name"] . "</td>
-                                    <td>" . $row["Initial Payment"] . "</td>                
-                                    <td>" . $row["Total Collection"] . "</td>
-                                    <td>" . $row["Account Amount"] . "</td>
-                                    
-                                    ";$id = $row["account recievables"];?>
-                                    
-                                     <td><a href="delete.php?id=<?php echo $id;?>&table=account recievables"><i class="fa fa-trash-o"></i></a></td>
-                                </tr><?php
-								
-                            }
-                            $connection->close();*/?>
                     </table>
                 </div>
             </div>

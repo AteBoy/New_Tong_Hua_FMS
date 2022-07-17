@@ -1,11 +1,5 @@
 <?php
-    $servername = "localhost";
-    $username = "root";
-    $password = "";
-    $database = "financial_db";
-
-    // Create connection
-    $connection = new mysqli($servername, $username, $password, $database);
+    include("config.php");
 
     if($connection->connect_error){
         die("Connection FailedL ". $connection->connect_error);
@@ -134,4 +128,5 @@
 
         }
     $connection->close();
+    header("Location: home.php");
 ?>

@@ -12,13 +12,10 @@
 
     $table = $split_data[0];
     $field = $split_data[1];
-
-    $qry = "DELETE FROM $table WHERE $field = '$id'";
-    $result = $connection->query($qry);
     
     if($table == "inventory"){
-        
-        $sql = "SELECT item_name, category, quantity from inventory where inventory_id = '$id'";
+      
+        $sql = "SELECT item_name, category, quantity from inventory where inventory_entry_id = '$id' && quantity <> '0'";
         $result = $connection->query($sql);
         $row = $result->fetch_assoc();
 
@@ -30,14 +27,9 @@
         $qry = "UPDATE merchandise SET item_stock = item_stock - '$quantity' where item_name = '$item_name' && item_category = '$item_cat'";
         $result = $connection->query($qry);
 
-        $qry = "DELETE from sub where transaction_id = $id";
-        $result = $connection->query($qry);
     }
-    if($table == "sales"){
-        $qry = "DELETE from sub where transaction_id = $id";
-        $result = $connection->query($qry);
-    }
-
+    $qry = "DELETE FROM $table WHERE $field = '$id'";
+    $result = $connection->query($qry);
     $connection->close(); 
     header("Location: home.php");
 ?>

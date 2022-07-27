@@ -4,59 +4,12 @@
     if($connection->connect_error){
         die("Connection FailedL ". $connection->connect_error);
     }
-
-        //Query for Inventory Entry ID
-        $query_last_inventory_entry_id = "SELECT
-                                    inventory_entry_id
-                                    FROM
-                                    inventory
-                                    ORDER BY
-                                    inventory_entry_id
-                                    DESC
-                                    LIMIT 1";
-
-        $result_last_inventory_entry_id = $connection->query($query_last_inventory_entry_id);
-        $row_count = mysqli_num_rows($result_last_inventory_entry_id);
-
-        if ($row_count == 0) {
-            $new_inventory_entry_id = "INV-000001";
-        }
-
-        else{
-            while ($row_last_inventory_entry_id = $result_last_inventory_entry_id->fetch_assoc()){
-                $temp_inventory_entry_id = $row_last_inventory_entry_id["inventory_entry_id"];
-                $get_num_inventory_entry_id = str_replace("INV-", "", $temp_inventory_entry_id);
-                $increment_inventory_entry_id = $get_num_inventory_entry_id + 1;
-                $string_inventory_entry_id = str_pad($increment_inventory_entry_id, 6,0, STR_PAD_LEFT);
-                $new_inventory_entry_id =  "INV-".$string_inventory_entry_id;  
-            }   
-        }
-
-        //Query for Posting ID
-        $query_last_posting_id = "SELECT
-                            inventory_posting_id
-                            FROM
-                            inventory
-                            ORDER BY
-                            inventory_posting_id
-                            DESC
-                            LIMIT 1";
-
-        $result_last_posting_id = $connection->query($query_last_posting_id);
-        $row_count2 = mysqli_num_rows($result_last_posting_id);
-
-        if ($row_count2 == 0) {
-            $increment_posting_id= 1;
-        }
-
-        else {
-            while ($row_last_posting_id = $result_last_posting_id->fetch_assoc()) {
-                $temp_posting_id = $row_last_posting_id["inventory_posting_id"];
-                $get_num_posting_id = str_replace("PS-", "", $temp_posting_id);
-                $increment_posting_id = $get_num_posting_id + 1;                          
-            }
-        }
-
+    header("Location: format.php?table=inventory:inventory_entry_id:inventory_posting_id:INV-");
+   
+    session_start();
+    $new_inventory_entry_id = $_SESSION['inventory_entry'];
+    $increment_posting_id = $_SESSION['inventory_posting'];
+  
         $current_date = date("Y-m-d");
  
         for ($i=0; $i < count($_POST['inv_acc']); $i++) { 
@@ -67,6 +20,8 @@
             $inv_item = $_POST['inv_item'];
             $inv_price = $_POST['inv_price'];
             $inv_cat = $_POST['inv_cat'];
+            $inv_type = $_POST['inv_type'];
+            $inv_measure = $_POST['inv_measure'];
             $inv_quantity = $_POST['inv_quantity'];
             $total = $inv_quantity * $inv_price;
             $inventory_entry_description = $_POST['inv_exp'];
@@ -100,21 +55,21 @@
                 //echo "<script>alert('$account_type');</script>";
                 if ($debit > $credit) {
                     if ($account_type == "Asset" || $account_type == "Expenses") {
-                        $query_insert_into_database = "INSERT INTO inventory(inventory_posting_id, account_id, inv_date, inventory_entry_id, supplier_id, item_name, category, price, quantity, total, debit, credit, inv_amount,explanation) VALUES ('$new_posting_id','$account_id','$current_date','$new_inventory_entry_id',(SELECT supplier_id from supplier where supplier_name = '$inv_sup'),'$inv_item','$inv_cat','$inv_price','$inv_quantity','$total', '$debit', '$credit','$debit','$inventory_entry_description')";
+                        $query_insert_into_database = "INSERT INTO inventory(inventory_posting_id, account_id, inv_date, inventory_entry_id, supplier_id, item_name, category, inv_measurement_type, inv_measurement, price, quantity, total, inv_amount,explanation) VALUES ('$new_posting_id','$account_id','$current_date','$new_inventory_entry_id',(SELECT supplier_id from supplier where supplier_name = '$inv_sup'),'$inv_item','$inv_cat','$inv_type','$inv_measure','$inv_price','$inv_quantity','$total','$debit','$inventory_entry_description')";
                     }
                     else if ($account_type == "Liability" || $account_type == "Owners Equity" || $account_type == "Income") {
                         $debit = $debit * -1;
-                        $query_insert_into_database = "INSERT INTO inventory(inventory_posting_id, account_id, inv_date, inventory_entry_id, supplier_id, item_name, category, price, quantity, total, debit, credit, inv_amount,explanation) VALUES ('$new_posting_id','$account_id','$current_date','$new_inventory_entry_id',(SELECT supplier_id from supplier where supplier_name = '$inv_sup'),'$inv_item','$inv_cat','$inv_price','$inv_quantity','$total', '$debit', '$credit','$debit','$inventory_entry_description')";
+                        $query_insert_into_database = "INSERT INTO inventory(inventory_posting_id, account_id, inv_date, inventory_entry_id, supplier_id, item_name, category, inv_measurement_type, inv_measurement, price, quantity, total, inv_amount,explanation) VALUES ('$new_posting_id','$account_id','$current_date','$new_inventory_entry_id',(SELECT supplier_id from supplier where supplier_name = '$inv_sup'),'$inv_item','$inv_cat','$inv_type','$inv_measure','$inv_price','$inv_quantity','$total','$debit','$inventory_entry_description')";
                     }
                 }
 
                 else if ($debit < $credit) {
                     if ($account_type == "Asset" || $account_type == "Expenses") {
                         $credit = $credit * -1;
-                        $query_insert_into_database = "INSERT INTO inventory(inventory_posting_id, account_id, inv_date, inventory_entry_id, supplier_id, item_name, category, price, quantity, total, debit, credit, inv_amount,explanation) VALUES ('$new_posting_id','$account_id','$current_date','$new_inventory_entry_id',(SELECT supplier_id from supplier where supplier_name = '$inv_sup'),'$inv_item','$inv_cat','$inv_price','$inv_quantity','$total', '$debit', '$credit','$credit','$inventory_entry_description')";
+                        $query_insert_into_database = "INSERT INTO inventory(inventory_posting_id, account_id, inv_date, inventory_entry_id, supplier_id, item_name, category, inv_measurement_type, inv_measurement, price, quantity, total, inv_amount,explanation) VALUES ('$new_posting_id','$account_id','$current_date','$new_inventory_entry_id',(SELECT supplier_id from supplier where supplier_name = '$inv_sup'),'$inv_item','$inv_cat','$inv_type','$inv_measure','$inv_price','$inv_quantity','$total','$credit','$inventory_entry_description')";
                     }
                     else if ($account_type == "Liability" || $account_type == "Owners Equity" || $account_type == "Income"){
-                        $query_insert_into_database = "INSERT INTO inventory(inventory_posting_id, account_id, inv_date, inventory_entry_id, supplier_id, item_name, category, price, quantity, total, debit, credit, inv_amount,explanation) VALUES ('$new_posting_id','$account_id','$current_date','$new_inventory_entry_id',(SELECT supplier_id from supplier where supplier_name = '$inv_sup'),'$inv_item','$inv_cat','$inv_price','$inv_quantity','$total', '$debit', '$credit','$credit','$inventory_entry_description')";
+                        $query_insert_into_database = "INSERT INTO inventory(inventory_posting_id, account_id, inv_date, inventory_entry_id, supplier_id, item_name, category, inv_measurement_type, inv_measurement, price, quantity, total, inv_amount,explanation) VALUES ('$new_posting_id','$account_id','$current_date','$new_inventory_entry_id',(SELECT supplier_id from supplier where supplier_name = '$inv_sup'),'$inv_item','$inv_cat','$inv_type','$inv_measure'.'$inv_price','$inv_quantity','$total','$credit','$inventory_entry_description')";
                     }
                 }
                 $sql = "SELECT item_name, item_category from merchandise where item_name = '$inv_item' && item_category = '$inv_cat'";
@@ -137,6 +92,7 @@
                 }
                 $qry_stock = "INSERT INTO stock(stock_id, stock_date, supplier_name, item_id, category, price, quantity, total, stock_status) VALUES('','$current_date','$inv_sup',(select item_id from merchandise where item_name = '$inv_item' && item_category = '$inv_cat'),'$inv_cat','$inv_price','$inv_quantity','$total','in')";
                 $result = $connection->query($qry_stock);
+
             }
             else{
                 $query_account_id_table = "SELECT
@@ -163,25 +119,27 @@
                     $string_posting_id = str_pad($increment_posting_id, 6,0, STR_PAD_LEFT);
                     $new_posting_id =  "PS-".$string_posting_id;
                 }
-
+                
                 //echo "<script>alert('$account_type');</script>";
                 if ($debit > $credit) {
+                    
                     if ($account_type == "Asset" || $account_type == "Expenses") {
-                        $query_insert_into_database = "INSERT INTO inventory(inventory_posting_id, account_id, inv_date, inventory_entry_id, supplier_id, item_name, category, price, quantity, total, debit, credit, inv_amount,explanation) VALUES ('$new_posting_id','$account_id','$current_date','$new_inventory_entry_id',(SELECT supplier_id from supplier where supplier_name = '$inv_sup'),'0','0','0','0','0', '$debit', '$credit','$debit','$inventory_entry_description')";
+                        $query_insert_into_database = "INSERT INTO inventory(inventory_posting_id, account_id, inv_date, inventory_entry_id, supplier_id, item_name, category, price, quantity, total, inv_amount,explanation) VALUES ('$new_posting_id','$account_id','$current_date','$new_inventory_entry_id',(SELECT supplier_id from supplier where supplier_name = '$inv_sup'),'0','0','0','0','0','$debit','$inventory_entry_description')";
                     }
                     else if ($account_type == "Liability" || $account_type == "Owners Equity" || $account_type == "Income") {
                         $debit = $debit * -1;
-                        $query_insert_into_database = "INSERT INTO inventory(inventory_posting_id, account_id, inv_date, inventory_entry_id, supplier_id, item_name, category, price, quantity, total, debit, credit, inv_amount,explanation) VALUES ('$new_posting_id','$account_id','$current_date','$new_inventory_entry_id',(SELECT supplier_id from supplier where supplier_name = '$inv_sup'),'0','0','0','0','0', '$debit', '$credit','$debit','$inventory_entry_description')";
+                        $query_insert_into_database = "INSERT INTO inventory(inventory_posting_id, account_id, inv_date, inventory_entry_id, supplier_id, item_name, category, price, quantity, total, inv_amount,explanation) VALUES ('$new_posting_id','$account_id','$current_date','$new_inventory_entry_id',(SELECT supplier_id from supplier where supplier_name = '$inv_sup'),'0','0','0','0','0','$debit','$inventory_entry_description')";
                     }
                 }
 
                 else if ($debit < $credit) {
+                   
                     if ($account_type == "Asset" || $account_type == "Expenses") {
                         $credit = $credit * -1;
-                        $query_insert_into_database = "INSERT INTO inventory(inventory_posting_id, account_id, inv_date, inventory_entry_id, supplier_id, item_name, category, price, quantity, total, debit, credit, inv_amount,explanation) VALUES ('$new_posting_id','$account_id','$current_date','$new_inventory_entry_id',(SELECT supplier_id from supplier where supplier_name = '$inv_sup'),'0','0','0','0','0', '$debit', '$credit','$credit','$inventory_entry_description')";
+                        $query_insert_into_database = "INSERT INTO inventory(inventory_posting_id, account_id, inv_date, inventory_entry_id, supplier_id, item_name, category, price, quantity, total, inv_amount,explanation) VALUES ('$new_posting_id','$account_id','$current_date','$new_inventory_entry_id',(SELECT supplier_id from supplier where supplier_name = '$inv_sup'),'0','0','0','0','0','$credit','$inventory_entry_description')";
                     }
                     else if ($account_type == "Liability" || $account_type == "Owners Equity" || $account_type == "Income"){
-                        $query_insert_into_database = "INSERT INTO inventory(inventory_posting_id, account_id, inv_date, inventory_entry_id, supplier_id, item_name, category, price, quantity, total, debit, credit, inv_amount,explanation) VALUES ('$new_posting_id','$account_id','$current_date','$new_inventory_entry_id',(SELECT supplier_id from supplier where supplier_name = '$inv_sup'),'0','0','0','0','0', '$debit', '$credit','$credit','$inventory_entry_description')";
+                        $query_insert_into_database = "INSERT INTO inventory(inventory_posting_id, account_id, inv_date, inventory_entry_id, supplier_id, item_name, category, price, quantity, total, inv_amount,explanation) VALUES ('$new_posting_id','$account_id','$current_date','$new_inventory_entry_id',(SELECT supplier_id from supplier where supplier_name = '$inv_sup'),'0','0','0','0','0','$credit','$inventory_entry_description')";
                     }
                 }
             }
@@ -189,7 +147,8 @@
                 
             $result_insert_into_database = $connection->query($query_insert_into_database);
         }
-        
+
     $connection->close();
+    
     header("Location: home.php");
 ?>

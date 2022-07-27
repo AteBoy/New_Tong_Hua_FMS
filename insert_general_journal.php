@@ -4,58 +4,11 @@
     if($connection->connect_error){
         die("Connection FailedL ". $connection->connect_error);
     }
-
-        //Query for Journal Entry ID
-        $query_last_journal_entry_id = "SELECT
-                                    journal_entry_id
-                                    FROM
-                                    journal_entry
-                                    ORDER BY
-                                    journal_entry_id
-                                    DESC
-                                    LIMIT 1";
-
-        $result_last_journal_entry_id = $connection->query($query_last_journal_entry_id);
-        $row_count = mysqli_num_rows($result_last_journal_entry_id);
-
-        if ($row_count == 0) {
-            $new_journal_entry_id = "JS-000001";
-        }
-
-        else{
-            while ($row_last_journal_entry_id = $result_last_journal_entry_id->fetch_assoc()){
-                $temp_journal_entry_id = $row_last_journal_entry_id["journal_entry_id"];
-                $get_num_journal_entry_id = str_replace("JS-", "", $temp_journal_entry_id);
-                $increment_journal_entry_id = $get_num_journal_entry_id + 1;
-                $string_journal_entry_id = str_pad($increment_journal_entry_id, 6,0, STR_PAD_LEFT);
-                $new_journal_entry_id =  "JS-".$string_journal_entry_id;  
-            }   
-        }
-
-        //Query for Posting ID
-        $query_last_posting_id = "SELECT
-                            journal_entry_posting_id
-                            FROM
-                            journal_entry
-                            ORDER BY
-                            journal_entry_posting_id
-                            DESC
-                            LIMIT 1";
-
-        $result_last_posting_id = $connection->query($query_last_posting_id);
-        $row_count2 = mysqli_num_rows($result_last_posting_id);
-
-        if ($row_count2 == 0) {
-            $increment_posting_id= 1;
-        }
-
-        else {
-            while ($row_last_posting_id = $result_last_posting_id->fetch_assoc()) {
-                $temp_posting_id = $row_last_posting_id["journal_entry_posting_id"];
-                $get_num_posting_id = str_replace("PS-", "", $temp_posting_id);
-                $increment_posting_id = $get_num_posting_id + 1;                          
-            }
-        }
+    header("Location: format.php?table=journal_entry:journal_entry_id:journal_entry_posting_id:JS-");
+   
+    session_start();
+    $new_journal_entry_id = $_SESSION['journal_entry_entry'];
+    $increment_posting_id = $_SESSION['journal_entry_posting'];
 
         $current_date = date("Y-m-d");
         
@@ -128,5 +81,5 @@
 
         }
     $connection->close();
-    header("Location: home.php");
+    //header("Location: home.php");
 ?>

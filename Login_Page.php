@@ -147,11 +147,14 @@
 			// https://www.sourcecodester.com/tutorials/php/12247/how-create-login-attempt-validation-using-php.html
 			// https://stackoverflow.com/questions/37120328/how-to-limit-the-number-of-login-attempts-in-a-login-script
 		}
+		
 		if(isset($_GET['logout'])){
+			echo "<script>alert('');</script>";
 			$logout = $_GET['logout'];
 			$date2 = date("Y-m-d H:i:s a");
-			$sql = "UPDATE logs SET logout = '$date2' WHERE logout = $logout";
+			$sql = "UPDATE logs SET logout = '$date2' WHERE log_id = $logout";
 			$result = $connection->query($sql);
+			echo "<script>alert('$date2');</script>";
 			header("Location: login_page.php");
 		}
 		?>

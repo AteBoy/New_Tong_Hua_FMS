@@ -16,18 +16,20 @@
                 $login_user = $_SESSION['login_user'];
                 $log_id = $_SESSION['log_id'];
                 $role = $_SESSION['role'];
+              
                 if(empty($login_user)){
                     header("Location: login_page.php");
                 }
                 echo $login_user;
             ?>
-            </button>
+            
                 <div id="myDropdown" class="user_dropdown">
                     <a href="home.php">Home</a>
-                    <a href="login_page.php?logout=<?php echo $log_id?>">Logout</a>
+                    <a href="login_page.php?logout=<?php echo $log_id;?>">Logout</a>
                 </div>
             </div>
         </div>
+
         <aside class = "nav">
             <ul>
                 <li><a href = "##" class = "tablink" onclick = "openTab(event, 'Dashboard')"><span class='icon-field'><i class="fa fa-home"></i></span> Dashboard</a></li> 
@@ -183,12 +185,13 @@
                                 <th>Buyer Name <i class = "fa fa-sort" onclick="sortTable(2,'sales_table')"></i></th>
                                 <th>Item Name <i class = "fa fa-sort" onclick="sortTable(3,'sales_table')"></i></th>
                                 <th>Category <i class = "fa fa-sort" onclick="sortTable(4,'sales_table')"></i></th>
-                                <th>Price <i class = "fa fa-sort" onclick="sortTable(5,'sales_table')"></i></th>
-                                <th>Quantity <i class = "fa fa-sort" onclick="sortTable(6,'sales_table')"></i></th>
-                                <th>Total Amount <i class = "fa fa-sort" onclick="sortTable(7,'sales_table')"></i></th>
-                                <th>Journal <i class = "fa fa-sort" onclick="sortTable(8,'sales_table')"></i></th>
-                                <th>Debit <i class = "fa fa-sort" onclick="sortTable(9,'sales_table')"></i></th>
-                                <th>Credit <i class = "fa fa-sort" onclick="sortTable(10,'sales_table')"></i></th>
+                                <th>Measure <i class = "fa fa-sort" onclick="sortTable(5,'sales_table')"></i></th>
+                                <th>Price <i class = "fa fa-sort" onclick="sortTable(6,'sales_table')"></i></th>
+                                <th>Quantity <i class = "fa fa-sort" onclick="sortTable(7,'sales_table')"></i></th>
+                                <th>Total Amount <i class = "fa fa-sort" onclick="sortTable(8,'sales_table')"></i></th>
+                                <th>Journal <i class = "fa fa-sort" onclick="sortTable(9,'sales_table')"></i></th>
+                                <th>Debit <i class = "fa fa-sort" onclick="sortTable(10,'sales_table')"></i></th>
+                                <th>Credit <i class = "fa fa-sort" onclick="sortTable(11,'sales_table')"></i></th>
                                 <th>Action</th>
                             </tr>
                             <?php
@@ -204,6 +207,8 @@
                                                     sales.buyer_name,      
                                                     sales.item_name,
                                                     sales.category,
+                                                    sales.sales_measurement_type,
+                                                    sales.sales_measurement,
                                                     sales.price,
                                                     sales.quantity,
                                                     sales.total,
@@ -242,10 +247,14 @@
                                         sales.buyer_name,
                                         sales.item_name,
                                         sales.category,
+                                        sales.sales_measurement_type,
+                                        sales.sales_measurement,
                                         sales.price,
                                         sales.quantity,
                                         sales.total,
                                         sales.sales_amount,
+                                        if(sales.sales_amount > 0, sales.sales_amount, ' ') as debit,
+                                        if(sales.sales_amount < 0, sales.sales_amount * -1, ' ') as credit,
                                         sales.sales_entry_id,
                                         sales.Explanation,
                                         account.account_name,
@@ -267,155 +276,56 @@
                                 while($row = $result->fetch_assoc()) {
                                  
                                     //echo "<script>alert('');</script>";
+                                    $m = $row["sales_measurement"];
+                                    if($m > 1){
+                                        $type = $row["sales_measurement_type"];
+                                        $type = $type."s";
+                                    }
+                                    else{
+                                        $type = $row["sales_measurement_type"];
+                                    }
                                     if ($j == 1) {
-                                        
-                                        if ($row["sales_amount"] > 0){
-
-                                            if ($row["account_type"] == "Asset" || $row["account_type"] == "Expenses") {
-                                                echo "<tr>
-                                                    <td>" . $row["sales_entry_id"] . "</td>
-                                                    <td>" . $row["sales_date"] . "</td>
-                                                    <td>" . $row["buyer_name"] . "</td>
-                                                    <td contenteditable='true' id = 'sales:item_name:sales_entry_id:". $row["sales_entry_id"] ."'>" . $row["item_name"] . "</td>
-                                                    <td contenteditable='true' id = 'sales:category:sales_entry_id:". $row["sales_entry_id"] ."'>" . $row["category"] . "</td>
-                                                    <td contenteditable='true' id = 'sales:price:sales_entry_id:". $row["sales_entry_id"] ."'>" . number_format($row["price"],2) . "</td>
-                                                    <td>" . number_format($row["quantity"],0) . "</td>
-                                                    <td>" . number_format($row["total"],2) . "</td>
-                                                    <td>". $row["account_name"] ."</td>
-                                                    <td>" . number_format($row["sales_amount"],2) . "</td>
-                                                    <td></td>";
-                                                    $id = $row["sales_entry_id"];?>
-                                                    <td><a href="delete.php?id=<?php echo $id;?>&table=sales:sales_entry_id"><i class="fa fa-trash-o"></i></a></td>
-                                                <?php "</tr>";
-                                            }
-                                            else if ($row["account_type"] == "Liability" || $row["account_type"] == "Owners Equity" || $row["account_type"] == "Income") {
-                                                echo "<tr>
-                                                    <td>" . $row["sales_entry_id"] . "</td>
-                                                    <td>" . $row["inv_date"] . "</td>
-                                                    <td>" . $row["buyer_name"] . "</td>
-                                                    <td contenteditable='true' id = 'sales:item_name:sales_entry_id:". $row["sales_entry_id"] ."'>" . $row["item_name"] . "</td>
-                                                    <td contenteditable='true' id = 'sales:category:sales_entry_id:". $row["sales_entry_id"] ."'>" . $row["category"] . "</td>
-                                                    <td contenteditable='true' id = 'sales:price:sales_entry_id:". $row["sales_entry_id"] ."'>" . number_format($row["price"],2) . "</td>
-                                                    <td>" . number_format($row["quantity"],0) . "</td>
-                                                    <td>" . number_format($row["total"],2) . "</td>
-                                                    <td>". $row["account_name"] ."<td>
-                                                    <td></td>
-                                                    ";
-                                                    $id = $row["sales_entry_id"];?>
-                                                    <td><a href="delete.php?id=<?php echo $id;?>&table=sales:sales_entry_id"><i class="fa fa-trash-o"></i></a></td>
-                                                <?php "</tr>";
-                                            }
-                                        }
-                                        elseif ($row["sales_amount"] < 0) {
-                                 
-                                            if ($row["account_type"] == "Asset" || $row["account_type"] == "Expenses") {
-                                                echo "<tr>
-                                                    <td>" . $row["sales_entry_id"] . "</td>
-                                                    <td>" . $row["sales_date"] . "</td>
-                                                    <td>" . $row["buyer_name"] . "</td>
-                                                    <td contenteditable='true' id = 'sales:item_name:sales_entry_id:". $row["sales_entry_id"] ."'>" . $row["item_name"] . "</td>
-                                                    <td contenteditable='true' id = 'sales:category:sales_entry_id:". $row["sales_entry_id"] ."'>" . $row["category"] . "</td>
-                                                    <td contenteditable='true' id = 'sales:price:sales_entry_id:". $row["sales_entry_id"] ."'>" . number_format($row["price"],2) . "</td>
-                                                    <td>" . number_format($row["quantity"],0) . "</td>
-                                                    <td>" . number_format($row["total"],2) . "</td>
-                                                    <td>". $row["account_name"] ."</td>
-                                                    <td></td>
-                                                    <td>" . number_format(($row["sales_amount"]*-1),2) . "</td>
-                                                    ";
-                                                    $id = $row["sales_entry_id"];?>
-                                                    <td><a href="delete.php?id=<?php echo $id;?>&table=sales:sales_entry_id"><i class="fa fa-trash-o"></i></a></td>
-                                                <?php "</tr>";
-                                            }
-                                            else if ($row["account_type"] == "Liability" || $row["account_type"] == "Owners Equity" || $row["account_type"] == "Income") {
-                                                echo "<tr>
-                                                    td>" . $row["sales_entry_id"] . "</td>
-                                                    <td>" . $row["sales_date"] . "</td>
-                                                    <td>" . $row["buyer_name"] . "</td>
-                                                    <td contenteditable='true' id = 'sales:item_name:sales_entry_id:". $row["sales_entry_id"] ."'>" . $row["item_name"] . "</td>
-                                                    <td contenteditable='true' id = 'sales:category:sales_entry_id:". $row["sales_entry_id"] ."'>" . $row["category"] . "</td>
-                                                    <td contenteditable='true' id = 'sales:price:sales_entry_id:". $row["sales_entry_id"] ."'>" . number_format($row["price"],2) . "</td>
-                                                    <td>" . number_format($row["quantity"],0) . "</td>
-                                                    <td>" . number_format($row["total"],2) . "</td>
-                                                    <td>". $row["account_name"] ."</td>
-                                                    <td>" . number_format(($row["sales_amount"]*-1),2) . "</td>
-                                                    <td></td>";
-                                                    $id = $row["sales_entry_id"];?>
-                                                    <td><a href="delete.php?id=<?php echo $id;?>&table=sales:sales_entry_id"><i class="fa fa-trash-o"></i></a></td>
-                                                <?php "</tr>";
-                                            }
-                                        }
+                                        echo "<tr>
+                                        <td>" . $row["sales_entry_id"] . "</td>
+                                        <td>" . $row["sales_date"] . "</td>
+                                        <td>" . $row["buyer_name"] . "</td>
+                                        <td contenteditable='true' id = 'sales:item_name:sales_entry_id:". $row["sales_entry_id"] ."'>" . $row["item_name"] . "</td>
+                                        <td contenteditable='true' id = 'sales:category:sales_entry_id:". $row["sales_entry_id"] ."'>" . $row["category"] . "</td>
+                                        <td>" .$row["sales_measurement"] ." " . $type ."</td>
+                                        <td contenteditable='true' id = 'sales:price:sales_entry_id:". $row["sales_entry_id"] ."'>" . number_format($row["price"],2) . "</td>
+                                        <td>" . number_format($row["quantity"],0) . "</td>
+                                        <td>" . number_format($row["total"],2) . "</td>
+                                        <td>". $row["account_name"] ."</td>
+                                        <td>" .$row["debit"] ."</td>
+                                        <td>" .$row["credit"] ."</td>";
+                                        $id = $row["sales_entry_id"];?>
+                                        <td><a href="delete.php?id=<?php echo $id;?>&table=sales:sales_entry_id"><i class="fa fa-trash-o"></i></a></td>
+                                    <?php "</tr>";
 
                                         $j = $j + 1;	
                                     }
 
                                     else {
-                                        if ($row["sales_amount"] > 0){
-                                            if ($row["account_type"] == "Asset" || $row["account_type"] == "Expenses") {
-                                                echo "<tr>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td>" . $row["account_name"] . "</td>
-                                                    <td>" . number_format($row["sales_amount"],2) . "</td>                    
-                                                    <td></td>
-                                                </tr>";
-                                            }
-                                            else if ($row["account_type"] == "Liability" || $row["account_type"] == "Owners Equity" || $row["account_type"] == "Income") {
-                                                echo "<tr>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>		                
-                                                    <td>" . $row["account_name"] . "</td>
-                                                    <td></td>
-                                                    <td>" . number_format($row["sales_amount"],2) . "</td>                    
-                                                </tr>";	
-                                            }
-                                        }
-                                        elseif ($row["sales_amount"] < 0) {
-                                            if ($row["account_type"] == "Asset" || $row["account_type"] == "Expenses") {
-                                                echo "<tr>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>                    
-                                                    <td>" . $row["account_name"] . "</td>
-                                                    <td></td>
-                                                    <td>" . number_format(($row["sales_amount"]*-1),2) . "</td>
-                                                </tr>";
-                                            }
-                                            else if ($row["account_type"] == "Liability" || $row["account_type"] == "Owners Equity" || $row["account_type"] == "Income") {
-                                                echo "<tr>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>	                    
-                                                    <td>" . $row["account_name"] . "</td>
-                                                    <td>" . number_format(($row["sales_amount"]*-1),2) . "</td>
-                                                    <td></td>
-                                                </tr>";
-                                            }
-                                        }
-              
+                                        
+                                        echo "<tr>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td>". $row["account_name"] ."</td>
+                                            <td>" .$row["debit"] ."</td>
+                                            <td>" .$row["credit"] ."</td>";
+                                            $id = $row["sales_entry_id"];?>
+   
+                                         <?php "</tr>";
                                         if($j == $t){
                                             echo "<tr>
+                                            <td></td>
                                             <td></td>
                                             <td></td>
                                             <td></td>
@@ -435,20 +345,13 @@
                                 $counter--;
                             }
 
-                            $connection->close();
-                             
-                                include("config.php");
-
-                                if($connection->connect_error){
-                                    die("Connection Failed ". $connection->connect_error);
-                                }
-    
-                                $sql = "SELECT format(sum(price),2) price, format(sum(quantity),0) quantity, format(sum(total),2) total, sum(debit) debit,sum(credit) credit FROM sales";
+                                $sql = "SELECT format(sum(price),2) price, format(sum(quantity),0) quantity, format(sum(total),2) total, sum(if(sales_amount > 0, sales_amount, 0)) as debit,sum(if(sales_amount < 0, sales_amount, 0)) as credit FROM sales";
                                 $result = $connection->query($sql);
                                 $row = $result->fetch_assoc();
                                
                                 echo "<tr id = 'tr_bold'>
                                     <td>Total</td>
+                                    <td></td>
                                     <td></td>
                                     <td></td>
                                     <td></td>
@@ -617,12 +520,13 @@
                                 <th>Supplier Name <i class = "fa fa-sort" onclick="sortTable(2,'inv_table')"></i></th>
                                 <th>Item Name <i class = "fa fa-sort" onclick="sortTable(3,'inv_table')"></i></th>
                                 <th>Category <i class = "fa fa-sort" onclick="sortTable(4,'inv_table')"></i></th>
-                                <th>Price <i class = "fa fa-sort" onclick="sortTable(5,'inv_table')"></i></th>
-                                <th>Quantity <i class = "fa fa-sort" onclick="sortTable(6,'inv_table')"></i></th>
-                                <th>Total Amount <i class = "fa fa-sort" onclick="sortTable(7,'inv_table')"></i></th>
-                                <th>Journal <i class = "fa fa-sort" onclick="sortTable(8,'inv_table')"></i></th>
-                                <th>Debit <i class = "fa fa-sort" onclick="sortTable(9,'inv_table')"></i></th>
-                                <th>Credit <i class = "fa fa-sort" onclick="sortTable(10,'inv_table')"></i></th>
+                                <th>Measure <i class = "fa fa-sort" onclick="sortTable(5,'inv_table')"></i></th>
+                                <th>Price <i class = "fa fa-sort" onclick="sortTable(6,'inv_table')"></i></th>
+                                <th>Quantity <i class = "fa fa-sort" onclick="sortTable(7,'inv_table')"></i></th>
+                                <th>Total Amount <i class = "fa fa-sort" onclick="sortTable(8,'inv_table')"></i></th>
+                                <th>Journal <i class = "fa fa-sort" onclick="sortTable(9,'inv_table')"></i></th>
+                                <th>Debit <i class = "fa fa-sort" onclick="sortTable(10,'inv_table')"></i></th>
+                                <th>Credit <i class = "fa fa-sort" onclick="sortTable(11,'inv_table')"></i></th>
                                 <th>Action</th>
                             </tr>
                             <?php
@@ -639,6 +543,8 @@
                                                     supplier.supplier_name,
                                                     inventory.item_name,
                                                     inventory.category,
+                                                    inventory.inv_measurement_type,
+                                                    inventory.inv_measurement,
                                                     inventory.price,
                                                     inventory.quantity,
                                                     inventory.total,
@@ -678,10 +584,14 @@
                                         supplier.supplier_name,
                                         inventory.item_name,
                                         inventory.category,
+                                        inventory.inv_measurement_type,
+                                        inventory.inv_measurement,
                                         inventory.price,
                                         inventory.quantity,
                                         inventory.total,
                                         inventory.inv_amount,
+                                        if(inventory.inv_amount > 0, inventory.inv_amount, ' ') as debit,
+                                        if(inventory.inv_amount < 0, inventory.inv_amount * -1, ' ') as credit,
                                         inventory.inventory_entry_id,
                                         inventory.Explanation,
                                         account.account_name,
@@ -700,92 +610,40 @@
 
                                 // read data of each row
                                 $t = mysqli_num_rows($result);
-                                
+                               
                                 while($row = $result->fetch_assoc()) {
-                                 
+                                    $m = $row["inv_measurement"];
+                                    if($m > 1){
+                                        $type = $row["inv_measurement_type"];
+                                        $type = $type."s";
+                                    }
+                                    else{
+                                        $type = $row["inv_measurement_type"];
+                                    }
                                     //echo "<script>alert('');</script>";
                                     if ($j == 1) {
-                                        if ($row["inv_amount"] > 0){
-                                            if ($row["account_type"] == "Asset" || $row["account_type"] == "Expenses") {
-                                                echo "<tr>
+                                        echo "<tr>
                                                     <td>" . $row["inventory_entry_id"] . "</td>
                                                     <td>" . $row["inv_date"] . "</td>
                                                     <td>" . $row["supplier_name"] . "</td>
                                                     <td contenteditable='true' id = 'inventory:item_name:inventory_entry_id:". $row["inventory_entry_id"] ."'>" . $row["item_name"] . "</td>
                                                     <td contenteditable='true' id = 'inventory:category:inventory_entry_id:". $row["inventory_entry_id"] ."'>" . $row["category"] . "</td>
+                                                    <td>" . $row["inv_measurement"] . " " . $type . "</td>
                                                     <td contenteditable='true' id = 'inventory:price:inventory_entry_id:". $row["inventory_entry_id"] ."'>" . number_format($row["price"],2) . "</td>
                                                     <td>" . number_format($row["quantity"],0) . "</td>
                                                     <td>" . number_format($row["total"],2) . "</td>
                                                     <td>". $row["account_name"] ."</td>
-                                                    <td>" . number_format($row["inv_amount"],2) . "</td>
-                                                    <td></td>";
+                                                    <td>" .$row["debit"] ."</td>
+                                                    <td>" .$row["credit"] ."</td>";
                                                     $id = $row["inventory_entry_id"];?>
                                                     <td><a href="delete.php?id=<?php echo $id;?>&table=inventory:inventory_entry_id"><i class="fa fa-trash-o"></i></a></td>
-                                                <?php "</tr>";
-                                            }
-                                            else if ($row["account_type"] == "Liability" || $row["account_type"] == "Owners Equity" || $row["account_type"] == "Income") {
-                                                echo "<tr>
-                                                    <td>" . $row["inventory_entry_id"] . "</td>
-                                                    <td>" . $row["inv_date"] . "</td>
-                                                    <td>" . $row["supplier_name"] . "</td>
-                                                    <td contenteditable='true' id = 'inventory:item_name:inventory_entry_id:". $row["inventory_entry_id"] ."'>" . $row["item_name"] . "</td>
-                                                    <td contenteditable='true' id = 'inventory:category:inventory_entry_id:". $row["inventory_entry_id"] ."'>" . $row["category"] . "</td>
-                                                    <td contenteditable='true' id = 'inventory:price:inventory_entry_id:". $row["inventory_entry_id"] ."'>" . number_format($row["price"],2) . "</td>
-                                                    <td>" . number_format($row["quantity"],0) . "</td>
-                                                    <td>" . number_format($row["total"],2) . "</td>
-                                                    <td>". $row["account_name"] ."<td>
-                                                    <td></td>
-                                                    ";
-                                                    $id = $row["inventory_entry_id"];?>
-                                                    <td><a href="delete.php?id=<?php echo $id;?>&table=inventory:inventory_entry_id"><i class="fa fa-trash-o"></i></a></td>
-                                                <?php "</tr>";
-                                            }
-                                        }
-                                        elseif ($row["inv_amount"] < 0) {
-                                            if ($row["account_type"] == "Asset" || $row["account_type"] == "Expenses") {
-                                                echo "<tr>
-                                                    <td>" . $row["inventory_entry_id"] . "</td>
-                                                    <td>" . $row["inv_date"] . "</td>
-                                                    <td>" . $row["supplier_name"] . "</td>
-                                                    <td contenteditable='true' id = 'inventory:item_name:inventory_entry_id:". $row["inventory_entry_id"] ."'>" . $row["item_name"] . "</td>
-                                                    <td contenteditable='true' id = 'inventory:category:inventory_entry_id:". $row["inventory_entry_id"] ."'>" . $row["category"] . "</td>
-                                                    <td contenteditable='true' id = 'inventory:price:inventory_entry_id:". $row["inventory_entry_id"] ."'>" . number_format($row["price"],2) . "</td>
-                                                    <td>" . number_format($row["quantity"],0) . "</td>
-                                                    <td>" . number_format($row["total"],2) . "</td>
-                                                    <td>". $row["account_name"] ."</td>
-                                                    <td></td>
-                                                    <td>" . number_format(($row["inv_amount"]*-1),2) . "</td>
-                                                    ";
-                                                    $id = $row["inventory_entry_id"];?>
-                                                    <td><a href="delete.php?id=<?php echo $id;?>&table=inventory:inventory_entry_id"><i class="fa fa-trash-o"></i></a></td>
-                                                <?php "</tr>";
-                                            }
-                                            else if ($row["account_type"] == "Liability" || $row["account_type"] == "Owners Equity" || $row["account_type"] == "Income") {
-                                                echo "<tr>
-                                                    <td>" . $row["inventory_entry_id"] . "</td>
-                                                    <td>" . $row["inv_date"] . "</td>
-                                                    <td>" . $row["supplier_name"] . "</td>
-                                                    <td contenteditable='true' id = 'inventory:item_name:inventory_entry_id:". $row["inventory_entry_id"] ."'>" . $row["item_name"] . "</td>
-                                                    <td contenteditable='true' id = 'inventory:category:inventory_entry_id:". $row["inventory_entry_id"] ."'>" . $row["category"] . "</td>
-                                                    <td contenteditable='true' id = 'inventory:price:inventory_entry_id:". $row["inventory_entry_id"] ."'>" . number_format($row["price"],2) . "</td>
-                                                    <td>" . number_format($row["quantity"],0) . "</td>
-                                                    <td>" . number_format($row["total"],2) . "</td>
-                                                    <td>". $row["account_name"] ."</td>
-                                                    <td>" . number_format(($row["inv_amount"]*-1),2) . "</td>
-                                                    <td></td>";
-                                                    $id = $row["inventory_entry_id"];?>
-                                                    <td><a href="delete.php?id=<?php echo $id;?>&table=inventory:inventory_entry_id"><i class="fa fa-trash-o"></i></a></td>
-                                                <?php "</tr>";
-                                            }
-                                        }
+                                             <?php "</tr>";
 
                                         $j = $j + 1;	
                                     }
 
                                     else {
-                                        if ($row["inv_amount"] > 0){
-                                            if ($row["account_type"] == "Asset" || $row["account_type"] == "Expenses") {
-                                                echo "<tr>
+                                        echo "<tr>
                                                     <td></td>
                                                     <td></td>
                                                     <td></td>
@@ -794,62 +652,18 @@
                                                     <td></td>
                                                     <td></td>
                                                     <td></td>
-                                                    <td>" . $row["account_name"] . "</td>
-                                                    <td>" . number_format($row["inv_amount"],2) . "</td>                    
                                                     <td></td>
-                                                </tr>";
-                                            }
-                                            else if ($row["account_type"] == "Liability" || $row["account_type"] == "Owners Equity" || $row["account_type"] == "Income") {
-                                                echo "<tr>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>		                
-                                                    <td>" . $row["account_name"] . "</td>
-                                                    <td></td>
-                                                    <td>" . number_format($row["inv_amount"],2) . "</td>                    
-                                                </tr>";	
-                                            }
-                                        }
-                                        elseif ($row["inv_amount"] < 0) {
-                                            if ($row["account_type"] == "Asset" || $row["account_type"] == "Expenses") {
-                                                echo "<tr>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>                    
-                                                    <td>" . $row["account_name"] . "</td>
-                                                    <td></td>
-                                                    <td>" . number_format(($row["inv_amount"]*-1),2) . "</td>
-                                                </tr>";
-                                            }
-                                            else if ($row["account_type"] == "Liability" || $row["account_type"] == "Owners Equity" || $row["account_type"] == "Income") {
-                                                echo "<tr>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>	                    
-                                                    <td>" . $row["account_name"] . "</td>
-                                                    <td>" . number_format(($row["inv_amount"]*-1),2) . "</td>
-                                                    <td></td>
-                                                </tr>";
-                                            }
-                                        }
+                                                    <td>". $row["account_name"] ."</td>
+                                                    <td>". $row["debit"] . "</td>
+                                                    <td>". $row["credit"]. "</td>";
+                                                    $id = $row["inventory_entry_id"];?>
+                                                    
+                                        <?php "</tr>";
+                                        
               
                                         if($j == $t){
                                             echo "<tr>
+                                            <td></td>
                                             <td></td>
                                             <td></td>
                                             <td></td>
@@ -868,37 +682,30 @@
                                 }
                                 $counter--;
                             }
-
-                            $connection->close();
-                             
-                                include("config.php");
-
-                                if($connection->connect_error){
-                                    die("Connection Failed ". $connection->connect_error);
-                                }
     
-                                $sql = "SELECT format(sum(price),2) price, format(sum(quantity),0) quantity, format(sum(total),2) total, sum(debit) debit,sum(credit) credit FROM inventory";
-                                $result = $connection->query($sql);
-                                $row = $result->fetch_assoc();
+                            $sql = "SELECT format(sum(price),2) price, format(sum(quantity),0) quantity, format(sum(total),2) total, sum(if(inv_amount > 0, inv_amount, 0)) as debit,sum(if(inv_amount < 0, inv_amount, 0)) as credit FROM inventory";
+                            $result = $connection->query($sql);
+                            $row = $result->fetch_assoc();
                                
-                                echo "<tr id = 'tr_bold'>
-                                    <td>Total</td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td>". $row["price"] ."</td>
-                                    <td>". $row["quantity"] ."</td>
-                                    <td>". $row["total"] ."</td>
-                                    <td></td>
+                            echo "<tr id = 'tr_bold'>
+                                <td>Total</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td>". $row["price"] ."</td>
+                                <td>". $row["quantity"] ."</td>
+                                <td>". $row["total"] ."</td>
+                                <td></td>
                                     
-                                    <td>". number_format($row["debit"],2) ."</td>
-                                    <td>". number_format(($row["credit"]*-1),2) ."</td>
-                                    <td></td>";
+                                <td>". number_format($row["debit"],2) ."</td>
+                                <td>". number_format(($row["credit"]*-1),2) ."</td>
+                                <td></td>";
                                 
-                                $connection->close();
+                            $connection->close();
                            
-                            ?>
+                        ?>
                             
                         </table>
                     </div>
@@ -1112,7 +919,7 @@
                                                 journal_entry
                                             WHERE journal_entry_id = '$temp_id'";
                                     $counter2 = intval($counter2);
-
+                                    
                                     $sql = "SELECT
                                             journal_entry.journal_entry_posting_id,
                                             journal_entry.journal_entry_date,
@@ -1120,6 +927,8 @@
                                             account.account_name,
                                             account.account_type,
                                             journal_entry.journal_entry_amount,
+                                            if(journal_entry.journal_entry_amount > 0, journal_entry.journal_entry_amount, ' ') as debit,
+                                            if(journal_entry.journal_entry_amount < 0, journal_entry.journal_entry_amount * -1, ' ') as credit,
                                             journal_entry.journal_entry_description
                                         FROM
                                             journal_entry
@@ -1138,101 +947,31 @@
                                      
                                         //echo "<script>alert('');</script>";
                                         if ($j == 1) {
-                                            if ($row["journal_entry_amount"] > 0){
-                                                if ($row["account_type"] == "Asset" || $row["account_type"] == "Expenses") {
-                                                    echo "<tr>
-                                                        <td>" . $row["journal_entry_date"] . "</td>
-                                                        <td>" . $row["journal_entry_id"] . "</td>
-                                                        <td>" . $row["account_name"] . "</td>
-                                                        <td>" . $row["journal_entry_amount"] . "</td>                    
-                                                        <td></td>";
+                                           
+                                            echo "<tr>
+                                                <td>" . $row["journal_entry_date"] . "</td>
+                                                <td>" . $row["journal_entry_id"] . "</td>
+                                                <td>" . $row["account_name"] . "</td>
+                                                        <td>" . $row["debit"] . "</td>    
+                                                        <td>" . $row["credit"] . "</td>";
                                                         $id = $row["journal_entry_id"];?>
                                                         <td><a href="delete.php?id=<?php echo $id;?>&table=journal_entry:journal_entry_id"><i class="fa fa-trash-o"></i></a></td>
                                                     <?php "</tr>";
-                                                }
-                                                else if ($row["account_type"] == "Liability" || $row["account_type"] == "Owners Equity" || $row["account_type"] == "Income") {
-                                                    echo "<tr>
-                                                        <td>" . $row["journal_entry_date"] . "</td>
-                                                        <td>" . $row["journal_entry_id"] . "</td>			                
-                                                        <td>" . $row["account_name"] . "</td>
-                                                        <td></td>";
-                                                        $id = $row["journal_entry_id"];
-                                                        ?>
-                                                        <td><a href="delete.php?id=<?php echo $id;?>&table=journal_entry:journal_entry_id"><i class="fa fa-trash-o"></i></a></td>
-                                                    <?php "</tr>";
-                                                }
-                                            }
-                                            elseif ($row["journal_entry_amount"] < 0) {
-                                                if ($row["account_type"] == "Asset" || $row["account_type"] == "Expenses") {
-                                                    echo "<tr>
-                                                        <td>" . $row["journal_entry_date"] . "</td>
-                                                        <td>" . $row["journal_entry_id"] . "</td>		                    
-                                                        <td>" . $row["account_name"] . "</td>
-                                                        <td></td>
-                                                        <td>" . $row["journal_entry_amount"]*-1 . "</td>";
-                                                        $id = $row["journal_entry_id"];
-                                                        ?>
-                                                        <td><a href="delete.php?id=<?php echo $id;?>&table=journal_entry:journal_entry_id"><i class="fa fa-trash-o"></i></a></td>
-                                                    <?php "</tr>";
-                                                }
-                                                else if ($row["account_type"] == "Liability" || $row["account_type"] == "Owners Equity" || $row["account_type"] == "Income") {
-                                                    echo "<tr>
-                                                        <td>" . $row["journal_entry_date"] . "</td>
-                                                        <td>" . $row["journal_entry_id"] . "</td>		                    
-                                                        <td>" . $row["account_name"] . "</td>
-                                                        <td>" . $row["journal_entry_amount"]*-1 . "</td>
-                                                        <td></td>";
-                                                        $id = $row["journal_entry_id"];?>
-                                                        <td><a href="delete.php?id=<?php echo $id;?>&table=journal_entry:journal_entry_id"><i class="fa fa-trash-o"></i></a></td>
-                                                    <?php "</tr>";
-                                                }
-                                            }
-
+         
                                             $j = $j + 1;	
                                         }
 
                                         else {
-                                            if ($row["journal_entry_amount"] > 0){
-                                                if ($row["account_type"] == "Asset" || $row["account_type"] == "Expenses") {
-                                                    echo "<tr>
-                                                        <td></td>
-                                                        <td></td>
-                                                        <td>" . $row["account_name"] . "</td>
-                                                        <td>" . $row["journal_entry_amount"] . "</td>                    
-                                                        <td></td>
-                                                    </tr>";
-                                                }
-                                                else if ($row["account_type"] == "Liability" || $row["account_type"] == "Owners Equity" || $row["account_type"] == "Income") {
-                                                    echo "<tr>
-                                                        <td></td>
-                                                        <td></td>			                
-                                                        <td>" . $row["account_name"] . "</td>
-                                                        <td></td>
-                                                        <td>" . $row["journal_entry_amount"] . "</td>                    
-                                                    </tr>";	
-                                                }
-                                            }
-                                            elseif ($row["journal_entry_amount"] < 0) {
-                                                if ($row["account_type"] == "Asset" || $row["account_type"] == "Expenses") {
-                                                    echo "<tr>
-                                                        <td></td>
-                                                        <td></td>	                    
-                                                        <td>" . $row["account_name"] . "</td>
-                                                        <td></td>
-                                                        <td>" . $row["journal_entry_amount"]*-1 . "</td>
-                                                    </tr>";
-                                                }
-                                                else if ($row["account_type"] == "Liability" || $row["account_type"] == "Owners Equity" || $row["account_type"] == "Income") {
-                                                    echo "<tr>
-                                                        <td></td>
-                                                        <td></td>		                    
-                                                        <td>" . $row["account_name"] . "</td>
-                                                        <td>" . $row["journal_entry_amount"]*-1 . "</td>
-                                                        <td></td>
-                                                    </tr>";
-                                                }
-                                            }
- 				 
+                                            
+                                            echo "<tr>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td>" . $row["debit"] . "</td>    
+                                            <td>" . $row["credit"] . "</td>";
+                                            $id = $row["journal_entry_id"];?>
+                                            <td><a href="delete.php?id=<?php echo $id;?>&table=journal_entry:journal_entry_id"><i class="fa fa-trash-o"></i></a></td>
+                                        <?php "</tr>";
                                             if($j == $t){
                                                 echo "<tr>
                                                 <td></td>
@@ -1248,6 +987,17 @@
                                     $counter--;
                                 }
 
+                                $sql = "SELECT sum(if(journal_entry_amount > 0, journal_entry_amount, 0)) as debit, sum(if(journal_entry_amount < 0, journal_entry_amount * -1, 0)) as credit from journal_entry;";
+                                $result = $connection->query($sql);
+                                $row = $result->fetch_assoc();
+                               
+                                echo "<tr id = 'tr_bold'>
+                                    <td>Total</td>
+                                    <td></td>
+                                    <td></td>                           
+                                    <td>". number_format($row["debit"],2) ."</td>
+                                    <td>". number_format(($row["credit"]),2) ."</td>
+                                    <td></td>";
                                 $connection->close();
 
                                 ?>
@@ -1337,10 +1087,15 @@
                                                     <input type="number" id="gen_credit" name="gen_credit[]">
                                                         </div>    
                                             </div>
-                                            <div style="float:left;;width: 100%;">
+                                            
+                                            <div style="float:right;;width: 100%;">
                                                 <label for="gen_exp"><b>Explanation</b></label>
                                                 <input type="text" placeholder="Enter Explanation" name="gen_exp" id="gen_exp" required>      
-                                            </div>     
+                                            </div>    
+                                            <div style="float:right;margin-left:10px;width: 100%;">
+                                                <label for="gen_client"><b>AR/AP ID</b></label>
+                                                <input type="text" placeholder="Enter ID" name="gen_client" id="gen_client" required>                     
+                                            </div> 
                                             <button type = "button" class = "add_entry" id = "add_gen_acc">Add</button>
                                             <button type = "button" class="remove_entry" id = "remove_gen_acc">remove</button>
                                             <button type="submit" class="registerbtn">Register</button>
@@ -1482,13 +1237,21 @@
                     <input type="text" id = "ap_search" placeholder="Search" >
                     <table>
                         <tr>
-                            <th>Account Receivable ID</th>
-                            <th>Sales ID</th>
-                            <th>Customer ID</th>
-                            <th>Initial Payment</th>
-                            <th>Collection of AR</th>
+                            <th>Account Payable ID</th>
+                            <th>Inventory ID</th>
+                            <th>Supplier</th>
+                            <th colspan="2">Amount Received</th>
                             <th>Total Collection</th>
                             <th>Account Amount</th>
+                        </tr>
+                        <tr>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th>Initial Payment</th>
+                            <th>Collection of AR</th>
+                            <th></th>
+                            <th></th>
                         </tr>
                     </table>
                 </div>
@@ -1502,12 +1265,21 @@
                     <input type="text" id = "ar_search" placeholder="Search" >
                     <table>
                         <tr>
-                            <th>Account Payable ID</th>
-                            <th>Inventory ID</th>
-                            <th>Initial Payment</th>
-                            <th>Collection of AR</th>
+                            <th>Account Receivable ID</th>
+                            <th>Sales ID</th>
+                            <th>Customer ID</th>
+                            <th colspan="2">Amount Received</th>
                             <th>Total Collection</th>
                             <th>Account Amount</th>
+                        </tr>
+                        <tr>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th>Initial Payment</th>
+                            <th>Collection of AR</th>
+                            <th></th>
+                            <th></th>
                         </tr>
                     </table>
                 </div>
@@ -1835,7 +1607,7 @@
                                     <td>" . $row["item_name"] . "</td>
                                     ";$id = $row["customer_id"];?>
                                     
-                                    <td><a href="delete.php?id=<?php echo $id;?>&table=customer:customer"><i class="fa fa-trash-o"></i></a></td>
+                                    <td><a href="delete.php?id=<?php echo $id;?>&table=customer:customer_id"><i class="fa fa-trash-o"></i></a></td>
                                </tr><?php
                            }
                            $connection->close();?>
@@ -2448,7 +2220,7 @@ function autocomplete(inp, arr) {
     }*/
 
     document.getElementById('inv_type').addEventListener('change', function (e) {
-        if (e.target.value === "~") {
+        if (e.target.value === "~" || e.target.value === "Box" || e.target.value === "Piece") {
             document.getElementById("inv_measure").readOnly = true;
             
         }
@@ -2457,7 +2229,7 @@ function autocomplete(inp, arr) {
         }
     });
     document.getElementById('sales_type').addEventListener('change', function (e) {
-        if (e.target.value === "~") {
+        if (e.target.value === "~" || e.target.value === "Box" || e.target.value === "Piece") {
             document.getElementById("sales_measure").readOnly = true;
             
         }
